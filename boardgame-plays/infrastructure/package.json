@@ -1,19 +1,23 @@
 {
-  "name": "@boardava/glue",
+  "name": "@boardava/infrastructure",
+  "main": "./build/src/index.js",
+  "types": "./build/src/index.d.ts",
   "scripts": {
     "clear": "rm -rf ./build ./tsconfig.tsbuildinfo",
     "types:check": "tsc --noEmit",
     "build": "tsc -b",
-    "dev": "pnpm run clear && FILE=./src/index.ts pnpm run dev:ts-node",
-    "dev:ts-node": "ts-node-dev --respawn --transpile-only --exit-child --quiet --no-deprecation ${TS_NODE_OPTIONS:-} ${FILE}",
     "lint:check": "eslint .",
     "lint:fix": "eslint . --fix",
-    "tests": "vitest run --dir src/__tests__",
-    "test:unit": "vitest run --dir src/__tests__/unit"
+    "tests": "vitest run --dir src/__tests__/",
+    "test:unit": "vitest run --dir src/__tests__/unit",
+    "test:functionnal": "vitest run --dir src/__tests__/functionnal",
+    "test:integration": "vitest run --dir src/__tests__/integration"
   },
   "dependencies": {
     "@boardava/domain": "workspace:*",
-    "@boardava/infrastructure": "workspace:*"
+    "fastify": "^5.1.0",
+    "fastify-type-provider-zod": "^4.0.2",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@boardava/eslint-config": "workspace:*",

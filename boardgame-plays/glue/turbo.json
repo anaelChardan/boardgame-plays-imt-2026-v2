@@ -2,7 +2,11 @@
   "extends": ["//"],
   "tasks": {
     "build": {
-      "dependsOn": ["@boardava/domain#build"],
+      "dependsOn": ["@boardava/domain#build", "@boardava/infrastructure#build"],
+      "outputs": ["build/**"]
+    },
+    "dev": {
+      "dependsOn": ["@boardava/domain#dev", "@boardava/infrastructure#dev"],
       "outputs": ["build/**"]
     }
   }
