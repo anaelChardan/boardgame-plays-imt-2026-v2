@@ -8,8 +8,8 @@
     "dev:ts-node": "ts-node-dev --respawn --transpile-only --exit-child --quiet --no-deprecation ${TS_NODE_OPTIONS:-} ${FILE}",
     "lint:check": "eslint .",
     "lint:fix": "eslint . --fix",
-    "tests": "vitest run --dir src/__tests__",
-    "test:unit": "vitest run --dir src/__tests__/unit"
+    "tests": "vitest run --dir src/__tests__ --passWithNoTests",
+    "test:unit": "vitest run --dir src/__tests__/unit --passWithNoTests"
   },
   "dependencies": {
     "@boardava/domain": "workspace:*",

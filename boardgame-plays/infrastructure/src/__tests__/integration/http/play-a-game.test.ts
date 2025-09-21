@@ -1,9 +1,12 @@
 import { describe, expect, it } from "vitest";
 import { buildHttpServer } from "../../../http";
+import { boardgameInventoryStub, buildPlayAGame } from "@boardava/domain";
 
 describe("play a game", () => {
   it("should return a 400 if the payload is invalid", async () => {
-    const fastify = buildHttpServer();
+    const fastify = buildHttpServer({
+      playAGame: buildPlayAGame({ boardgameInventory: boardgameInventoryStub }),
+    });
 
     const response = await fastify.inject({
       method: "POST",
@@ -14,7 +17,9 @@ describe("play a game", () => {
   });
 
   it("should return a play", async () => {
-    const fastify = buildHttpServer();
+    const fastify = buildHttpServer({
+      playAGame: buildPlayAGame({ boardgameInventory: boardgameInventoryStub }),
+    });
 
     const response = await fastify.inject({
       method: "POST",

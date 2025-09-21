@@ -1,8 +1,17 @@
 import { FastifyInstance } from "fastify";
+import { PlayAGame } from "@boardava/domain";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
 import z from "zod";
 
-export function buildPlayAGame(fastify: FastifyInstance) {
+export type PlayAGameDependencies = {
+  playAGame: PlayAGame;
+};
+
+export function buildPlayAGame(
+  fastify: FastifyInstance,
+  dependencies: PlayAGameDependencies
+) {
+  const { playAGame } = dependencies;
   const playAGamePayloadSchema = z.object({
     boardgameName: z.string(),
     players: z.array(z.string()),
@@ -24,12 +33,11 @@ export function buildPlayAGame(fastify: FastifyInstance) {
         },
       },
     },
-    async (_request, response) => {
-      const play = {
-        boardgameName: "Brass: Birmingham",
-        bggId: "224517",
-        players: ["John", "Jane"],
-      };
+    async (request, response) => {
+      const play = await playAGame.forBoardgame(
+        request.body.boardgameName,
+        request.body.players
+      );
 
       response.status(201).send(play);
     }
