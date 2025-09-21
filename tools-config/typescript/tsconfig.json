@@ -1,0 +1,40 @@
+{
+  "compilerOptions": {
+    // language and environment
+    "lib": ["es2022"],
+    "target": "es2022",
+    // modules
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "resolveJsonModule": true,
+    "types": ["node"],
+    // JS support
+    "checkJs": true,
+    // type checking
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "strict": true,
+    "strictNullChecks": true,
+    // interop constraints
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    // emit
+    "declaration": true,
+    "sourceMap": true,
+    // project
+    "composite": true,
+    // output formatting
+    "noErrorTruncation": true,
+    // completeness
+    "skipLibCheck": true
+  },
+  "ts-node": {
+    "swc": true
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "name": "@boardava/glue",
+  "scripts": {
+    "clear": "rm -rf ./build ./tsconfig.tsbuildinfo",
+    "types:check": "tsc --noEmit",
+    "build": "tsc -b",
+    "dev": "pnpm run clear && FILE=./src/index.ts pnpm run dev:ts-node",
+    "dev:ts-node": "ts-node-dev --respawn --transpile-only --exit-child --quiet --no-deprecation ${TS_NODE_OPTIONS:-} ${FILE}",
+    "lint:check": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "tests": "vitest run --dir src/__tests__",
+    "test:unit": "vitest run --dir src/__tests__/unit"
+  },
+  "dependencies": {
+    "@boardava/domain": "workspace:*"
+  },
+  "devDependencies": {
+    "@boardava/eslint-config": "workspace:*",
+    "@types/node": "^22.8.6",
+    "ts-node": "10.9.1",
+    "ts-node-dev": "2.0.0",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.4"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "volta": {
+    "extends": "../../package.json"
+  }
+}

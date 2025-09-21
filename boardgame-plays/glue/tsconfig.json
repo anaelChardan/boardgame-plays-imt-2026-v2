@@ -1,0 +1,15 @@
+{
+  "extends": "../../tools-config/typescript/tsconfig.json",
+  "include": ["src/**/*.ts"],
+  "exclude": ["build"],
+  "compilerOptions": {
+    "strict": true,
+    "noImplicitAny": true,
+    "outDir": "./build"
+  },
+  "references": [
+    {
+      "path": "../domain"
+    }
+  ]
+}

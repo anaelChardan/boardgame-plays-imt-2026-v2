@@ -1,0 +1,47 @@
+name: Build and testss
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    name: 🏗️ Build and Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: false
+
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: ⎔ Set up pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: 📥 Download deps
+        run: pnpm install --frozen-lockfile
+
+      - name: 🔍 Valid commit message
+        if: ${{ github.event_name == 'pull_request' }}
+        run: pnpm commitlint --from ${{ github.event.pull_request.base.sha }} --to ${{ github.event.pull_request.head.sha }} --verbose
+
+      - name: 💄 Prettier
+        run: pnpm prettier:check
+
+      - name: 💅 ESLint
+        run: pnpm run lint:check
+
+      - name: 📲 Test the builds
+        run: pnpm run build
+
+      - name: 🏄 Run the tests
+        run: pnpm run test

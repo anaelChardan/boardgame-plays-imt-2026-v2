@@ -1,0 +1,33 @@
+{
+  "private": true,
+  "scripts": {
+    "build": "FORCE_COLOR=1 turbo run build",
+    "dev": "FORCE_COLOR=1 turbo run dev",
+    "tests": "FORCE_COLOR=1 turbo run tests",
+    "test:unit": "FORCE_COLOR=1 turbo run test:unit",
+    "test:functionnal": "FORCE_COLOR=1 turbo run test:functionnal",
+    "test:integration": "FORCE_COLOR=1 turbo run test:integration",
+    "test:api": "FORCE_COLOR=1 turbo run test:api",
+    "lint:check": "FORCE_COLOR=1 turbo run lint:check",
+    "lint:fix": "FORCE_COLOR=1 turbo run lint:fix",
+    "prettier:check": "prettier --check .",
+    "prettier:fix": "prettier --write .",
+    "types:check": "FORCE_COLOR=1 turbo run types:check"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.5.0",
+    "@commitlint/config-conventional": "^19.5.0",
+    "eslint": "^9.13.0",
+    "prettier": "^3.3.3",
+    "turbo": "^2.2.3"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "volta": {
+    "node": "20.11.0",
+    "pnpm": "9.12.2"
+  },
+  "packageManager": "pnpm@9.12.2",
+  "name": "boardgame-plays-monorepo"
+}
