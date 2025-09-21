@@ -1,9 +1,12 @@
-import { boardgameInventoryStub, buildPlayAGame } from "@boardava/domain";
-import { buildHttpServer } from "@boardava/infrastructure";
+import { buildPlayAGame } from "@boardava/domain";
+import {
+  buildBggBoardgameInventory,
+  buildHttpServer,
+} from "@boardava/infrastructure";
 
 const fastify = buildHttpServer({
   playAGame: buildPlayAGame({
-    boardgameInventory: boardgameInventoryStub,
+    boardgameInventory: buildBggBoardgameInventory(),
   }),
 });
 

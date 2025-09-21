@@ -32,7 +32,7 @@ export function buildPlayAGame({
     }
 
     return {
-      boardgameName,
+      boardgameName: boardgame.name,
       bggId: boardgame.bggId,
       players,
     };
