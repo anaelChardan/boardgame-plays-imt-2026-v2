@@ -47,6 +47,7 @@ build: ## Build All
 
 .PHONY: dev
 dev: ## Dev
+	docker compose up -d
 	@$(PACKAGE_MANAGER) run dev
 
 .PHONY: tests

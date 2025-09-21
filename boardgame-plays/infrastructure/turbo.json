@@ -2,8 +2,11 @@
   "extends": ["//"],
   "tasks": {
     "build": {
-      "dependsOn": ["@boardava/domain#build"],
+      "dependsOn": ["@boardava/domain#build", "prisma:generate"],
       "outputs": ["build/**"]
+    },
+    "prisma:generate": {
+      "outputs": []
     }
   }
 }

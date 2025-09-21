@@ -5,24 +5,30 @@
   "scripts": {
     "clear": "rm -rf ./build ./tsconfig.tsbuildinfo",
     "types:check": "tsc --noEmit",
+    "dump:test": "./scripts/test_dump.sh",
     "build": "tsc -b",
     "lint:check": "eslint .",
     "lint:fix": "eslint . --fix",
-    "tests": "vitest run --dir src/__tests__/",
-    "test:unit": "vitest run --dir src/__tests__/unit",
-    "test:functionnal": "vitest run --dir src/__tests__/functionnal",
-    "test:integration": "vitest run --dir src/__tests__/integration"
+    "prisma:generate": "prisma generate",
+    "tests": "vitest run --dir src/__tests__/ --passWithNoTests",
+    "test:unit": "vitest run --dir src/__tests__/unit --passWithNoTests",
+    "test:functionnal": "pnpm run dump:test && vitest run --dir src/__tests__/functionnal --passWithNoTests",
+    "test:integration": "pnpm run dump:test && vitest run --dir src/__tests__/integration --passWithNoTests"
   },
   "dependencies": {
     "@boardava/domain": "workspace:*",
+    "@prisma/client": "^5.22.0",
+    "bgg-sdk": "^1.0.0",
     "fastify": "^5.1.0",
     "fastify-type-provider-zod": "^4.0.2",
-    "zod": "^3.23.8",
-    "bgg-sdk": "^1.0.0"
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@boardava/eslint-config": "workspace:*",
+    "@testcontainers/postgresql": "^10.14.0",
     "@types/node": "^22.8.6",
+    "prisma": "^5.22.0",
+    "testcontainers": "^10.14.0",
     "ts-node": "10.9.1",
     "ts-node-dev": "2.0.0",
     "typescript": "^5.6.3",
