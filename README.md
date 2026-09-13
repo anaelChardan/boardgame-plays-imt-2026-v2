@@ -44,6 +44,8 @@ L’historique 2025/2026 reste accessible avant les commits v2. Le README histor
 
 ## Pour animer la séance
 
+Commencer par le [conducteur pas à pas](docs/lesson-steps.md) : fichiers à ouvrir, manipulations, tests et résultats attendus pour chaque checkpoint.
+
 - [Conducteur détaillé des 40 slides](docs/presenter-notes.md)
 - [Commandes, séquences de code et plans de secours](docs/demo-runbook.md)
 - [PDF pour présenter hors ligne](slides/course.pdf)

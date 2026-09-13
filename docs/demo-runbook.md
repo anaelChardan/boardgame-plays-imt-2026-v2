@@ -2,6 +2,8 @@
 
 Public : troisième année après le baccalauréat, première année du cycle ingénieur. Objectif : argumenter des décisions de conception à partir des effets observables d’un changement. Les questions viennent des étudiants, qui peuvent interrompre les démonstrations. Le professeur répond au fil du cours. Les slides présentent le problème, le code et les compromis.
 
+Le [conducteur pas à pas](lesson-steps.md) précise le point de départ, les manipulations et les résultats attendus pour chaque étape.
+
 ## Avant la séance
 
 Utiliser **Node 24**, puis `npm ci`, `npm run check` et `npm run course -- warmup` dans le clone principal. La préparation installe les dépendances de chaque étape une fois. Prévoir plusieurs minutes et de l’espace disque. Les passages suivants réutilisent les étapes prêtes, sans téléchargement.
