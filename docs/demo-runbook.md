@@ -1,6 +1,6 @@
 # Démonstrations et conduite de séance
 
-Public : troisième année après le baccalauréat, première année du cycle ingénieur. Objectif : argumenter des décisions de conception à partir des effets observables d’un changement. Les questions et les échanges sont conduits oralement. Les slides présentent le problème, le code et les compromis.
+Public : troisième année après le baccalauréat, première année du cycle ingénieur. Objectif : argumenter des décisions de conception à partir des effets observables d’un changement. Les questions viennent des étudiants, qui peuvent interrompre les démonstrations. Le professeur répond au fil du cours. Les slides présentent le problème, le code et les compromis.
 
 ## Avant la séance
 
@@ -21,20 +21,20 @@ Si une étape contient des modifications, le navigateur refuse de la réinitiali
 
 ## Démonstrations et revues de conception
 
-| Minute | Étape | Action du professeur | Participation |
+| Minute | Étape | Action du professeur | Point expliqué |
 |---|---|---|---|
 | 11 | 00 | Montrer la fonction couplée | Identifier les raisons de changer |
-| 15–45 | 01 | Analyser les cinq exemples SOLID | Prédire le comportement après remplacement |
-| 59–67 | 03 | Écrire la condition min/max | Proposer les exemples de test |
-| 67–75 | 03 | Changer temporairement `>` en `>=` | Prédire quel test devient rouge |
-| 85–100 | 04 | Envoyer deux payloads | Choisir 400, 404 ou 422 |
+| 15–45 | 01 | Analyser les cinq exemples SOLID | Comportement après remplacement |
+| 59–67 | 03 | Écrire la condition min/max | Choix des exemples de test |
+| 67–75 | 03 | Changer temporairement `>` en `>=` | Détection de la régression |
+| 85–100 | 04 | Envoyer deux payloads | Traduction en 400, 404 ou 422 |
 | 100–115 | 05 | Remplacer le catalogue dans la composition | Distinguer absence et panne |
 | 115–124 | 06 | Ajouter `await writer.save(play)` | Dire quand annoncer une création |
 | 124–130 | 07 | Exécuter le test Prisma préparé | Vérifier la preuve de persistance |
 | 130–134 | 08 | Lancer la CLI | Repérer le cas métier réutilisé |
-| 134–140 | 08 puis 09 | Ajouter les noms uniques | Proposer le test, puis lire le diff |
+| 134–140 | 08 puis 09 | Ajouter les noms uniques | Justification du test et lecture du diff |
 
-Les tests de l’étape 03 et le défi final sont les meilleurs moments pour écrire du code en direct. Préparer le parsing XML, Fastify et Prisma : leur saisie n’est pas l’objectif pédagogique. La pause dure 10 minutes, entre la minute 75 et la minute 85. Les 10 dernières minutes servent à discuter et absorber un retard.
+Les tests de l’étape 03 et la modification finale sont les meilleurs moments pour écrire du code en direct. Préparer le parsing XML, Fastify et Prisma : leur saisie n’est pas l’objectif pédagogique. La pause dure 10 minutes, entre la minute 75 et la minute 85. Les questions peuvent intervenir pendant toute la séance. Les 10 dernières minutes accueillent les questions restantes et absorbent un éventuel retard.
 
 ## HTTP
 
@@ -76,8 +76,8 @@ Ne pas placer de secret dans le code, les slides ou une commande projetée. Util
 
 Si le Wi-Fi tombe : conserver le mode fixture, lancer `npm test -- tests/catalogue.test.ts` et montrer les réponses XML contrôlées. Cela démontre l’adaptateur sans prétendre vérifier le service réel.
 
-Si vous êtes en retard : conserver toutes les lettres de SOLID, les limites du domaine et le port d’écriture. Lire le diff Prisma préparé, puis garder au moins la démonstration CLI et deux minutes pour le défi. Repousser DDD, CQRS et les microservices à un autre cours.
+Si vous êtes en retard : conserver toutes les lettres de SOLID, les limites du domaine et le port d’écriture. Lire le diff Prisma préparé, puis garder au moins la démonstration CLI et deux minutes pour les questions. Repousser DDD, CQRS et les microservices à un autre cours.
 
 ## Périmètre pédagogique
 
-Les noms identifient les joueurs uniquement pour le défi. Ce choix ne convient pas à tous les homonymes. La version finale ne prétend pas être un service de production : aucune authentification utilisateur, pas d’idempotence et pas de stratégie de retry BGG. Ces sujets sont des prolongements, pas des prérequis pour comprendre SOLID et les ports.
+Les noms identifient les joueurs uniquement dans cette démonstration. Ce choix ne convient pas à tous les homonymes. La version finale ne prétend pas être un service de production : aucune authentification utilisateur, pas d’idempotence et pas de stratégie de retry BGG. Ces sujets sont des prolongements, pas des prérequis pour comprendre SOLID et les ports.

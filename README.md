@@ -51,7 +51,7 @@ L’historique 2025/2026 reste accessible avant les commits v2. Le README histor
 
 Avant le cours : `npm run course -- warmup`. Pendant le cours : `npm run course -- prepare 03` puis `npm run course -- next 03` depuis le clone principal. Les premières étapes montrent volontairement une validation sans écriture. Les scripts `start` et `cli` deviennent utilisables respectivement à 04 et 08.
 
-Le deck est en français. Les étudiants analysent les décisions de conception pendant les démonstrations. Les invitations à discuter restent dans les notes du présentateur. Un exercice de code de 4 minutes peut remplacer le défi oral final uniquement si leurs environnements sont déjà prêts.
+Le deck est en français. Le professeur explique les concepts et réalise les démonstrations. Les étudiants peuvent l’interrompre pour poser leurs questions tout au long de la séance. Le conducteur réserve du temps aux réponses, sans prédictions imposées ni exercices en binôme.
 
 ## Sources
 
