@@ -1,4 +1,6 @@
-# Démonstrations et plan B
+# Démonstrations et conduite de séance
+
+Public : troisième année après le baccalauréat, première année du cycle ingénieur. Objectif : argumenter des décisions de conception à partir des effets observables d’un changement. Les questions et les échanges sont conduits oralement. Les slides présentent le problème, le code et les compromis.
 
 ## Avant la séance
 
@@ -13,16 +15,16 @@ npm run course -- next 03
 npm run course -- diff 08 09
 ```
 
-`prepare` affiche le dossier, le fichier à ouvrir et la slide. `next 03` prépare04. Chaque étape est un worktree Git indépendant. Aucun changement de branche dans le dossier où vous codez. Aucun `reset --hard` ni nettoyage forcé.
+`prepare` affiche le dossier, le fichier à ouvrir et la slide. `next 03` prépare 04. Chaque étape est un worktree Git indépendant. Aucun changement de branche dans le dossier où vous codez. Aucun `reset --hard` ni nettoyage forcé.
 
 Si une étape contient des modifications, le navigateur refuse de la réinitialiser. Les modifications restent disponibles : ouvrir son dossier et lancer `npm run demo` ou `npm test` directement. Pour passer à la solution, préparer **l’étape suivante depuis le clone principal**. `diff` compare les solutions enregistrées, pas les modifications en cours.
 
-## Les moments à coder ensemble
+## Démonstrations et revues de conception
 
 | Minute | Étape | Action du professeur | Participation |
 |---|---|---|---|
 | 11 | 00 | Montrer la fonction couplée | Identifier les raisons de changer |
-| 15–45 | 01 | Lire les cinq petits exemples SOLID | Prédire le comportement après remplacement |
+| 15–45 | 01 | Analyser les cinq exemples SOLID | Prédire le comportement après remplacement |
 | 59–67 | 03 | Écrire la condition min/max | Proposer les exemples de test |
 | 67–75 | 03 | Changer temporairement `>` en `>=` | Prédire quel test devient rouge |
 | 85–100 | 04 | Envoyer deux payloads | Choisir 400, 404 ou 422 |
@@ -30,13 +32,13 @@ Si une étape contient des modifications, le navigateur refuse de la réinitiali
 | 115–124 | 06 | Ajouter `await writer.save(play)` | Dire quand annoncer une création |
 | 124–130 | 07 | Exécuter le test Prisma préparé | Vérifier la preuve de persistance |
 | 130–134 | 08 | Lancer la CLI | Repérer le cas métier réutilisé |
-| 134–140 | 08 puis09 | Ajouter les noms uniques | Proposer le test, puis lire le diff |
+| 134–140 | 08 puis 09 | Ajouter les noms uniques | Proposer le test, puis lire le diff |
 
-Les tests de l’étape03 et le défi final sont les meilleurs moments pour écrire du code en direct. Préparer le parsing XML, Fastify et Prisma : leur saisie n’est pas l’objectif pédagogique. La pause dure 75–85 minutes. Les 10 dernières minutes servent à discuter et absorber un retard.
+Les tests de l’étape 03 et le défi final sont les meilleurs moments pour écrire du code en direct. Préparer le parsing XML, Fastify et Prisma : leur saisie n’est pas l’objectif pédagogique. La pause dure 10 minutes, entre la minute 75 et la minute 85. Les 10 dernières minutes servent à discuter et absorber un retard.
 
 ## HTTP
 
-À partir de04, dans le dossier préparé :
+À partir de 04, dans le dossier préparé :
 
 ```sh
 npm start
@@ -50,7 +52,7 @@ curl -i http://127.0.0.1:3000/plays \
   -d '{"boardgameName":"Azul","players":["Alice","Bob"]}'
 ```
 
-À04–05 : 200, partie validée mais pas sauvegardée. À06 et après : 201 après sauvegarde. Remplacer la liste par `["Alice"]` pour obtenir422. `GET /plays` devient disponible à 07. Arrêter le serveur avant de démarrer celui d’un autre worktree sur le même port, ou choisir `PORT=3001`.
+À 04–05 : 200, partie validée mais pas sauvegardée. À 06 et après : 201 après sauvegarde. Remplacer la liste par `["Alice"]` pour obtenir 422. `GET /plays` devient disponible à 07. Arrêter le serveur avant de démarrer celui d’un autre worktree sur le même port, ou choisir `PORT=3001`.
 
 ## Persistance visible dans la version finale
 
@@ -70,7 +72,7 @@ Puis `curl http://127.0.0.1:3000/plays` dans un autre terminal. La partie de la 
 
 Tout le cours et tous les tests tournent sans BGG, avec `CATALOG=fixture`. Le mode live se choisit explicitement avec `CATALOG=bgg` et `BGG_API_TOKEN`. Il faut un jeton BGG valide pour une application autorisée. Le jeton Slides.com sert uniquement à Slides.com.
 
-Ne pas placer de secret dans le code, les slides ou une commande projetée. Utiliser un fichier `.env` ignoré. Le catalogue traduit un401/202/429, une panne réseau ou une réponse incorrecte en indisponibilité. Il ne bascule pas silencieusement sur la fixture.
+Ne pas placer de secret dans le code, les slides ou une commande projetée. Utiliser un fichier `.env` ignoré. Le catalogue traduit un statut 401/202/429, une panne réseau ou une réponse incorrecte en indisponibilité. Il ne bascule pas silencieusement sur la fixture.
 
 Si le Wi-Fi tombe : conserver le mode fixture, lancer `npm test -- tests/catalogue.test.ts` et montrer les réponses XML contrôlées. Cela démontre l’adaptateur sans prétendre vérifier le service réel.
 

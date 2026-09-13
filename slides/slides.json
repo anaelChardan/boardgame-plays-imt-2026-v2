@@ -1,362 +1,734 @@
 [
   {
     "title": "SOLID et architecture\nhexagonale",
-    "body": "Une application de parties de jeux de société\nAnaël Chardan · IMT Atlantique · 2026",
+    "body": "Concevoir une application qui évolue\nAnaël Chardan · IMT Atlantique · 2026",
     "code": "",
     "prompt": "",
-    "notes": "0–2 min. Présentation personnelle courte. Objectif : comprendre les choix de séparation en regardant évoluer la même application. Durée totale 150 minutes, pause comprise.",
+    "notes": "0–2 min. Public : première année du cycle ingénieur, Bac+3. Présenter brièvement le contexte professionnel. Objectif : argumenter une séparation à partir des changements qu’elle rend moins coûteux. 150 minutes au total, pause comprise.",
     "step": null,
-    "kind": "cover"
+    "kind": "cover",
+    "rows": null,
+    "caption": ""
   },
   {
-    "title": "Une partie acceptée, une partie refusée",
-    "body": "Brass: Birmingham accepte 2 à 4 joueurs.\nAlice + Bob : partie valide.\nAlice seule : refus métier.",
+    "title": "Le service : enregistrer une partie",
+    "body": "",
     "code": "",
-    "prompt": "À quel endroit doit vivre cette règle ?",
-    "notes": "2–5 min. Montrer immédiatement le résultat de npm run demo à l’étape 00. Faire prédire le résultat avant de lancer. Ne pas encore expliquer toute l’architecture.",
+    "prompt": "",
+    "notes": "2–5 min. Exécuter la démonstration00. Distinguer comportement observable et structure interne. Le point de départ ne persiste pas encore les données. Demander où la règle sera vérifiée si une seconde entrée apparaît. Brass désigne Brass: Birmingham dans les exemples du dépôt.",
     "step": "00-start",
-    "kind": "normal"
+    "kind": "table",
+    "rows": [
+      [
+        "Demande",
+        "Résultat attendu"
+      ],
+      [
+        "Brass, 2 à 4 participants",
+        "Partie valide"
+      ],
+      [
+        "Brass, 1 ou 5 participants",
+        "Refus métier"
+      ],
+      [
+        "Jeu absent du catalogue",
+        "Jeu introuvable"
+      ]
+    ],
+    "caption": "La même politique doit s’appliquer à chaque entrée."
   },
   {
-    "title": "Vous décidez, je code",
-    "body": "Une prédiction avant chaque modification.\n30 secondes pour comparer avec votre voisin.\nUne vérification dans le code ou les tests.",
-    "code": "",
-    "prompt": "Pas de configuration à faire pendant la séance.",
-    "notes": "5–8 min. Les étudiants regardent les démonstrations. Faire participer aux choix plutôt que dicter du code à recopier. Si toute la promotion a déjà le projet prêt, proposer seulement le défi final en binôme 4 minutes, sans dépasser le créneau de 10 minutes.",
-    "step": null,
-    "kind": "normal"
-  },
-  {
-    "title": "Le vocabulaire utile",
-    "body": "Type : la forme des données.\nInterface : les opérations attendues.\nPromise : un résultat qui arrive plus tard.\nTest : un exemple dont on vérifie le résultat.",
+    "title": "Trois évolutions du même service",
+    "body": "",
     "code": "",
     "prompt": "",
-    "notes": "8–11 min. Pointer un objet, une fonction async et une assertion dans l’éditeur. Ne pas enseigner TypeScript en entier. Demander un signal si Promise ou interface est inconnu.",
+    "notes": "5–8 min. Annoncer les changements concrets que la séance va introduire. Les étudiants proposent des options et examinent leurs conséquences pendant que le professeur code. L’activité orale reste dans la conduite de séance, pas dans la mise en scène des slides.",
     "step": null,
-    "kind": "normal"
+    "kind": "table",
+    "rows": [
+      [
+        "Évolution",
+        "Contrainte à conserver"
+      ],
+      [
+        "Catalogue local remplacé par BGG",
+        "Règles métier identiques"
+      ],
+      [
+        "Stockage persistant",
+        "Aucun enregistrement invalide"
+      ],
+      [
+        "Traitement depuis une CLI",
+        "Aucune duplication des règles"
+      ]
+    ],
+    "caption": "Ces changements serviront à évaluer les choix de conception."
+  },
+  {
+    "title": "Les critères de conception",
+    "body": "",
+    "code": "",
+    "prompt": "",
+    "notes": "8–11 min. Faire expliciter un compromis : un fichier unique facilite parfois la lecture, mais plusieurs sources de changement peuvent le rendre fragile. Vérifier les prérequis TypeScript au fil de la lecture du code. Expliquer brièvement une syntaxe si nécessaire, sans faire un cours de vocabulaire.",
+    "step": null,
+    "kind": "table",
+    "rows": [
+      [
+        "Critère",
+        "Question d’ingénierie"
+      ],
+      [
+        "Impact d’un changement",
+        "Quels modules faut-il modifier ?"
+      ],
+      [
+        "Testabilité",
+        "Quelles dépendances faut-il démarrer ?"
+      ],
+      [
+        "Complexité ajoutée",
+        "Quel coût ajoute la séparation ?"
+      ]
+    ],
+    "caption": "Une abstraction se justifie par le besoin qu’elle protège."
   },
   {
     "title": "Le point de départ couplé",
     "body": "",
-    "code": "const { boardgameName, players } = JSON.parse(json);\nconst game = { name: \"Brass\", min: 2, max: 4 };\nif (players.length < game.min) throw new Error();\nconst row = {\n  game: game.name,\n  players_json: JSON.stringify(players)\n};",
-    "prompt": "Changer JSON, la règle ou SQL touche le même endroit.",
-    "notes": "11–15 min. Extrait simplifié, pas le fichier complet. Ouvrir examples/00-coupled.ts. Le stockage est encore simulé. Faire nommer les raisons différentes de modifier le code.",
+    "code": "const { boardgameName, players } = JSON.parse(json);\nconst game = { name: \"Brass\", min: 2, max: 4 };\nif (players.length < game.min ||\n    players.length > game.max) throw new Error();\nconst row = {\n  game: game.name,\n  players_json: JSON.stringify(players)\n};",
+    "prompt": "",
+    "notes": "11–15 min. Extrait abrégé de examples/00-coupled.ts. Le stockage reste simulé. Identifier quelles lignes changeraient pour un nouveau payload, une règle différente ou un schéma SQL différent. Les changements externes motivent la séparation, pas la longueur de la fonction.",
     "step": "00-start",
-    "kind": "normal"
+    "kind": "code",
+    "rows": null,
+    "caption": "Transport, politique métier et représentation du stockage."
   },
   {
-    "title": "Les cinq principes SOLID",
-    "body": "S  Une responsabilité cohérente\nO  Une extension sur un axe prévu\nL  Un remplacement qui respecte le contrat\nI  Des interfaces adaptées aux consommateurs\nD  Des dépendances vers les besoins métier",
+    "title": "SOLID : cinq critères de conception",
+    "body": "",
     "code": "",
     "prompt": "",
-    "notes": "15 min. Carte du parcours, moins d’une minute. 6 minutes environ pour chaque lettre avec le même cas. Exemples dans examples/solid/principles.ts.",
+    "notes": "15 min. Carte des cinq principes. Annoncer leur rôle comme critères d’analyse, sans les présenter comme une recette mécanique. Les exemples restent centrés sur les parties de jeux de société. Source : https://www.cs.odu.edu/~zeil/cs330/latest/Public/solid/",
     "step": "01-solid",
-    "kind": "normal"
+    "kind": "table",
+    "rows": [
+      [
+        "Principe",
+        "Propriété recherchée"
+      ],
+      [
+        "Single Responsibility",
+        "Cohésion des raisons de changer"
+      ],
+      [
+        "Open / Closed",
+        "Extension sur un axe identifié"
+      ],
+      [
+        "Liskov Substitution",
+        "Compatibilité des comportements"
+      ],
+      [
+        "Interface Segregation",
+        "Contrats adaptés aux consommateurs"
+      ],
+      [
+        "Dependency Inversion",
+        "Dépendances vers les besoins métier"
+      ]
+    ],
+    "caption": ""
   },
   {
-    "title": "S · Les raisons de changer",
-    "body": "Le format HTTP change avec le client.\nLa règle change avec le besoin métier.\nLe format de stockage change avec la base.",
-    "code": "",
-    "prompt": "Quel changement justifie chaque séparation ?",
-    "notes": "15–18 min. SRP = une raison cohérente de changer, pas une fonction qui ne ferait qu’une instruction. Demander quelle équipe ou quel besoin déclencherait chaque changement.",
-    "step": null,
-    "kind": "normal"
-  },
-  {
-    "title": "S · La règle isolée",
+    "title": "SRP : les axes de changement",
     "body": "",
-    "code": "function validateCount(game: Game, players: string[]) {\n  if (players.length < game.min ||\n      players.length > game.max) {\n    throw new Error(\"Nombre invalide\");\n  }\n}",
-    "prompt": "Ce test a-t-il besoin d’un serveur ?",
-    "notes": "18–21 min. Ouvrir principles.ts et le test du validateur. Le parsing et la conversion SQL sont aux frontières. SRP ne se démontre pas seulement en découpant une grosse interface.",
-    "step": null,
-    "kind": "normal"
-  },
-  {
-    "title": "O · Le catalogue peut varier",
-    "body": "Aujourd’hui : des jeux en mémoire.\nDemain : BoardGameGeek.\nLa règle du nombre de joueurs reste la même.",
     "code": "",
-    "prompt": "Quel point de variation avons-nous choisi ?",
-    "notes": "21–24 min. OCP dépend d’un axe d’évolution identifié. On ne prévoit pas tous les futurs possibles. Faire proposer une substitution de catalogue.",
+    "prompt": "",
+    "notes": "15–18 min. SRP = une raison cohérente de changer, pas une fonction qui ne ferait qu’une instruction. Demander quelle équipe ou quel besoin déclencherait chaque changement.\nDiscussion possible : Quel changement justifie chaque séparation ?",
     "step": null,
-    "kind": "normal"
+    "kind": "table",
+    "rows": [
+      [
+        "Responsabilité",
+        "Origine du changement"
+      ],
+      [
+        "Décoder une requête",
+        "Évolution du client HTTP"
+      ],
+      [
+        "Valider une partie",
+        "Évolution de la politique métier"
+      ],
+      [
+        "Représenter une ligne SQL",
+        "Évolution du stockage"
+      ]
+    ],
+    "caption": "Un module peut coordonner plusieurs opérations cohérentes."
   },
   {
-    "title": "O · Une extension par remplacement",
+    "title": "Validation indépendante du transport",
     "body": "",
-    "code": "const validate = makeValidator(fixtureCatalogue);\n\n// Même politique, autre fournisseur\nconst validateLive = makeValidator(bggCatalogue);",
-    "prompt": "Une nouvelle règle peut encore modifier le cas métier.",
-    "notes": "24–27 min. Les noms illustrent la composition, exemples autonomes à l’étape01. Insister sur le coût de l’abstraction et le périmètre protégé. OCP ne veut pas dire ne jamais éditer un fichier.",
+    "code": "function validateCount(\n  game: Game, players: string[]\n) {\n  if (players.length < game.min ||\n      players.length > game.max) {\n    throw new Error(\"Nombre invalide\");\n  }\n}",
+    "prompt": "",
+    "notes": "18–21 min. Ouvrir principles.ts et le test du validateur. Le parsing et la conversion SQL sont aux frontières. SRP ne se démontre pas seulement en découpant une grosse interface.\nDiscussion possible : Ce test a-t-il besoin d’un serveur ?",
     "step": null,
-    "kind": "normal"
+    "kind": "code",
+    "rows": null,
+    "caption": "Le test porte sur la règle et ses données d’entrée."
   },
   {
-    "title": "L · Un contrat observable",
-    "body": "Jeu connu : un Boardgame.\nJeu inconnu : null.\nPanne technique : CatalogUnavailable.",
-    "code": "getBoardgameByName(name: string)\n  : Promise<Boardgame | null>",
+    "title": "OCP : remplacer le catalogue",
+    "body": "Le catalogue local doit pouvoir céder la place à BGG.\n\nLe cas d’usage dépend des informations du jeu,\npas du protocole utilisé pour les obtenir.",
+    "code": "",
+    "prompt": "",
+    "notes": "21–24 min. OCP dépend d’un axe d’évolution identifié. On ne prévoit pas tous les futurs possibles. Faire proposer une substitution de catalogue.\nDiscussion possible : Quel point de variation avons-nous choisi ?",
+    "step": null,
+    "kind": "text",
+    "rows": null,
+    "caption": "Axe d’extension choisi : la provenance du catalogue."
+  },
+  {
+    "title": "Le câblage concentre le changement",
+    "body": "",
+    "code": "// Configuration locale\nconst play = buildPlayAGame(fixtureCatalogue, store);\n\n// Configuration avec le fournisseur externe\nconst play = buildPlayAGame(bggCatalogue, store);",
+    "prompt": "",
+    "notes": "24–27 min. Comparaison de deux configurations, pas deux déclarations dans le même scope. Le port du catalogue sera introduit à03 et le writer à06. L’exemple annonce le câblage final. Les petits exemples autonomes sont disponibles à01. L’OCP protège un axe choisi, pas tous les changements possibles.",
+    "step": null,
+    "kind": "code",
+    "rows": null,
+    "caption": "Une nouvelle politique métier peut encore modifier le cas d’usage."
+  },
+  {
+    "title": "LSP : le contrat observable du catalogue",
+    "body": "",
+    "code": "",
     "prompt": "",
     "notes": "27–29 min. Contrat précis utilisé dans tout le cours. LSP concerne comportement et attentes du client, même sans héritage de classes.",
     "step": null,
-    "kind": "normal"
+    "kind": "table",
+    "rows": [
+      [
+        "Situation",
+        "Comportement du port"
+      ],
+      [
+        "Jeu connu",
+        "Boardgame avec des limites valides"
+      ],
+      [
+        "Jeu inconnu",
+        "null"
+      ],
+      [
+        "Fournisseur indisponible",
+        "CatalogUnavailable"
+      ]
+    ],
+    "caption": "Résultat, absence et erreurs font partie du contrat."
   },
   {
-    "title": "L · Cela compile, mais cela casse",
+    "title": "Une signature compatible ne suffit pas",
     "body": "",
     "code": "const brokenCatalogue: Catalogue = {\n  async find(name) {\n    throw new Error(\"Jeu inconnu\");\n  }\n};",
-    "prompt": "Que devient le code qui attend null ?",
-    "notes": "29–31 min. Une implémentation qui refuse un cas prévu par le contrat ne se substitue pas correctement. Ne pas confondre absence et indisponibilité.",
+    "prompt": "",
+    "notes": "29–31 min. Une implémentation qui refuse un cas prévu par le contrat ne se substitue pas correctement. Ne pas confondre absence et indisponibilité.\nDiscussion possible : Que devient le code qui attend null ?",
     "step": null,
-    "kind": "normal"
+    "kind": "code",
+    "rows": null,
+    "caption": "Le client attend null pour une absence, pas une exception."
   },
   {
-    "title": "L · Un contrat commun",
+    "title": "Le contrat commun des catalogues",
     "body": "",
-    "code": "expect(await catalogue.find(\"Inconnu\"))\n  .toBeNull();\n\nexpect(await catalogue.find(\"Azul\"))\n  .toMatchObject({ min: 2, max: 4 });",
-    "prompt": "La signature seule ne suffit pas.",
-    "notes": "31–33 min. Extrait pédagogique avec les types courts de principles.ts. Plus tard tests/catalogue.test.ts applique le même contrat aux noms métier complets. Demander quel test manque pour une panne technique.",
+    "code": "expect(await catalogue.getBoardgameByName(\"Inconnu\"))\n  .toBeNull();\n\nexpect(await catalogue.getBoardgameByName(\"Azul\"))\n  .toMatchObject({ minNumberOfPlayers: 2 });",
+    "prompt": "",
+    "notes": "31–33 min. Extraits alignés sur le port réel, disponible à03 et les tests de contrat à05. À01, l’exemple autonome utilise find et les noms courts Game.min/max. Montrer la continuité des contrats plutôt que le détail des noms. Le contrat doit aussi distinguer une panne du fournisseur.",
     "step": null,
-    "kind": "normal"
+    "kind": "code",
+    "rows": null,
+    "caption": "La même suite de contrat s’applique aux deux catalogues."
   },
   {
-    "title": "I · Une interface trop large",
+    "title": "ISP : le contrat vu par le consommateur",
     "body": "",
     "code": "interface PlayRepository {\n  save(play: Play): Promise<void>;\n  all(): Promise<Play[]>;\n  deleteAll(): Promise<void>;\n  rebuildStatistics(): Promise<void>;\n}",
-    "prompt": "De quoi le compteur de parties a-t-il besoin ?",
-    "notes": "33–36 min. Le problème est le couplage du consommateur à des opérations inutiles, pas le nombre arbitraire de méthodes.",
-    "step": null,
-    "kind": "normal"
-  },
-  {
-    "title": "I · Un besoin de lecture",
-    "body": "",
-    "code": "interface PlayReader {\n  all(): Promise<Play[]>;\n}\n\nasync function countPlays(reader: PlayReader) {\n  return (await reader.all()).length;\n}",
     "prompt": "",
-    "notes": "36–39 min. Une même classe ou un même objet peut implémenter lecture et écriture. Chaque consommateur reçoit seulement le contrat dont il a besoin.",
+    "notes": "33–36 min. Le problème est le couplage du consommateur à des opérations inutiles, pas le nombre arbitraire de méthodes.\nDiscussion possible : De quoi le compteur de parties a-t-il besoin ?",
     "step": null,
-    "kind": "normal"
+    "kind": "code",
+    "rows": null,
+    "caption": "Un rapport de lecture n’utilise qu’une partie de ce contrat."
   },
   {
-    "title": "D · Une dépendance vers la technique",
+    "title": "Des ports distincts pour lire et écrire",
     "body": "",
-    "code": "// Dans le cas métier\nimport { PrismaClient } from \"@prisma/client\";\n\nconst db = new PrismaClient();\nawait db.play.create({ data: sqlRow });",
-    "prompt": "Faut-il une base pour vérifier la règle ?",
-    "notes": "39–42 min. Montrer le problème d’import et le vocabulaire SQL qui entre dans le métier. Demander comment on testerait les bornes sans base.",
+    "code": "interface PlayReader {\n  all(): Promise<Play[]>;\n}\n\ninterface PlayWriter {\n  save(play: Play): Promise<void>;\n}",
+    "prompt": "",
+    "notes": "36–39 min. Revenir au consommateur countPlays dans principles.ts. Il demande PlayReader. L’ISP porte sur le besoin des clients, pas sur l’obligation de créer de nombreux petits objets. Une implémentation commune reste possible.",
     "step": null,
-    "kind": "normal"
+    "kind": "code",
+    "rows": null,
+    "caption": "Un même adaptateur peut implémenter les deux interfaces."
   },
   {
-    "title": "D · Le besoin appartient au métier",
+    "title": "DIP : le métier dépend du stockage",
     "body": "",
-    "code": "// domain/ports.ts\ninterface PlayWriter {\n  save(play: Play): Promise<void>;\n}\n\n// Au démarrage, on fournit l’implémentation\nconst play = buildPlayAGame(catalogue, store);",
-    "prompt": "DIP : qui définit le contrat ? DI : qui fournit l’objet ?",
-    "notes": "42–45 min. DIP et injection ne sont pas synonymes. Pas besoin de conteneur DI. Une fonction suffit. Le domaine n’importe pas Prisma.",
+    "code": "// Module métier couplé à une bibliothèque\nimport { PrismaClient } from \"@prisma/client\";\n\nconst db = new PrismaClient();\nawait db.play.create({ data: sqlRow });",
+    "prompt": "",
+    "notes": "39–42 min. Montrer le problème d’import et le vocabulaire SQL qui entre dans le métier. Demander comment on testerait les bornes sans base.\nDiscussion possible : Faut-il une base pour vérifier la règle ?",
     "step": null,
-    "kind": "normal"
+    "kind": "code",
+    "rows": null,
+    "caption": "La politique métier connaît ici Prisma et la forme SQL."
   },
   {
-    "title": "SOLID dans notre application",
-    "body": "S  Séparer les raisons de changer.\nO  Remplacer le catalogue sur un axe prévu.\nL  Respecter absence, résultat et erreurs.\nI  Demander seulement lecture ou écriture.\nD  Définir les ports du côté métier.",
+    "title": "Le domaine définit le port",
+    "body": "",
+    "code": "// Contrat défini dans domain/ports.ts\ninterface PlayWriter {\n  save(play: Play): Promise<void>;\n}\n\n// Instance choisie dans composition.ts\nconst play = buildPlayAGame(catalogue, store);",
+    "prompt": "",
+    "notes": "42–45 min. DIP et injection ne sont pas synonymes. Pas besoin de conteneur DI. Une fonction suffit. Le domaine n’importe pas Prisma.\nDiscussion possible : DIP : qui définit le contrat ? DI : qui fournit l’objet ?",
+    "step": null,
+    "kind": "code",
+    "rows": null,
+    "caption": "DIP : direction des dépendances. Injection : assemblage des objets."
+  },
+  {
+    "title": "Les décisions obtenues avec SOLID",
+    "body": "",
     "code": "",
     "prompt": "",
-    "notes": "45–46 min. Faire rappeler une lettre par un étudiant. Pas un nouvel exposé des définitions. Transition : comment placer ces séparations dans l’application ?",
+    "notes": "45–46 min. Synthèse des décisions effectivement prises. Demander laquelle serait superflue pour un script jetable. Les lettres servent à argumenter, elles ne remplacent pas l’analyse du contexte.",
     "step": null,
-    "kind": "normal"
+    "kind": "table",
+    "rows": [
+      [
+        "Décision",
+        "Effet attendu"
+      ],
+      [
+        "Isoler la validation",
+        "Tester la politique sans transport"
+      ],
+      [
+        "Définir le contrat du catalogue",
+        "Remplacer sa provenance"
+      ],
+      [
+        "Distinguer lecture et écriture",
+        "Réduire les exigences des clients"
+      ],
+      [
+        "Placer les ports dans le domaine",
+        "Éviter les imports techniques"
+      ]
+    ],
+    "caption": "Contrepartie : des interfaces et des conversions à maintenir."
   },
   {
-    "title": "Les frontières de l’application",
-    "body": "Métier : les parties valides et les cas d’usage.\nEntrées : HTTP, CLI et tests.\nSorties : catalogue et stockage.",
-    "code": "",
-    "prompt": "Une forme de dossier ne garantit pas la séparation.",
-    "notes": "46–48 min. Les couches aident à classer le code mais il faut regarder les dépendances. Source : https://alistair.cockburn.us/hexagonal-architecture",
-    "step": null,
-    "kind": "normal"
-  },
-  {
-    "title": "Ports et adaptateurs",
-    "body": "HTTP et CLI appellent PlayAGame.\nPlayAGame utilise BoardgameInventory et PlayWriter.\nFixture, BGG et Prisma réalisent ces contrats.",
-    "code": "",
-    "prompt": "Un port décrit une conversation utile au métier.",
-    "notes": "48–51 min. Tracer les relations au tableau en parallèle. Les ports nomment des besoins. Le nombre six ne définit pas le nombre de ports. Source : https://alistair.cockburn.us/hexagonal-architecture",
-    "step": null,
-    "kind": "architecture"
-  },
-  {
-    "title": "Les dépendances du code",
+    "title": "Couches et frontière applicative",
     "body": "",
-    "code": "infrastructure/http.ts\n  imports domain/play-a-game.ts\n\ninfrastructure/prisma-store.ts\n  imports domain/ports.ts\n\ndomain/*.ts\n  imports seulement le domaine",
-    "prompt": "Lecture : « ce fichier connaît le type de… »",
-    "notes": "51–53 min. Ces relations sont les imports à la compilation. Ne pas les confondre avec le sens des appels à l’exécution. Le fichier composition.ts connaît les implémentations pour assembler le programme.",
-    "step": null,
-    "kind": "normal"
-  },
-  {
-    "title": "Les appels pendant une requête",
-    "body": "1. HTTP convertit le JSON en demande métier.\n2. PlayAGame consulte le catalogue.\n3. PlayAGame vérifie la règle.\n4. PlayAGame enregistre via PlayWriter.\n5. HTTP transforme le résultat en réponse.",
     "code": "",
-    "prompt": "Un appel sortant peut respecter une dépendance vers le métier.",
-    "notes": "53–55 min. Comparer avec la slide précédente. L’appel atteint Prisma à l’exécution, mais le domaine compile contre PlayWriter. L’écriture sera ajoutée à l’étape06.",
+    "prompt": "",
+    "notes": "46–48 min. Éviter l’opposition artificielle entre couches et architecture hexagonale. Les dossiers ne prouvent pas la règle de dépendance. Examiner les imports et les contrats. Source : https://alistair.cockburn.us/hexagonal-architecture",
     "step": null,
-    "kind": "normal"
+    "kind": "comparison",
+    "rows": [
+      [
+        "Organisation en couches",
+        "Ports et adaptateurs"
+      ],
+      [
+        "Répartir les responsabilités",
+        "Définir les échanges avec l’extérieur"
+      ],
+      [
+        "Rendre la structure lisible",
+        "Rendre les technologies substituables"
+      ]
+    ],
+    "caption": "Les deux approches peuvent coexister."
   },
   {
-    "title": "Les objets métier",
+    "title": "La frontière du domaine",
+    "body": "",
+    "code": "",
+    "prompt": "",
+    "notes": "48–51 min. Cartographie des conversations à l’exécution, pas graphe d’imports. PlayAGame est le port d’entrée. Le catalogue et l’écriture sont les ports de sortie. Fixture/BGG et mémoire/Prisma sont des alternatives. Source : https://alistair.cockburn.us/hexagonal-architecture",
+    "step": null,
+    "kind": "architecture",
+    "rows": null,
+    "caption": ""
+  },
+  {
+    "title": "Dépendances à la compilation",
+    "body": "",
+    "code": "",
+    "prompt": "",
+    "notes": "51–53 min. Chaque flèche signifie « importe le type de ». Le domaine ne connaît aucun adaptateur concret. composition.ts connaît les deux côtés pour les assembler. Comparer avec les appels de la slide suivante.",
+    "step": null,
+    "kind": "dependencies",
+    "rows": null,
+    "caption": "Les adaptateurs importent les contrats définis dans le domaine."
+  },
+  {
+    "title": "Séquence d’un enregistrement",
+    "body": "",
+    "code": "",
+    "prompt": "",
+    "notes": "53–55 min. Séquence nominale de la version finale. L’étape03 valide, puis l’étape06 ajoute l’écriture. Une exception de validation interrompt la séquence avant save. Les interfaces sont définies dans le domaine même quand l’appel atteint un adaptateur externe.",
+    "step": null,
+    "kind": "sequence",
+    "rows": null,
+    "caption": "Le sens des appels diffère du sens des dépendances du code."
+  },
+  {
+    "title": "Le modèle manipulé par le cas d’usage",
     "body": "",
     "code": "type Boardgame = {\n  name: string; bggId: string;\n  minNumberOfPlayers: number;\n  maxNumberOfPlayers: number;\n};\ntype Play = {\n  boardgameName: string; bggId: string;\n  players: string[];\n};",
     "prompt": "",
-    "notes": "55–59 min. Rester dans le vocabulaire des jeux. Faire choisir un exemple accepté et un exemple rejeté.",
+    "notes": "55–59 min. Ouvrir model.ts à02. Les types n’expriment pas à eux seuls la validité du nombre de joueurs. Distinguer forme des données et invariants. bggId reste un identifiant de référence dans le vocabulaire du cours, sans introduire le XML dans le domaine.",
     "step": "02-model",
-    "kind": "normal"
+    "kind": "code",
+    "rows": null,
+    "caption": ""
   },
   {
-    "title": "Le cas d’usage hors ligne",
+    "title": "La validation dans le cas d’usage",
     "body": "",
     "code": "const game = await inventory.getBoardgameByName(name);\nif (!game) throw new BoardgameNotFound();\n\nif (count < game.minNumberOfPlayers ||\n    count > game.maxNumberOfPlayers) {\n  throw new InvalidPlayerCount(min, max);\n}",
-    "prompt": "La règle se vérifie sans HTTP et sans BGG.",
-    "notes": "59–67 min. Extrait avec variables abrégées. Coder la condition avec la salle puis lancer tests/domain.test.ts. À cette étape on retourne le Play, sans prétendre l’avoir sauvegardé. Le test n’effectue aucun appel réseau.",
+    "prompt": "",
+    "notes": "59–67 min. Extrait avec variables abrégées. Coder la condition avec la salle puis lancer tests/domain.test.ts. À cette étape on retourne le Play, sans prétendre l’avoir sauvegardé. Le test n’effectue aucun appel réseau.\nDiscussion possible : La règle se vérifie sans HTTP et sans BGG.",
     "step": "03-domain",
-    "kind": "normal"
+    "kind": "code",
+    "rows": null,
+    "caption": "À cette étape, une partie valide est retournée sans écriture."
   },
   {
-    "title": "Les limites font de bons exemples",
-    "body": "1 joueur : refus\n2 joueurs : accepté\n4 joueurs : accepté\n5 joueurs : refus\nJeu inconnu : erreur distincte",
+    "title": "Les tests aux frontières de l’intervalle",
+    "body": "",
     "code": "",
-    "prompt": "Que se passe-t-il si « > » devient « >= » ?",
-    "notes": "67–75 min. Faire la mutation temporaire > vers >= dans le worktree03. Lancer le test, observer la borne4 échouer, annuler uniquement cette petite édition manuellement. Garder 1 minute pour expliquer que les tests réseau et SQL vérifieront autre chose.",
+    "prompt": "",
+    "notes": "67–75 min. Faire la mutation temporaire > vers >= dans le worktree03. Lancer le test, observer la borne4 échouer, annuler uniquement cette petite édition manuellement. Garder 1 minute pour expliquer que les tests réseau et SQL vérifieront autre chose.\nDiscussion possible : Que se passe-t-il si « > » devient « >= » ?",
     "step": null,
-    "kind": "normal"
+    "kind": "table",
+    "rows": [
+      [
+        "Participants",
+        "Résultat"
+      ],
+      [
+        "1",
+        "Refus"
+      ],
+      [
+        "2 et 4",
+        "Acceptation des deux bornes"
+      ],
+      [
+        "5",
+        "Refus"
+      ],
+      [
+        "Jeu inconnu",
+        "Erreur distincte du nombre invalide"
+      ]
+    ],
+    "caption": "Mutation de la condition : > devient >=."
   },
   {
     "title": "Pause",
-    "body": "10 minutes\n\nÀ la reprise : la même règle derrière HTTP.",
+    "body": "Reprise dans 10 minutes\n\nIntégration des adaptateurs HTTP, catalogue et stockage.",
     "code": "",
     "prompt": "",
-    "notes": "75–85 min. Pause réelle. Afficher l’heure de reprise à l’oral. Préparer le worktree04 si nécessaire.",
+    "notes": "75–85 min. Pause. Annoncer l’heure de reprise. Préparer04 depuis le clone principal si nécessaire.",
     "step": null,
-    "kind": "break"
+    "kind": "break",
+    "rows": null,
+    "caption": ""
   },
   {
-    "title": "HTTP est un adaptateur",
+    "title": "HTTP : validation et traduction",
     "body": "",
-    "code": "const parsed = requestSchema.safeParse(request.body);\nif (!parsed.success) return reply.code(400).send(...);\n\nconst result = await play(parsed.data);\nreturn reply.code(200).send(result);",
-    "prompt": "Le JSON reste à la frontière.",
-    "notes": "85–91 min. Étape04 : validation seule, réponse200. À l’étape06 on passera à201 après l’écriture. Modifier un payload, laisser la salle prédire400 ou422. Extrait abrégé, fichier complet dans infrastructure/http.ts.",
+    "code": "const parsed = requestSchema.safeParse(request.body);\nif (!parsed.success) {\n  return reply.code(400).send({\n    error: \"Requête invalide\"\n  });\n}\nconst result = await play(parsed.data);\nreturn reply.code(200).send(result);",
+    "prompt": "",
+    "notes": "85–91 min. Étape04 : validation seule, réponse200. À l’étape06 on passera à201 après l’écriture. Modifier un payload, laisser la salle prédire400 ou422. Extrait abrégé, fichier complet dans infrastructure/http.ts.\nDiscussion possible : Le JSON reste à la frontière.",
     "step": "04-http",
-    "kind": "normal"
+    "kind": "code",
+    "rows": null,
+    "caption": "Étape 04 : validation seule. Étape 06 : création après écriture."
   },
   {
-    "title": "Des erreurs qui disent ce qui arrive",
-    "body": "400  Le JSON ne correspond pas à la demande.\n404  Le catalogue ne connaît pas le jeu.\n422  Le nombre ou les noms sont invalides.\n503  Le catalogue est indisponible.\n500  Une erreur interne inattendue.",
+    "title": "La politique d’erreur de l’API",
+    "body": "",
     "code": "",
     "prompt": "",
     "notes": "91–95 min. Codes décidés par notre API, pas imposés par l’architecture hexagonale. Une autre API pourrait choisir d’autres conventions explicites. Le domaine expose des erreurs métier, pas des codes HTTP.",
     "step": null,
-    "kind": "normal"
+    "kind": "table",
+    "rows": [
+      [
+        "Situation",
+        "Réponse choisie"
+      ],
+      [
+        "Demande mal formée",
+        "400"
+      ],
+      [
+        "Jeu introuvable",
+        "404"
+      ],
+      [
+        "Règle métier non satisfaite",
+        "422"
+      ],
+      [
+        "Catalogue indisponible",
+        "503"
+      ],
+      [
+        "Erreur interne inattendue",
+        "500"
+      ]
+    ],
+    "caption": "Les codes HTTP appartiennent à l’adaptateur."
   },
   {
-    "title": "Prédiction : panne ou règle ?",
-    "body": "Le catalogue répond 401.\n\nA. Le jeu est inconnu.\nB. Le catalogue est indisponible.\nC. La partie est valide.",
-    "code": "",
-    "prompt": "30 secondes avec votre voisin.",
-    "notes": "95–100 min. Réponse B. 401 vient du fournisseur, notre API répond503. Montrer le test correspondant à l’étape05. Ne pas transformer une panne en null ou accepter silencieusement une fixture.",
-    "step": null,
-    "kind": "normal"
-  },
-  {
-    "title": "Le catalogue externe",
-    "body": "Mode de cours : catalogue en mémoire.\nMode live : BGG avec un jeton d’application.\nMême port, mêmes règles métier.",
-    "code": "",
-    "prompt": "Le réseau peut échouer sans changer la règle.",
-    "notes": "100–104 min. Ouvrir composition.ts, montrer le choix CATALOG. Le mode live est facultatif et demande un jeton BGG valide. Ne pas réutiliser le jeton Slides. Les tests BGG utilisent des réponses HTTP contrôlées. Source : https://boardgamegeek.com/wiki/page/BGG_XML_API2",
-    "step": "05-catalog",
-    "kind": "normal"
-  },
-  {
-    "title": "La traduction de BGG",
+    "title": "Absence métier ou panne technique",
     "body": "",
-    "code": "<minplayers value=\"2\" />\n<maxplayers value=\"4\" />\n\n// Le domaine reçoit\n{ minNumberOfPlayers: 2, maxNumberOfPlayers: 4 }",
-    "prompt": "Le XML ne traverse pas le port.",
-    "notes": "104–109 min. Montrer recherche exacte puis détail par identifiant dans bgg.ts. Expliquer le délai maximum, la validation de réponse et la panne distincte. Éviter de taper le parsing complet en direct.",
+    "code": "",
+    "prompt": "",
+    "notes": "95–100 min. Présenter le scénario « BGG répond401 » oralement. Laisser argumenter sur le comportement attendu avant de commenter les deux colonnes. Les codes de notre API sont une décision explicite. Aucun fallback silencieux vers des fixtures.",
     "step": null,
-    "kind": "normal"
+    "kind": "comparison",
+    "rows": [
+      [
+        "Absence métier",
+        "Défaillance technique"
+      ],
+      [
+        "Recherche valide, aucun jeu",
+        "Authentification ou réseau en échec"
+      ],
+      [
+        "Le port retourne null",
+        "Le port lève CatalogUnavailable"
+      ],
+      [
+        "Notre API répond 404",
+        "Notre API répond 503"
+      ]
+    ],
+    "caption": ""
   },
   {
-    "title": "Ce que chaque test vérifie",
-    "body": "Métier : quelles parties sont valides ?\nContrat : les catalogues sont-ils substituables ?\nAdaptateur : le XML devient-il le bon objet ?\nIntégration : la base conserve-t-elle les données ?",
+    "title": "Intégration du catalogue BGG",
+    "body": "",
+    "code": "",
+    "prompt": "",
+    "notes": "100–104 min. Ouvrir composition.ts, montrer le choix CATALOG. Le mode live est facultatif et demande un jeton BGG valide. Ne pas réutiliser le jeton Slides. Les tests BGG utilisent des réponses HTTP contrôlées. Source : https://boardgamegeek.com/wiki/page/BGG_XML_API2\nDiscussion possible : Le réseau peut échouer sans changer la règle.",
+    "step": "05-catalog",
+    "kind": "table",
+    "rows": [
+      [
+        "Contrat stable",
+        "Choix de l’adaptateur"
+      ],
+      [
+        "Obtenir un Boardgame",
+        "Données locales ou service BGG"
+      ],
+      [
+        "Signaler une absence",
+        "null"
+      ],
+      [
+        "Signaler une défaillance",
+        "Erreur technique distincte"
+      ]
+    ],
+    "caption": "Le mode BGG exige un jeton d’application valide."
+  },
+  {
+    "title": "La traduction au niveau de l’adaptateur",
+    "body": "minNumberOfPlayers: 2\nmaxNumberOfPlayers: 4",
+    "code": "<minplayers value=\"2\" />\n<maxplayers value=\"4\" />",
+    "prompt": "",
+    "notes": "104–109 min. Montrer recherche exacte puis détail par identifiant dans bgg.ts. Expliquer le délai maximum, la validation de réponse et la panne distincte. Éviter de taper le parsing complet en direct.\nDiscussion possible : Le XML ne traverse pas le port.",
+    "step": null,
+    "kind": "translation",
+    "rows": null,
+    "caption": "L’adaptateur valide le document et produit le type métier."
+  },
+  {
+    "title": "Les niveaux de vérification",
+    "body": "",
     "code": "",
     "prompt": "",
     "notes": "109–115 min. Lancer catalogue.test.ts. Le faux transport valide notre conversion, pas la disponibilité de BGG ni un jeton réel. Temps et hasard peuvent aussi rendre un test variable, même sans réseau.",
     "step": null,
-    "kind": "normal"
+    "kind": "table",
+    "rows": [
+      [
+        "Test",
+        "Ce qu’il établit"
+      ],
+      [
+        "Métier",
+        "Validité des règles et de leurs bornes"
+      ],
+      [
+        "Contrat",
+        "Compatibilité des comportements"
+      ],
+      [
+        "Adaptateur BGG",
+        "Conversion de réponses contrôlées"
+      ],
+      [
+        "Intégration SQL",
+        "Écriture et relecture dans une base"
+      ]
+    ],
+    "caption": "Un faux transport ne vérifie ni BGG en direct ni ses identifiants."
   },
   {
-    "title": "Enregistrer par un port",
+    "title": "La sauvegarde fait partie du cas d’usage",
     "body": "",
-    "code": "interface PlayWriter {\n  save(play: Play): Promise<void>;\n}\n\n// Après toutes les validations\nawait writer.save(play);\nreturn play;",
-    "prompt": "À quel moment peut-on annoncer « créée » ?",
-    "notes": "115–121 min. Faire écrire await writer.save(play) avec la salle. Étape06 retourne201 après succès. Sans await, on pourrait annoncer une création avant un échec. Montrer le test de stockage indisponible.",
+    "code": "// Les validations ont réussi\nconst play = { boardgameName, bggId, players };\n\nawait writer.save(play);\nreturn play;",
+    "prompt": "",
+    "notes": "115–121 min. Faire écrire await writer.save(play) avec la salle. Étape06 retourne201 après succès. Sans await, on pourrait annoncer une création avant un échec. Montrer le test de stockage indisponible.\nDiscussion possible : À quel moment peut-on annoncer « créée » ?",
     "step": "06-save",
-    "kind": "normal"
+    "kind": "code",
+    "rows": null,
+    "caption": "La réponse de création attend le succès de l’écriture."
   },
   {
-    "title": "Une partie refusée ne s’enregistre pas",
+    "title": "Deux propriétés à vérifier",
     "body": "",
-    "code": "await play(validRequest);\nawait expect(play(invalidRequest)).rejects.toThrow();\n\nexpect(await store.all()).toHaveLength(1);",
-    "prompt": "Le retour de la fonction ne prouve pas une écriture.",
-    "notes": "121–124 min. Lancer save.test.ts et relire le magasin mémoire. Montrer pourquoi un test qui inspecte seulement le retour aurait manqué l’absence de sauvegarde dans l’ancien cours.",
-    "step": null,
-    "kind": "normal"
-  },
-  {
-    "title": "La preuve par SQLite et Prisma",
-    "body": "",
-    "code": "await client.play.create({ data: mappedPlay });\n\n// Puis une nouvelle connexion à la même base\nconst rows = await store.all();",
-    "prompt": "Même PlayWriter, stockage réellement persistant.",
-    "notes": "124–130 min. Démonstration préparée. npm run db:setup, puis STORAGE=sqlite npm run cli à partir de08 ou test Prisma à07. Le test ferme la connexion, rouvre la même base temporaire et relit la partie. Aucun Docker. Ne pas taper tout le schéma.",
-    "step": "07-sql",
-    "kind": "normal"
-  },
-  {
-    "title": "Une deuxième entrée : le terminal",
-    "body": "",
-    "code": "npm run cli -- \"Azul\" Alice Bob\n\n// L’adaptateur appelle le même cas d’usage\nawait play({ boardgameName, players });",
-    "prompt": "Faut-il réécrire la règle du nombre de joueurs ?",
-    "notes": "130–134 min. Réponse non, montrer runCli puis le domaine. Mode memory : chaque processus a son propre magasin. Pour partager avec le serveur, choisir sqlite et la même DATABASE_URL. Comparer une acceptation et un refus.",
-    "step": "08-second-driver",
-    "kind": "normal"
-  },
-  {
-    "title": "Défi : deux fois la même personne",
-    "body": "Nouvelle règle : chaque nom doit être unique.\n« Alice » et « alice » désignent la même personne.\nLes espaces autour du nom ne comptent pas.",
     "code": "",
-    "prompt": "Quels fichiers faut-il modifier ? Quels tests ajouter ?",
-    "notes": "134–138 min. Rester à l’étape08 pour ne pas révéler la solution09. 30 secondes seul, 60 secondes en binôme, puis propositions orales. Si environnement déjà prêt : 4 minutes de code optionnel. Aucun setup à ce moment.",
-    "step": "09-challenge",
-    "kind": "normal"
+    "prompt": "",
+    "notes": "121–124 min. Montrer save.test.ts. Une partie invalide ne provoque aucun enregistrement. Une erreur du writer doit empêcher201. Reformuler la première propriété comme absence d’appel au writer dans une variante de test avec spy, et comme stockage inchangé dans la version présente.",
+    "step": null,
+    "kind": "comparison",
+    "rows": [
+      [
+        "Partie refusée",
+        "Écriture en échec"
+      ],
+      [
+        "Aucun enregistrement",
+        "Aucune réponse de création"
+      ],
+      [
+        "Le stockage reste inchangé",
+        "L’erreur remonte à l’adaptateur"
+      ]
+    ],
+    "caption": "Vérifier les effets observables, pas seulement le retour du cas d’usage."
   },
   {
-    "title": "La règle change une seule fois",
+    "title": "Persistance après reconnexion",
+    "body": "",
+    "code": "",
+    "prompt": "",
+    "notes": "124–130 min. Démonstration préparée. npm run db:setup, puis STORAGE=sqlite npm run cli à partir de08 ou test Prisma à07. Le test ferme la connexion, rouvre la même base temporaire et relit la partie. Aucun Docker. Ne pas taper tout le schéma.\nDiscussion possible : Même PlayWriter, stockage réellement persistant.",
+    "step": "07-sql",
+    "kind": "persistence",
+    "rows": null,
+    "caption": "Prisma implémente le port. Le domaine garde ses propres types."
+  },
+  {
+    "title": "Une entrée CLI sur le même cas d’usage",
+    "body": "",
+    "code": "npm run cli -- \"Azul\" Alice Bob\n\n// Adaptateur CLI\nawait play({ boardgameName, players });",
+    "prompt": "",
+    "notes": "130–134 min. Réponse non, montrer runCli puis le domaine. Mode memory : chaque processus a son propre magasin. Pour partager avec le serveur, choisir sqlite et la même DATABASE_URL. Comparer une acceptation et un refus.\nDiscussion possible : Faut-il réécrire la règle du nombre de joueurs ?",
+    "step": "08-second-driver",
+    "kind": "code",
+    "rows": null,
+    "caption": "HTTP et CLI partagent le stockage lorsqu’ils ciblent la même base."
+  },
+  {
+    "title": "Unicité des participants",
+    "body": "",
+    "code": "",
+    "prompt": "",
+    "notes": "134–138 min. Partir de08. Demander quels modules doivent changer et quelles régressions vérifier. Laisser2minutes de discussion puis réaliser le changement. Option de4minutes de code seulement si les postes sont déjà prêts. L’unicité par nom est une simplification explicite, pas un modèle universel des personnes.",
+    "step": "09-challenge",
+    "kind": "table",
+    "rows": [
+      [
+        "Demande",
+        "Résultat attendu"
+      ],
+      [
+        "Alice, Bob",
+        "Acceptation"
+      ],
+      [
+        "Alice, Alice",
+        "Refus"
+      ],
+      [
+        "Alice, « alice » avec espaces",
+        "Refus après normalisation"
+      ]
+    ],
+    "caption": "Convention de l’exercice : le nom normalisé représente l’identité."
+  },
+  {
+    "title": "Une règle commune aux deux entrées",
     "body": "",
     "code": "const names = players.map(name => name.trim());\nconst unique = new Set(\n  names.map(name => name.toLowerCase())\n);\nif (unique.size !== names.length) {\n  throw new InvalidParticipants();\n}",
-    "prompt": "HTTP et CLI refusent la même partie.",
-    "notes": "138–140 min. Passer à09, montrer le diff08→09 et lancer challenge.test.ts. Définition simplifiée de l’identité par le nom pour cet exercice. En production deux personnes peuvent porter le même nom : un identifiant serait un autre besoin.",
+    "prompt": "",
+    "notes": "138–140 min. Passer à09, montrer le diff08→09 et lancer challenge.test.ts. Définition simplifiée de l’identité par le nom pour cet exercice. En production deux personnes peuvent porter le même nom : un identifiant serait un autre besoin.\nDiscussion possible : HTTP et CLI refusent la même partie.",
     "step": null,
-    "kind": "normal"
+    "kind": "diff",
+    "rows": null,
+    "caption": "Le diff 08 / 09 ajoute la règle et les vérifications HTTP et CLI."
   },
   {
-    "title": "Le coût de la séparation",
-    "body": "Plus de fichiers et de contrats à comprendre.\nDes conversions à maintenir et à tester.\nUne frontière vaut son coût si elle protège un besoin.",
+    "title": "Le coût des frontières",
+    "body": "",
     "code": "",
-    "prompt": "Un petit script jetable aurait-il besoin de tout cela ?",
-    "notes": "140–144 min. Discuter les compromis. Pas d’interface automatique pour chaque classe. Hors périmètre : DDD complet, CQRS, microservices. Pistes après cours : idempotence, vrais identifiants joueurs, transaction si plusieurs écritures doivent réussir ensemble.",
+    "prompt": "",
+    "notes": "140–144 min. Discuter les compromis. Pas d’interface automatique pour chaque classe. Hors périmètre : DDD complet, CQRS, microservices. Pistes après cours : idempotence, vrais identifiants joueurs, transaction si plusieurs écritures doivent réussir ensemble.\nDiscussion possible : Un petit script jetable aurait-il besoin de tout cela ?",
     "step": null,
-    "kind": "normal"
+    "kind": "table",
+    "rows": [
+      [
+        "Bénéfice recherché",
+        "Coût à accepter"
+      ],
+      [
+        "Tests métier isolés",
+        "Contrats à concevoir"
+      ],
+      [
+        "Adaptateur remplaçable",
+        "Conversions à vérifier"
+      ],
+      [
+        "Réutilisation du cas d’usage",
+        "Parcours du code moins direct"
+      ]
+    ],
+    "caption": "Le contexte détermine si cette séparation est rentable."
   },
   {
-    "title": "Ce que vous savez maintenant décider",
-    "body": "Où placer une règle métier.\nQuel contrat rend un fournisseur remplaçable.\nQuel test vérifie chaque frontière.\nComment ajouter une entrée sans dupliquer la règle.",
+    "title": "Les limites du modèle et la suite",
+    "body": "Identité : gérer les homonymes avec des identifiants.\nFiabilité : éviter un double enregistrement lors d’un retry.\nCohérence : définir la transaction si plusieurs écritures\ndoivent réussir ensemble.",
     "code": "",
-    "prompt": "Quelle dépendance supprimeriez-vous en premier ?",
-    "notes": "144–150 min. Questions et marge. Demander une explication du DIP avec un fichier concret. Ressources et tags dans le README du dépôt. Sources : https://alistair.cockburn.us/hexagonal-architecture ; https://www.cs.odu.edu/~zeil/cs330/latest/Public/solid/ ; https://boardgamegeek.com/wiki/page/BGG_XML_API2",
+    "prompt": "",
+    "notes": "144–150 min. Synthèse orale des cinq critères SOLID et de la frontière applicative, puis questions. Les prolongements sont hors périmètre du code livré. L’idempotence ne découle pas automatiquement des ports. Sources : https://alistair.cockburn.us/hexagonal-architecture ; https://www.cs.odu.edu/~zeil/cs330/latest/Public/solid/ ; https://boardgamegeek.com/wiki/page/BGG_XML_API2",
     "step": null,
-    "kind": "normal"
+    "kind": "text",
+    "rows": null,
+    "caption": "Ces besoins doivent précéder les nouvelles abstractions."
   }
 ]

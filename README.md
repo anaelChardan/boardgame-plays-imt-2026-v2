@@ -1,6 +1,6 @@
 # SOLID et architecture hexagonale · IMT 2026 v2
 
-Cours guidé de 2h30 pour élèves ingénieurs de première année. L’enseignant code ; la classe propose des tests et prédit les changements.
+Cours de conception logicielle de 2h30 pour étudiants en troisième année après le baccalauréat, en première année du cycle ingénieur. Les démonstrations examinent les effets de nouvelles exigences sur une application, les contrats entre modules et le coût des abstractions.
 
 [Présentation v2](https://slides.com/anaelchardan/solid-et-architecture-hexagonale-imt-2026-v2) · [Dépôt original 2026](https://github.com/anaelChardan/boardgame-plays-imt-2026)
 
@@ -51,7 +51,7 @@ L’historique 2025/2026 reste accessible avant les commits v2. Le README histor
 
 Avant le cours : `npm run course -- warmup`. Pendant le cours : `npm run course -- prepare 03` puis `npm run course -- next 03` depuis le clone principal. Les premières étapes montrent volontairement une validation sans écriture. Les scripts `start` et `cli` deviennent utilisables respectivement à 04 et 08.
 
-Le deck est en français. Les élèves regardent les démonstrations et proposent les changements. Un exercice de code de 4 minutes peut remplacer le défi oral final uniquement si leurs environnements sont déjà prêts.
+Le deck est en français. Les étudiants analysent les décisions de conception pendant les démonstrations. Les invitations à discuter restent dans les notes du présentateur. Un exercice de code de 4 minutes peut remplacer le défi oral final uniquement si leurs environnements sont déjà prêts.
 
 ## Sources
 
