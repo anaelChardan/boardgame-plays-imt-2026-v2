@@ -29,6 +29,7 @@ Public : première année du cycle ingénieur, Bac+3. La séance analyse les cha
 ## 7 · SRP : les axes de changement
 
 15–18 min. SRP = une raison cohérente de changer, pas une fonction qui ne ferait qu’une instruction. Illustrer quelle équipe ou quel besoin déclencherait chaque changement.
+Lecture du schéma : Les flèches relient chaque source de changement à la responsabilité concernée. Elles ne représentent pas des appels à l’exécution.
 
 ## 8 · Validation indépendante du transport
 
@@ -37,6 +38,7 @@ Public : première année du cycle ingénieur, Bac+3. La séance analyse les cha
 ## 9 · OCP : remplacer le catalogue
 
 21–24 min. OCP dépend d’un axe d’évolution identifié. On ne prévoit pas tous les futurs possibles. Montrer une substitution de catalogue.
+Lecture du schéma : Le schéma représente les appels possibles via BoardgameInventory. Le câblage sélectionne un seul catalogue au démarrage. Les deux branches sont des alternatives, pas deux appels systématiques.
 
 ## 10 · Le câblage concentre le changement
 
@@ -61,6 +63,7 @@ Public : première année du cycle ingénieur, Bac+3. La séance analyse les cha
 ## 15 · Des ports distincts pour lire et écrire
 
 36–39 min. Revenir au consommateur countPlays dans principles.ts. Il demande PlayReader. L’ISP porte sur le besoin des clients, pas sur l’obligation de créer de nombreux petits objets. Une implémentation commune reste possible.
+Lecture du schéma : Les flèches de gauche signifient « utilise ce contrat ». Celles de droite signifient « implémente ce contrat ». Un rapport peut recevoir PlayReader, tandis que PlayAGame ne demande que PlayWriter. Un même adaptateur peut réaliser les deux ports.
 
 ## 16 · DIP : le métier dépend du stockage
 
@@ -141,6 +144,7 @@ Public : première année du cycle ingénieur, Bac+3. La séance analyse les cha
 ## 35 · Persistance après reconnexion
 
 124–130 min. Démonstration préparée. npm run db:setup, puis STORAGE=sqlite npm run cli à partir de08 ou test Prisma à07. Le test ferme la connexion, rouvre la même base temporaire et relit la partie. Aucun Docker. Ne pas taper tout le schéma.
+Lecture du schéma : Le client A écrit puis se déconnecte. Le client B est une nouvelle connexion au même fichier SQLite et relit la partie. Le maintien du résultat après reconnexion établit la persistance.
 
 ## 36 · Une entrée CLI sur le même cas d’usage
 

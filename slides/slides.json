@@ -146,9 +146,9 @@
     "body": "",
     "code": "",
     "prompt": "",
-    "notes": "15–18 min. SRP = une raison cohérente de changer, pas une fonction qui ne ferait qu’une instruction. Illustrer quelle équipe ou quel besoin déclencherait chaque changement.",
+    "notes": "15–18 min. SRP = une raison cohérente de changer, pas une fonction qui ne ferait qu’une instruction. Illustrer quelle équipe ou quel besoin déclencherait chaque changement.\nLecture du schéma : Les flèches relient chaque source de changement à la responsabilité concernée. Elles ne représentent pas des appels à l’exécution.",
     "step": null,
-    "kind": "table",
+    "kind": "responsibilities",
     "rows": [
       [
         "Responsabilité",
@@ -185,11 +185,11 @@
     "body": "Le catalogue local doit pouvoir céder la place à BGG.\n\nLe cas d’usage dépend des informations du jeu,\npas du protocole utilisé pour les obtenir.",
     "code": "",
     "prompt": "",
-    "notes": "21–24 min. OCP dépend d’un axe d’évolution identifié. On ne prévoit pas tous les futurs possibles. Montrer une substitution de catalogue.",
+    "notes": "21–24 min. OCP dépend d’un axe d’évolution identifié. On ne prévoit pas tous les futurs possibles. Montrer une substitution de catalogue.\nLecture du schéma : Le schéma représente les appels possibles via BoardgameInventory. Le câblage sélectionne un seul catalogue au démarrage. Les deux branches sont des alternatives, pas deux appels systématiques.",
     "step": null,
-    "kind": "text",
+    "kind": "substitution",
     "rows": null,
-    "caption": "Axe d’extension choisi : la provenance du catalogue."
+    "caption": "Le câblage choisit un adaptateur. Le cas d’usage reste identique."
   },
   {
     "title": "Le câblage concentre le changement",
@@ -268,11 +268,11 @@
     "body": "",
     "code": "interface PlayReader {\n  all(): Promise<Play[]>;\n}\n\ninterface PlayWriter {\n  save(play: Play): Promise<void>;\n}",
     "prompt": "",
-    "notes": "36–39 min. Revenir au consommateur countPlays dans principles.ts. Il demande PlayReader. L’ISP porte sur le besoin des clients, pas sur l’obligation de créer de nombreux petits objets. Une implémentation commune reste possible.",
+    "notes": "36–39 min. Revenir au consommateur countPlays dans principles.ts. Il demande PlayReader. L’ISP porte sur le besoin des clients, pas sur l’obligation de créer de nombreux petits objets. Une implémentation commune reste possible.\nLecture du schéma : Les flèches de gauche signifient « utilise ce contrat ». Celles de droite signifient « implémente ce contrat ». Un rapport peut recevoir PlayReader, tandis que PlayAGame ne demande que PlayWriter. Un même adaptateur peut réaliser les deux ports.",
     "step": null,
-    "kind": "code",
+    "kind": "segregation",
     "rows": null,
-    "caption": "Un même adaptateur peut implémenter les deux interfaces."
+    "caption": "Chaque consommateur utilise uniquement le contrat nécessaire."
   },
   {
     "title": "DIP : le métier dépend du stockage",
@@ -636,11 +636,11 @@
     "body": "",
     "code": "",
     "prompt": "",
-    "notes": "124–130 min. Démonstration préparée. npm run db:setup, puis STORAGE=sqlite npm run cli à partir de08 ou test Prisma à07. Le test ferme la connexion, rouvre la même base temporaire et relit la partie. Aucun Docker. Ne pas taper tout le schéma.",
+    "notes": "124–130 min. Démonstration préparée. npm run db:setup, puis STORAGE=sqlite npm run cli à partir de08 ou test Prisma à07. Le test ferme la connexion, rouvre la même base temporaire et relit la partie. Aucun Docker. Ne pas taper tout le schéma.\nLecture du schéma : Le client A écrit puis se déconnecte. Le client B est une nouvelle connexion au même fichier SQLite et relit la partie. Le maintien du résultat après reconnexion établit la persistance.",
     "step": "07-sql",
     "kind": "persistence",
     "rows": null,
-    "caption": "Prisma implémente le port. Le domaine garde ses propres types."
+    "caption": "La partie reste disponible après la fermeture du premier client."
   },
   {
     "title": "Une entrée CLI sur le même cas d’usage",

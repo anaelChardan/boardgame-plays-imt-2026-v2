@@ -19,6 +19,21 @@ npm run course -- diff 08 09
 
 Si une étape contient des modifications, le navigateur refuse de la réinitialiser. Les modifications restent disponibles : ouvrir son dossier et lancer `npm run demo` ou `npm test` directement. Pour passer à la solution, préparer **l’étape suivante depuis le clone principal**. `diff` compare les solutions enregistrées, pas les modifications en cours.
 
+## Schémas de référence
+
+Le deck comprend huit schémas éditables. Le sens des flèches est précisé sur la slide ou dans les notes.
+
+| Slide | Schéma | Point expliqué |
+|---|---|---|
+| 7 | Sources de changement et responsabilités | SRP |
+| 9 | Deux adaptateurs pour un port | OCP et choix au démarrage |
+| 15 | Consommateurs, interfaces et adaptateur commun | ISP |
+| 20 | Frontière du domaine | Ports et adaptateurs |
+| 21 | Imports vers le domaine | Inversion des dépendances |
+| 22 | Séquence d’enregistrement | Ordre des appels |
+| 31 | XML et objet métier | Traduction à la frontière |
+| 35 | Écriture et relecture après reconnexion | Persistance réelle |
+
 ## Démonstrations et revues de conception
 
 | Minute | Étape | Action du professeur | Point expliqué |
