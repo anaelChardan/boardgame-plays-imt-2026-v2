@@ -1,106 +1,43 @@
-# Architecture Logiciel - Hexagonal
+# SOLID et architecture hexagonale · IMT 2026 v2
 
-- [Slides](https://slides.com/anaelchardan/hexagonal-architecture-and-beyond-0e45d4) du cours
+Cours guidé de 2h30 pour élèves ingénieurs de première année. L’enseignant code ; la classe propose des tests et prédit les changements.
 
-## Installation
+[Présentation v2](https://slides.com/anaelchardan/solid-et-architecture-hexagonale-imt-2026-v2) · [Dépôt original 2026](https://github.com/anaelChardan/boardgame-plays-imt-2026)
 
-### Pré-requis
+## Démarrer
 
-- [volta](https://volta.sh/)
-
-### Makefile
-
-Vous permet de lister tout ce que l'on peut faire
+Node 24 LTS recommandé (`.node-version`), npm fourni avec Node. Aucune base externe et aucun compte BGG nécessaires pour les démonstrations par défaut.
 
 ```sh
-make
+npm ci
+npm run check
+npm run demo
+npm run course -- list
 ```
 
-Par exemple pour installer
+Chaque tag `course-2026/00-start` à `course-2026/09-challenge` est un état exécutable. `main` contient la version complète. Les dépendances et le schéma Prisma sont préparés dès le départ pour éviter les installations en cours de démonstration.
+
+## Naviguer sans perdre les modifications
 
 ```sh
-make install
+npm run course -- show 03
+npm run course -- diff 03 04
+npm run course -- prepare 04
+npm run course -- run 04
+npm run course -- test 04
+npm run course -- next 04
 ```
 
-### Contenu du dépôt
+Les commandes créent des worktrees détachés dans `.course-worktrees/`, sans changer votre checkout ni écraser vos modifications. `run` utilise la démonstration de l’étape ; `test` exécute sa vérification. `next` prépare l’étape suivante et affiche les chemins, sans démarrer de serveur. Exécuter ces commandes depuis le clone principal. Les worktrees modifiés sont conservés ; leur vérification refuse de les traiter comme des réponses intactes.
 
-Ce dépôt est un monorepo géré avec [turbo](https://turbo.build/).
+Les checkpoints ne sont disponibles qu’après récupération des tags (`git fetch --tags`). Les commandes sont identiques sous macOS, Linux et Windows avec Git et Node installés.
 
-On a les packages:
-- `domain` (qui représente notre métier)
-- `glue` (qui execute vraiment le code et qui peut dépendre d'un peu tout)
+## Résultat final
 
-Les tests sont executés par [vitest](https://vitest.dev/), différents types de tests sont disponibles (voir `make list`).
+Le cas d’usage valide le nombre de joueurs, enregistre une partie via un port, puis fonctionne via HTTP ou CLI. Le catalogue de démonstration fonctionne hors ligne. BGG et SQLite/Prisma sont des implémentations interchangeables de dépendances.
 
-## Objectifs
+## Supports
 
-Pouvoir enregistrer/vérifier des parties de jeux de société en étant sûr de rentrer le bon nombre de joueur (sans forcément rentrer le score).
+Consulter `docs/` pour le déroulé, les contrats, les questions et les correspondances entre diapositives et étapes. Les exemples SOLID se trouvent dans `examples/solid/` à partir de l’étape 01.
 
-Par exemple enregistrer une partie de [Brass Birmingham](https://boardgamegeek.com/boardgame/224517/brass-birmingham)
-
-Nous pouvons utiliser l'API de boardgamegeek pour retrouver ces informations.
-
-## Étapes
-
-### 1. Domain
-
-#### Model
-
-J'ai des jeux de plateux et des parties
-
-On a les notions de:
-
-- **Jeu de plateau**: Il est composé d'un nom, d'un identifiant BGG, des nombres minimum et maximum de joueur.
-- **Partie**: composé d'un nom d'un id de jeu (on peut prendre celui de bgg), d'une liste de joueurs (string[]);
-
-#### Use cases (ports primaire)
-
-Je veux pouvoir enregistrer un partie avec une fonction de ce type là
-
-```ts
-function forBoardgame(boardgameName: string, players: string[]) Play {
-  // ...
-}
-```
-
-**Besoins**:
-- D'un port primaire de son implémentation (et de son test fonctionnel)
-- D'un moyen de retrouver le jeu sur BGG (voir injection de dépendance, utilisation d'un port secondaire, et d'un stub).
-
-**Règles**:
-- Le domain ne doit jamais dépendre d'éléments extérieurs au domain!
-
-### 2. Intéragir avec le domain (utilisation du port primaire)
-
-On veut pouvoir maintenant exposer une API rest pour enregistrer/vérifier notre partie.
-
-On peut utiliser [fastify](https://fastify.dev/) comme framework HTTP.
-
-Tout est préconfigurer en allant sur la branche `2_controller`.
-
-**Règles:**
-- On veut un test qui ne dépende que du domain
-- Je ne veux toujours pas appeler l'API de BGG.
-
-**Questions:**
-- Pourquoi est-ce que le stub serait en production ?
-
-### BGG Client
-
-On peut utiliser le SDK que l'on veut: [bgg-sdk](https://github.com/ColCross/bgg-sdk).
-
-l'objectif est de parler les objets du domain (Anti-corruption-layer) donc notre adapter doit renvoyer des objets du domain
-
-On écrit d'abord un test pour BGG pour créer notre adapter et on mock ensuite (on ne veut pas dépendre du réseau dans la CI)
-
-### Aller plus loin
-
-Concepts de command / query
-
-
-
-
-
-### Crédits
-
-- Inspiré du [talk](https://www.youtube.com/watch?v=YPmKHm7G19Q) de Julien Topçu
+L’historique 2025/2026 reste accessible avant les commits v2. Le README historique est conservé dans `docs/legacy-README.md`.

@@ -1,33 +1,33 @@
 {
+  "name": "boardgame-plays-imt-2026-v2",
   "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.12 <27"
+  },
   "scripts": {
-    "build": "FORCE_COLOR=1 turbo run build",
-    "dev": "FORCE_COLOR=1 turbo run dev",
-    "tests": "FORCE_COLOR=1 turbo run tests",
-    "test:unit": "FORCE_COLOR=1 turbo run test:unit",
-    "test:functionnal": "FORCE_COLOR=1 turbo run test:functionnal",
-    "test:integration": "FORCE_COLOR=1 turbo run test:integration",
-    "test:api": "FORCE_COLOR=1 turbo run test:api",
-    "lint:check": "FORCE_COLOR=1 turbo run lint:check",
-    "lint:fix": "FORCE_COLOR=1 turbo run lint:fix",
-    "prettier:check": "prettier --check .",
-    "prettier:fix": "prettier --write .",
-    "types:check": "FORCE_COLOR=1 turbo run types:check"
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "check": "npm run build && npm test",
+    "demo": "tsx src/demo.ts",
+    "course": "node scripts/course.mjs",
+    "db:setup": "node scripts/db-setup.mjs",
+    "start": "tsx src/server.ts",
+    "cli": "tsx src/cli.ts",
+    "postinstall": "prisma generate"
+  },
+  "dependencies": {
+    "fastify": "5.12.4",
+    "fast-xml-parser": "5.11.1",
+    "zod": "3.25.76",
+    "@prisma/client": "6.19.3"
   },
   "devDependencies": {
-    "@commitlint/cli": "^19.5.0",
-    "@commitlint/config-conventional": "^19.5.0",
-    "eslint": "^9.13.0",
-    "prettier": "^3.3.3",
-    "turbo": "^2.2.3"
-  },
-  "engines": {
-    "node": ">=20"
-  },
-  "volta": {
-    "node": "20.11.0",
-    "pnpm": "9.12.2"
-  },
-  "packageManager": "pnpm@9.12.2",
-  "name": "boardgame-plays-monorepo"
+    "typescript": "5.9.3",
+    "tsx": "4.23.13",
+    "vitest": "5.0.0",
+    "prisma": "6.19.3",
+    "@types/node": "24.10.1"
+  }
 }
