@@ -1,6 +1,6 @@
 # Architecture Logiciel - Hexagonal
 
-- [Slides](https://slides.com/anaelchardan/hexagonal-architecture-and-beyond) du cours
+- [Slides](https://slides.com/anaelchardan/hexagonal-architecture-and-beyond-0e45d4) du cours
 
 ## Installation
 
