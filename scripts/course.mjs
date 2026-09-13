@@ -42,7 +42,8 @@ Ouvrir : ${resolve(dir,s.file)}`);
  return dir;
 }
 try {
- if(action==='list') steps.forEach(s=>console.log(`${s.step}  ${s.title}  (${s.ref})`));
+ if(action==='warmup') steps.forEach(prepare);
+ else if(action==='list') steps.forEach(s=>console.log(`${s.step}  ${s.title}  (${s.ref})`));
  else if(action==='show') show(step(id));
  else if(action==='diff') run('git',['diff',step(id).ref,step(toId).ref,'--','src','tests','examples']);
  else if(action==='prepare' || action==='run' || action==='test' || action==='next') {
@@ -51,5 +52,5 @@ try {
   const dir=prepare(s);
   if(action==='run') run(npm,['run','demo'],dir);
   if(action==='test') run(npm,['run','check'],dir);
- } else throw new Error('Commande inconnue : list, show, diff, prepare, run, test, next.');
+ } else throw new Error('Commande inconnue : list, show, diff, warmup, prepare, run, test, next.');
 } catch(e) { console.error(e.message);process.exitCode=1; }

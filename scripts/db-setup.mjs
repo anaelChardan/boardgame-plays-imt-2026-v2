@@ -1,3 +1,5 @@
+import { existsSync } from 'node:fs';
+if (existsSync('.env')) process.loadEnvFile('.env');
 import { spawnSync } from 'node:child_process';
 const command = process.platform === 'win32' ? 'node_modules/.bin/prisma.cmd' : 'node_modules/.bin/prisma';
 const result = spawnSync(command, ['db', 'push', '--skip-generate'], {
