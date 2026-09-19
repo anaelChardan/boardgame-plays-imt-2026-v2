@@ -3,14 +3,15 @@ import { CatalogUnavailable } from '../src/domain/errors.js';
 import { buildPlayAGame } from '../src/domain/play-a-game.js';
 import { fixtureCatalogue } from '../src/infrastructure/fixture-catalogue.js';
 import { buildHttp } from '../src/infrastructure/http.js';
+import { buildMemoryStore } from '../src/infrastructure/memory-store.js';
 
 it.each([
-  [{ boardgameName: 'Azul', players: ['Alice', 'Bob'] }, 200],
+  [{ boardgameName: 'Azul', players: ['Alice', 'Bob'] }, 201],
   [{ boardgameName: 'Azul', players: ['Alice'] }, 422],
   [{ boardgameName: 'Inconnu', players: ['Alice', 'Bob'] }, 404],
   [{ boardgameName: 'Azul', players: 'Alice' }, 400],
 ])('traduit la requête et le résultat %j', async (payload, status) => {
-  const app = buildHttp(buildPlayAGame(fixtureCatalogue));
+  const app = buildHttp(buildPlayAGame(fixtureCatalogue, buildMemoryStore()));
   try {
     expect(
       (await app.inject({ method: 'POST', url: '/plays', payload })).statusCode,

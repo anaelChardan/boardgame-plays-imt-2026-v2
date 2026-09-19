@@ -1,8 +1,9 @@
 import { expect, it } from 'vitest';
 import { buildPlayAGame } from '../src/domain/play-a-game.js';
 import { fixtureCatalogue } from '../src/infrastructure/fixture-catalogue.js';
+import { buildMemoryStore } from '../src/infrastructure/memory-store.js';
 
-const play = () => buildPlayAGame(fixtureCatalogue);
+const play = () => buildPlayAGame(fixtureCatalogue, buildMemoryStore());
 it.each([2, 4])('accepte la borne %i', async (n) => {
   const result = await play()({
     boardgameName: 'brass: birmingham',

@@ -4,9 +4,12 @@ import {
   InvalidPlayerCount,
 } from './errors.js';
 import type { Play, PlayRequest } from './model.js';
-import type { BoardgameInventory } from './ports.js';
+import type { BoardgameInventory, PlayWriter } from './ports.js';
 export type PlayAGame = (request: PlayRequest) => Promise<Play>;
-export function buildPlayAGame(inventory: BoardgameInventory): PlayAGame {
+export function buildPlayAGame(
+  inventory: BoardgameInventory,
+  writer: PlayWriter,
+): PlayAGame {
   return async ({ boardgameName, players }) => {
     const names = players.map((name) => name.trim());
     if (names.some((name) => name.length === 0)) {
@@ -30,6 +33,7 @@ export function buildPlayAGame(inventory: BoardgameInventory): PlayAGame {
       bggId: game.bggId,
       players: names,
     };
+    await writer.save(play);
     return play;
   };
 }

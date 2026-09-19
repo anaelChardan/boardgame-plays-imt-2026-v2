@@ -22,7 +22,7 @@ export function buildHttp(play: PlayAGame) {
       return reply.code(400).send({ error: 'Requête invalide' });
     }
     try {
-      return reply.code(200).send(await play(parsed.data));
+      return reply.code(201).send(await play(parsed.data));
     } catch (error) {
       if (error instanceof BoardgameNotFound) {
         return reply.code(404).send({ error: error.message });

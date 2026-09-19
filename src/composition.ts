@@ -2,6 +2,7 @@ import { existsSync } from 'node:fs';
 import { buildPlayAGame } from './domain/play-a-game.js';
 import { buildBggCatalogue } from './infrastructure/bgg.js';
 import { fixtureCatalogue } from './infrastructure/fixture-catalogue.js';
+import { buildMemoryStore } from './infrastructure/memory-store.js';
 export function compose() {
   if (existsSync('.env')) {
     process.loadEnvFile('.env');
@@ -14,5 +15,6 @@ export function compose() {
     kind === 'bgg'
       ? buildBggCatalogue(process.env.BGG_API_TOKEN ?? '')
       : fixtureCatalogue;
-  return { play: buildPlayAGame(inventory) };
+  const store = buildMemoryStore();
+  return { play: buildPlayAGame(inventory, store), store };
 }
