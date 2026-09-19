@@ -1,32 +1,18 @@
 import assert from 'node:assert/strict';
-import {
-  validateCount, makeValidator, emptyCatalogue, brokenCatalogue, countPlays,
-  type Catalogue, type Game, type PlayReader,
-} from '../examples/solid/principles.js';
+import type { Boardgame, Play, PlayRequest } from './domain/model.js';
+import { games } from './infrastructure/fixtures.js';
 
-console.log('01 · SOLID : cinq principes, cinq observations');
-const azul: Game = { name: 'Azul', min: 2, max: 4 };
-validateCount(azul, ['Alice', 'Bob']);
-assert.throws(() => validateCount(azul, ['Alice']), /Nombre invalide/);
-console.log('S · La règle accepte 2 joueurs et refuse 1 joueur, sans JSON ni SQL.');
+console.log('02 · Modèle : distinguer jeu, demande et partie');
+const game: Boardgame | undefined = games.find(game => game.name === 'Azul');
+assert.ok(game);
+const request: PlayRequest = { boardgameName: game.name, players: ['Alice', 'Bob'] };
+const example: Play = { ...request, bggId: game.bggId };
+console.log('Boardgame → catalogue et limites :', game);
+console.log('PlayRequest → demande reçue :', request);
+console.log('Play → exemple de résultat, construit manuellement :', example);
 
-const catalogueA: Catalogue = { async find(name) { return name === azul.name ? azul : null; } };
-const games = new Map([[azul.name, azul]]);
-const catalogueB: Catalogue = { async find(name) { return games.get(name) ?? null; } };
-for (const catalogue of [catalogueA, catalogueB]) {
-  await makeValidator(catalogue)('Azul', ['Alice', 'Bob']);
-}
-console.log('O · Deux catalogues différents, le même validateur accepte la partie.');
-
-assert.equal(await emptyCatalogue.find('Inconnu'), null);
-await assert.rejects(() => brokenCatalogue.find('Inconnu'), /Jeu inconnu/);
-console.log('L · Inconnu : null avec le contrat respecté, exception avec le contre-exemple.');
-console.log('    Cette exception est attendue ici pour montrer la violation du contrat.');
-
-const reader: PlayReader = { async all() { return [['Alice', 'Bob']]; } };
-assert.equal(await countPlays(reader), 1);
-console.log('I · Une partie comptée avec all() seulement ; aucune méthode save() exigée.');
-
-await assert.rejects(() => makeValidator(emptyCatalogue)('Azul', ['Alice', 'Bob']), /Jeu inconnu/);
-console.log('D · makeValidator dépend du contrat Catalogue ; le câblage fournit son instance.');
-console.log('    Avec le catalogue vide injecté, la même politique refuse le jeu inconnu.');
+const invalidRequest: PlayRequest = { boardgameName: game.name, players: ['Alice'] };
+assert.ok(invalidRequest.players.length < game.minNumberOfPlayers);
+console.log('Cette demande à un joueur est pourtant bien typée :', invalidRequest);
+console.log('Les types ne valident pas les règles métier. Le cas d’usage arrive à 03.');
+console.log('Aucune validation automatique et aucune sauvegarde à cette étape.');
