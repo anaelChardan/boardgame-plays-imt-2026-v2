@@ -1,106 +1,93 @@
-# Architecture Logiciel - Hexagonal
+# SOLID et architecture hexagonale · IMT 2026 v2
 
-- [Slides](https://slides.com/anaelchardan/hexagonal-architecture-and-beyond-0e45d4) du cours
+Cours de conception logicielle de 2h30 pour étudiants en troisième année après le baccalauréat, en première année du cycle ingénieur. Les démonstrations examinent les effets de nouvelles exigences sur une application, les contrats entre modules et le coût des abstractions.
 
-## Installation
+[Présentation v2](https://slides.com/anaelchardan/solid-et-architecture-hexagonale-imt-2026-v2) · [Dépôt original 2026](https://github.com/anaelChardan/boardgame-plays-imt-2026)
 
-### Pré-requis
+## Démarrer
 
-- [volta](https://volta.sh/)
-
-### Makefile
-
-Vous permet de lister tout ce que l'on peut faire
+Node 24 LTS requis (`.node-version`), npm fourni avec Node. Aucune base externe et aucun compte BGG nécessaires pour les démonstrations par défaut.
 
 ```sh
-make
+npm ci
+npm run check
+npm run demo
+npm run course -- list
 ```
 
-Par exemple pour installer
+Chaque tag `course-2026-v3/00-start` à `course-2026-v3/09-challenge` est un état exécutable. `main` contient la version complète. Les dépendances et le schéma Prisma sont préparés dès le départ pour éviter les installations en cours de démonstration.
+
+## Naviguer sans perdre les modifications
 
 ```sh
-make install
+npm run course -- show 03
+npm run course -- diff 03 04
+npm run course -- prepare 04
+npm run course -- run 04
+npm run course -- test 04
+npm run course -- next 04
 ```
 
-### Contenu du dépôt
+Les commandes créent des worktrees détachés dans `.course-worktrees/v3/`, sans changer votre checkout ni écraser vos modifications. `run` utilise la démonstration de l’étape ; `test` exécute sa vérification. `next` prépare l’étape suivante et affiche les chemins, sans démarrer de serveur. Exécuter ces commandes depuis le clone principal. Les worktrees modifiés sont conservés ; leur vérification refuse de les traiter comme des réponses intactes.
 
-Ce dépôt est un monorepo géré avec [turbo](https://turbo.build/).
+Les tags formatés avec Biome utilisent le préfixe `course-2026-v3/`. Les anciens tags `course-2026/`, `course-2026-v2/` et leurs dossiers restent conservés. Après une mise à jour, lancer `git pull --ff-only`, `git fetch --tags`, puis `npm run course -- warmup` pour préparer les nouvelles versions.
 
-On a les packages:
-- `domain` (qui représente notre métier)
-- `glue` (qui execute vraiment le code et qui peut dépendre d'un peu tout)
+Les checkpoints ne sont disponibles qu’après récupération des tags (`git fetch --tags`). Les démonstrations ont été vérifiées sous macOS avec Node 24. Les exemples de variables d’environnement utilisent la syntaxe des terminaux macOS/Linux.
 
-Les tests sont executés par [vitest](https://vitest.dev/), différents types de tests sont disponibles (voir `make list`).
+## Ce que lance la démonstration
 
-## Objectifs
+`npm run demo` exécute `src/demo.ts` dans le dossier courant, affiche les résultats puis se termine. Dans `main`, c’est la démo finale 09. Pour choisir une étape : `npm run course -- run 04`. Pour laisser un serveur ouvert : `npm start` (à partir de 04).
 
-Pouvoir enregistrer/vérifier des parties de jeux de société en étant sûr de rentrer le bon nombre de joueur (sans forcément rentrer le score).
+Chaque étape a sa propre démo, décrite dans le [conducteur](docs/lesson-steps.md#les-démos-exécutables). Les assertions font échouer la commande si le résultat attendu n’est pas obtenu ; les refus métier prévus sont vérifiés puis affichés.
 
-Par exemple enregistrer une partie de [Brass Birmingham](https://boardgamegeek.com/boardgame/224517/brass-birmingham)
+Pour répéter et vérifier toute la progression : `npm run course -- verify` compile, teste et lance les dix démos. Prévoir plusieurs minutes lors de la première préparation.
 
-Nous pouvons utiliser l'API de boardgamegeek pour retrouver ces informations.
+## Format et qualité du code
 
-## Étapes
+[Biome](https://biomejs.dev/guides/getting-started/) est installé avec une version exacte, commune à tous les checkpoints. Il formate TypeScript, JavaScript et les configurations JSON, trie les imports et applique ses règles recommandées. Le code utilise deux espaces, des lignes de 80 caractères et des accolades pour les blocs.
 
-### 1. Domain
-
-#### Model
-
-J'ai des jeux de plateux et des parties
-
-On a les notions de:
-
-- **Jeu de plateau**: Il est composé d'un nom, d'un identifiant BGG, des nombres minimum et maximum de joueur.
-- **Partie**: composé d'un nom d'un id de jeu (on peut prendre celui de bgg), d'une liste de joueurs (string[]);
-
-#### Use cases (ports primaire)
-
-Je veux pouvoir enregistrer un partie avec une fonction de ce type là
-
-```ts
-function forBoardgame(boardgameName: string, players: string[]) Play {
-  // ...
-}
+```sh
+npm run format     # Mettre en forme
+npm run lint:fix   # Formater, organiser les imports et appliquer les corrections sûres
+npm run lint       # Vérifier sans modifier les fichiers
+npm run check      # Lint, compilation et tests
 ```
 
-**Besoins**:
-- D'un port primaire de son implémentation (et de son test fonctionnel)
-- D'un moyen de retrouver le jeu sur BGG (voir injection de dépendance, utilisation d'un port secondaire, et d'un stub).
+La CI vérifie aussi les dix checkpoints avec `npm run course -- verify`. Les documents, les exports de slides, le lockfile npm et les fichiers générés ne sont pas reformattés par Biome. Le schéma Prisma utilise son formateur natif.
 
-**Règles**:
-- Le domain ne doit jamais dépendre d'éléments extérieurs au domain!
+Après une manipulation en direct, lancer `npm run lint:fix` dans le dossier du checkpoint pour retrouver le format du dépôt. `npm test` reste disponible pour se concentrer sur le comportement pendant la démonstration.
 
-### 2. Intéragir avec le domain (utilisation du port primaire)
+## Résultat final
 
-On veut pouvoir maintenant exposer une API rest pour enregistrer/vérifier notre partie.
+Le cas d’usage valide le nombre de joueurs, enregistre une partie via un port, puis fonctionne via HTTP ou CLI. Le catalogue de démonstration fonctionne hors ligne. BGG et SQLite/Prisma sont des implémentations interchangeables de dépendances.
 
-On peut utiliser [fastify](https://fastify.dev/) comme framework HTTP.
+## Supports
 
-Tout est préconfigurer en allant sur la branche `2_controller`.
+Consulter `docs/` pour le déroulé, les contrats, les questions et les correspondances entre diapositives et étapes. Les exemples SOLID se trouvent dans `examples/solid/` à partir de l’étape 01.
 
-**Règles:**
-- On veut un test qui ne dépende que du domain
-- Je ne veux toujours pas appeler l'API de BGG.
+L’historique 2025/2026 reste accessible avant les commits v2. Le README historique est conservé dans `docs/legacy-README.md`.
 
-**Questions:**
-- Pourquoi est-ce que le stub serait en production ?
+## Pour animer la séance
 
-### BGG Client
+[Vue présentateur avec les notes](https://slides.com/anaelchardan/solid-et-architecture-hexagonale-imt-2026-v2/speaker). Les 49 slides comprennent les rôles primaire/secondaire et six étapes du même hexagone. Aucun Docker nécessaire : Node 24, npm et Git suffisent.
 
-On peut utiliser le SDK que l'on veut: [bgg-sdk](https://github.com/ColCross/bgg-sdk).
+Le code existe déjà dans chaque checkpoint. Les modifications à taper en direct sont courtes et décrites dans le conducteur ; HTTP, BGG, Prisma et la CLI sont préparés.
 
-l'objectif est de parler les objets du domain (Anti-corruption-layer) donc notre adapter doit renvoyer des objets du domain
+Commencer par le [conducteur pas à pas](docs/lesson-steps.md) : fichiers à ouvrir, manipulations, tests et résultats attendus pour chaque checkpoint.
 
-On écrit d'abord un test pour BGG pour créer notre adapter et on mock ensuite (on ne veut pas dépendre du réseau dans la CI)
+- [Conducteur détaillé des 49 slides](docs/presenter-notes.md)
+- [Commandes, séquences de code et plans de secours](docs/demo-runbook.md)
+- [PDF pour présenter hors ligne](slides/course.pdf)
+- [Source éditable du deck](slides/deck.html) et [contenu structuré](slides/slides.json)
 
-### Aller plus loin
+Avant le cours : `npm run course -- warmup`. Pendant le cours : `npm run course -- prepare 03` puis `npm run course -- next 03` depuis le clone principal. Les premières étapes montrent volontairement une validation sans écriture. Les scripts `start` et `cli` deviennent utilisables respectivement à 04 et 08.
 
-Concepts de command / query
+Le deck est en français. Le professeur explique les concepts et réalise les démonstrations. Les étudiants peuvent l’interrompre pour poser leurs questions tout au long de la séance. Le conducteur réserve du temps aux réponses, sans prédictions imposées ni exercices en binôme.
 
+## Sources
 
+- [Ports and Adapters, article original d’Alistair Cockburn](https://alistair.cockburn.us/hexagonal-architecture)
+- [SOLID, cours de Steven Zeil](https://www.cs.odu.edu/~zeil/cs330/latest/Public/solid/)
+- [Documentation XML API2 de BoardGameGeek](https://boardgamegeek.com/wiki/page/BGG_XML_API2)
 
-
-
-### Crédits
-
-- Inspiré du [talk](https://www.youtube.com/watch?v=YPmKHm7G19Q) de Julien Topçu
+Les tests BGG utilisent un transport contrôlé. Ils ne vérifient pas un compte, un jeton ou la disponibilité du service en direct.

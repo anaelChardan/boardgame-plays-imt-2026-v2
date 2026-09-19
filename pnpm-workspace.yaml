@@ -1,3 +1,0 @@
-packages:
-  - "./boardgame-plays/*"
-  - "./tools-config/*"
