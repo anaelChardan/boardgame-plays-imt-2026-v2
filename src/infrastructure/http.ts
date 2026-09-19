@@ -8,7 +8,7 @@ export function buildHttp(play: PlayAGame) {
   app.post('/plays', async (request, reply) => {
     const parsed = requestSchema.safeParse(request.body);
     if (!parsed.success) return reply.code(400).send({error:'Requête invalide'});
-    try { return reply.code(200).send(await play(parsed.data)); }
+    try { return reply.code(201).send(await play(parsed.data)); }
     catch (error) {
       if (error instanceof BoardgameNotFound) return reply.code(404).send({error:error.message});
       if (error instanceof InvalidPlayerCount || error instanceof InvalidParticipants) return reply.code(422).send({error:error.message});

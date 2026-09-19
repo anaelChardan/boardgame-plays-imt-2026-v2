@@ -1,8 +1,8 @@
 import type { Play, PlayRequest } from './model.js';
-import type { BoardgameInventory } from './ports.js';
+import type { BoardgameInventory, PlayWriter } from './ports.js';
 import { BoardgameNotFound, InvalidPlayerCount, InvalidParticipants } from './errors.js';
 export type PlayAGame = (request: PlayRequest) => Promise<Play>;
-export function buildPlayAGame(inventory: BoardgameInventory): PlayAGame {
+export function buildPlayAGame(inventory: BoardgameInventory, writer: PlayWriter): PlayAGame {
   return async ({boardgameName, players}) => {
     const names = players.map(name => name.trim());
     if (names.some(name => name.length === 0)) throw new InvalidParticipants();
@@ -12,6 +12,7 @@ export function buildPlayAGame(inventory: BoardgameInventory): PlayAGame {
       throw new InvalidPlayerCount(game.minNumberOfPlayers, game.maxNumberOfPlayers);
     }
     const play = {boardgameName:game.name,bggId:game.bggId,players:names};
+    await writer.save(play);
     return play;
   };
 }

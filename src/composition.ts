@@ -1,3 +1,4 @@
+import { buildMemoryStore } from './infrastructure/memory-store.js';
 import { existsSync } from 'node:fs';
 import { fixtureCatalogue } from './infrastructure/fixture-catalogue.js';
 import { buildBggCatalogue } from './infrastructure/bgg.js';
@@ -7,5 +8,6 @@ export function compose() {
   const kind = process.env.CATALOG ?? 'fixture';
   if (!['fixture','bgg'].includes(kind)) throw new Error('CATALOG : fixture ou bgg');
   const inventory = kind === 'bgg' ? buildBggCatalogue(process.env.BGG_API_TOKEN ?? '') : fixtureCatalogue;
-  return {play:buildPlayAGame(inventory)};
+  const store = buildMemoryStore();
+  return {play:buildPlayAGame(inventory, store),store};
 }
