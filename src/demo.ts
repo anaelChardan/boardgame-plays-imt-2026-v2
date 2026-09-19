@@ -2,29 +2,26 @@ import assert from 'node:assert/strict';
 import { buildPlayAGame } from './domain/play-a-game.js';
 import { CatalogUnavailable } from './domain/errors.js';
 import { fixtureCatalogue } from './infrastructure/fixture-catalogue.js';
-import { buildHttp } from './infrastructure/http.js';
+import { buildBggCatalogue } from './infrastructure/bgg.js';
 
-console.log('04 · HTTP : un adaptateur primaire traduit les résultats du même cas d’usage');
-console.log('Requêtes internes avec inject() : aucun port réseau ouvert, aucune sauvegarde.');
-const app = buildHttp(buildPlayAGame(fixtureCatalogue));
-const unavailable = buildHttp(buildPlayAGame({ async getBoardgameByName() { throw new CatalogUnavailable(); } }));
-const valid = { boardgameName: 'Azul', players: ['Alice', 'Bob'] };
-try {
-  const cases = [
-    { label: 'Partie valide', payload: valid, status: 200 },
-    { label: 'Forme invalide', payload: { ...valid, players: 'Alice' }, status: 400 },
-    { label: 'Jeu inconnu', payload: { ...valid, boardgameName: 'Inconnu' }, status: 404 },
-    { label: 'Un joueur', payload: { ...valid, players: ['Alice'] }, status: 422 },
-  ];
-  for (const { label, payload, status } of cases) {
-    const response = await app.inject({ method: 'POST', url: '/plays', payload });
-    assert.equal(response.statusCode, status);
-    console.log(`${label} → HTTP ${response.statusCode}`, response.json());
-  }
-  const response = await unavailable.inject({ method: 'POST', url: '/plays', payload: valid });
-  assert.equal(response.statusCode, 503);
-  console.log('Catalogue indisponible → HTTP 503', response.json());
-} finally {
-  await app.close();
-  await unavailable.close();
-}
+console.log('05 · BGG : remplacer un adaptateur secondaire sans changer le cas d’usage');
+console.log('Vrai adaptateur XML, réponses HTTP contrôlées : aucun réseau ni jeton réel.');
+const searchXml = '<items><item id="230802"><name value="Azul"/></item></items>';
+const detailsXml = '<items><item id="230802"><name type="primary" value="Azul"/><minplayers value="2"/><maxplayers value="4"/></item></items>';
+const controlledFetch: typeof fetch = async input => {
+  const url = new URL(String(input));
+  console.log('Transport contrôlé →', url.pathname + url.search);
+  return new Response(url.pathname.endsWith('/thing') ? detailsXml
+    : url.searchParams.get('query') === 'Azul' ? searchXml : '<items total="0"/>');
+};
+const bgg = buildBggCatalogue('demo-offline', controlledFetch);
+const request = { boardgameName: 'Azul', players: ['Alice', 'Bob'] };
+const fixturePlay = await buildPlayAGame(fixtureCatalogue)(request);
+const bggPlay = await buildPlayAGame(bgg)(request);
+assert.deepEqual(bggPlay, fixturePlay);
+console.log('Fixture et BGG donnent la même partie :', bggPlay);
+assert.equal(await bgg.getBoardgameByName('Inconnu'), null);
+console.log('Aucun résultat → null, absence métier.');
+const unavailable = buildBggCatalogue('demo-offline', async () => new Response('', { status: 401 }));
+await assert.rejects(() => unavailable.getBoardgameByName('Azul'), CatalogUnavailable);
+console.log('HTTP 401 → CatalogUnavailable, panne technique distincte de l’absence.');
