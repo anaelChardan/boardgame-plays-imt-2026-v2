@@ -32,7 +32,7 @@ npm run course -- warmup
 npm run course -- list
 ```
 
-Chaque tag `course-2026/00-start` à `course-2026/09-challenge` contient **une solution complète qui fonctionne**. Le dépôt ne contient pas de versions à trous. Pour montrer un changement, comparer deux tags ou modifier temporairement une petite portion de la solution dans son dossier préparé.
+Chaque tag `course-2026-v2/00-start` à `course-2026-v2/09-challenge` contient **une solution complète qui fonctionne**. Le dépôt ne contient pas de versions à trous. Pour montrer un changement, comparer deux tags ou modifier temporairement une petite portion de la solution dans son dossier préparé.
 
 Garder deux fenêtres :
 
@@ -46,9 +46,30 @@ npm run course -- diff 02 03
 npm run course -- next 03
 ```
 
-`prepare 03` affiche un chemin se terminant par `.course-worktrees/03-domain`. Ouvrir ce dossier dans l’éditeur. Les commandes de test indiquées ci-dessous s’exécutent **dans ce dossier**, sauf les commandes `course`, exécutées depuis le clone principal.
+`prepare 03` affiche un chemin se terminant par `.course-worktrees/v2/03-domain`. Ouvrir ce dossier dans l’éditeur. Les commandes de test indiquées ci-dessous s’exécutent **dans ce dossier**, sauf les commandes `course`, exécutées depuis le clone principal.
 
 `next 03` prépare 04 sans effacer ce que tu as modifié dans 03. Il ne transporte pas tes modifications vers 04 et ne démarre aucun serveur. Pour une étape modifiée, lancer ses tests directement dans son dossier : le navigateur refuse de la réinitialiser. Les diffs entre tags montrent les solutions enregistrées, pas les modifications en cours.
+
+## Les démos exécutables
+
+Dans un dossier d’étape, `npm run demo` lance `src/demo.ts`, affiche les observations puis se termine. Depuis le clone principal, `npm run course -- run NN` choisit l’étape. Les démonstrations fonctionnent hors ligne après préparation ; les résultats attendus sont vérifiés par des assertions. Une régression fait échouer la commande.
+
+| Étape | Ce que montre `npm run demo` |
+|---|---|
+| 00 | JSON accepté, ligne de stockage simulée, refus à un joueur |
+| 01 | Cinq observations SOLID : règle isolée, catalogues interchangeables, violation LSP, lecture seule, injection |
+| 02 | Objets `Boardgame`, `PlayRequest`, `Play` et demande bien typée mais invalide métier |
+| 03 | Bornes 2/4 acceptées, 1/5 refusées, jeu inconnu, sans stockage |
+| 04 | Vraies routes HTTP via `inject()` : 200, 400, 404, 422 et 503 |
+| 05 | Vrai adaptateur BGG, XML contrôlé : même résultat que la fixture, absence et panne distinguées |
+| 06 | HTTP 201 après écriture mémoire, aucun ajout en cas de refus, échec du writer propagé |
+| 07 | Écriture SQLite, fermeture, nouvelle connexion et relecture de la même partie |
+| 08 | HTTP et CLI appellent le même cas d’usage ; mêmes résultats et refus |
+| 09 | Doublons après normalisation refusés par HTTP et CLI, sans sauvegarde |
+
+La démo 07 prépare et supprime sa propre base temporaire : aucun `db:setup` manuel et aucune modification de ta base. Les démos HTTP n’ouvrent aucun port réseau. Pour manipuler avec `curl`, utiliser `npm start`. Les démos 08/09 partagent la mémoire dans un seul processus ; deux commandes séparées nécessitent SQLite pour partager les données.
+
+Pour une répétition complète : `npm run course -- verify`. Les checkpoints corrigés se trouvent dans `.course-worktrees/v2/`. Les anciens tags et dossiers sont conservés ; ils contiennent les anciennes démos.
 
 ## Vue d’ensemble : 150 minutes
 
@@ -96,6 +117,8 @@ Les durées intègrent les explications et les questions au fil du cours. Si une
 - 30–35 : ISP, montrer que `countPlays` ne demande que `PlayReader`.
 - 35–40 : DIP, distinguer la propriété du contrat et l’injection de l’instance.
 
+**Démontrer :** `npm run demo` montre les cinq observations, puis ouvrir chaque fonction pendant son créneau.
+
 **Vérifier :** `npm test -- tests/solid.test.ts`.
 
 **Attention au contre-exemple LSP :** la suite verte contient une assertion qui constate volontairement l’exception de `brokenCatalogue`. Elle ne certifie pas sa conformité au contrat « inconnu = null ». Pour montrer la violation en rouge, remplacer temporairement cette assertion par une attente `resolves.toBeNull()`, lancer le test puis remettre l’assertion initiale.
@@ -108,7 +131,7 @@ Les durées intègrent les explications et les questions au fil du cours. Si une
 
 **Ouvrir :** `src/domain/model.ts` et `src/infrastructure/fixtures.ts`.
 
-**Faire :** expliquer les données manipulées : `Boardgame`, `Play`, `PlayRequest`. Pointer les limites min/max. La forme des données ne garantit pas à elle seule qu’une partie est valide.
+**Faire :** lancer `npm run demo`, puis expliquer les données manipulées : `Boardgame`, `Play`, `PlayRequest`. Pointer les limites min/max. La forme des données ne garantit pas à elle seule qu’une partie est valide.
 
 **Transition :** depuis le clone principal, `npm run course -- diff 02 03` montre l’arrivée du port de catalogue, des erreurs et du cas d’usage.
 
@@ -149,7 +172,7 @@ Les durées intègrent les explications et les questions au fil du cours. Si une
 
 **Vérifier :** `npm test -- tests/http.test.ts`.
 
-La réponse 200 correspond ici à la validation. Le passage à 201 arrivera avec la sauvegarde en06. Expliquer la panne catalogue 503 à partir du test contrôlé. Arrêter le serveur avant de démarrer une autre étape sur le même port.
+La réponse 200 correspond ici à la validation. Le passage à 201 arrivera avec la sauvegarde en 06. Expliquer la panne catalogue 503 à partir du test contrôlé. Arrêter le serveur avant de démarrer une autre étape sur le même port.
 
 ## 05 · Catalogue externe
 
@@ -157,7 +180,7 @@ La réponse 200 correspond ici à la validation. Le passage à 201 arrivera avec
 
 **Ouvrir :** `src/infrastructure/bgg.ts`, `src/composition.ts`, `tests/catalogue.test.ts`.
 
-**Faire :** montrer le choix fixture/BGG dans la composition, puis la traduction XML en `Boardgame`. Lire les réponses contrôlées utilisées par les tests. Montrer le cas 401 qui devient une indisponibilité, jamais une absence métier.
+**Faire :** lancer `npm run demo` pour voir l’adaptateur BGG fonctionner avec des réponses contrôlées, puis montrer le choix fixture/BGG dans la composition, puis la traduction XML en `Boardgame`. Lire les réponses contrôlées utilisées par les tests. Montrer le cas 401 qui devient une indisponibilité, jamais une absence métier.
 
 **Vérifier :** `npm test -- tests/catalogue.test.ts`.
 
@@ -187,7 +210,7 @@ La réponse 200 correspond ici à la validation. Le passage à 201 arrivera avec
 
 **Ouvrir :** `src/infrastructure/prisma-store.ts`, `prisma/schema.prisma`, `tests/prisma.test.ts`.
 
-**Faire :** expliquer la conversion entre le type métier et la ligne SQL, puis suivre le test : écriture, déconnexion, nouvelle connexion et relecture.
+**Faire :** lancer `npm run demo` pour montrer une écriture réelle et sa relecture après reconnexion. Expliquer la conversion entre le type métier et la ligne SQL, puis suivre le test : écriture, déconnexion, nouvelle connexion et relecture.
 
 **Vérifier :** `npm test -- tests/prisma.test.ts`.
 
@@ -236,7 +259,7 @@ Combiner cette condition avec le contrôle existant des noms vides pour lever `I
 4. Dans `src/domain/errors.ts`, adapter le message à « Chaque joueur doit avoir un nom non vide et unique ».
 5. Relancer le test : il réussit.
 6. Depuis le clone principal, afficher `npm run course -- diff 08 09`, puis `npm run course -- prepare 09` pour ouvrir la solution complète.
-7. Dans le dossier 09, lancer `npm test -- tests/challenge.test.ts` : HTTP et CLI rejettent les doublons, le stockage reste vide.
+7. Dans le dossier 09, lancer `npm run demo` pour voir les deux refus, puis `npm test -- tests/challenge.test.ts` : HTTP et CLI rejettent les doublons, le stockage reste vide.
 
 **Résultat :** une modification de la politique métier s’applique aux deux entrées. L’unicité par nom est une convention limitée de cette démonstration. La solution 09 ajoute aussi les vérifications d’intégration préparées, sans obliger à les saisir pendant les 6 minutes.
 

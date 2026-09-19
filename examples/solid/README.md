@@ -1,6 +1,6 @@
 # Cinq principes, une application
 
-Ouvrir `principles.ts`. Six minutes par principe : problème, explication du choix, modification du code et résultat. Les étudiants peuvent interrompre la démonstration pour poser leurs questions.
+Ouvrir `principles.ts`. Cinq minutes par principe : problème, explication du choix, modification du code et résultat. Les étudiants peuvent interrompre la démonstration pour poser leurs questions.
 
 - **SRP** : JSON change avec le transport, le nombre de joueurs avec la règle, la ligne SQL avec le stockage. Séparer ces raisons de changer. Une fonction peut coordonner plusieurs opérations cohérentes.
 - **OCP** : passer un autre catalogue à `makeValidator` étend un axe prévu. Une nouvelle règle peut toujours demander une modification du cas d’usage.

@@ -3,7 +3,13 @@ import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
-const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const scriptRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+// Navigation always uses the main clone, even from a prepared checkpoint.
+const commonGitDir = spawnSync('git', ['rev-parse', '--path-format=absolute', '--git-common-dir'], {
+ cwd: scriptRoot, encoding: 'utf8',
+});
+if (commonGitDir.status !== 0) throw new Error('Le navigateur de cours nécessite un clone Git.');
+const root = dirname(commonGitDir.stdout.trim());
 const steps = JSON.parse(readFileSync(resolve(root, 'course.json'), 'utf8'));
 const [action = 'list', id, toId] = process.argv.slice(2);
 const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
@@ -26,7 +32,7 @@ Slides : ${s.slidesUrl}`);
 }
 function prepare(s) {
  const sha=run('git',['rev-parse','--verify',`${s.ref}^{commit}`],root,true);
- const dir=resolve(root,'.course-worktrees',s.name);
+ const dir=resolve(root,'.course-worktrees','v2',s.name);
  if(!existsSync(dir)) run('git',['worktree','add','--detach',dir,s.ref]);
  if(run('git',['rev-parse','HEAD'],dir,true)!==sha) throw new Error(`Le worktree ${dir} pointe sur un autre commit. Aucune modification effectuée.`);
  if(run('git',['status','--porcelain'],dir,true)) throw new Error(`Modifications conservées dans ${dir}. Utiliser un autre clone pour une réponse intacte.`);
@@ -43,6 +49,14 @@ Ouvrir : ${resolve(dir,s.file)}`);
 }
 try {
  if(action==='warmup') steps.forEach(prepare);
+ else if(action==='verify') {
+  for(const s of steps) {
+   const dir=prepare(s);
+   run(npm,['run','check'],dir);
+   run(npm,['run','demo'],dir);
+  }
+  console.log('10 checkpoints : compilation, tests et démonstrations vérifiés.');
+ }
  else if(action==='list') steps.forEach(s=>console.log(`${s.step}  ${s.title}  (${s.ref})`));
  else if(action==='show') show(step(id));
  else if(action==='diff') run('git',['diff',step(id).ref,step(toId).ref,'--','src','tests','examples']);
@@ -52,5 +66,5 @@ try {
   const dir=prepare(s);
   if(action==='run') run(npm,['run','demo'],dir);
   if(action==='test') run(npm,['run','check'],dir);
- } else throw new Error('Commande inconnue : list, show, diff, warmup, prepare, run, test, next.');
+ } else throw new Error('Commande inconnue : list, show, diff, warmup, verify, prepare, run, test, next.');
 } catch(e) { console.error(e.message);process.exitCode=1; }

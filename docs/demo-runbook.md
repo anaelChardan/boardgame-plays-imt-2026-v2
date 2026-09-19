@@ -21,6 +21,12 @@ npm run course -- diff 08 09
 
 Si une étape contient des modifications, le navigateur refuse de la réinitialiser. Les modifications restent disponibles : ouvrir son dossier et lancer `npm run demo` ou `npm test` directement. Pour passer à la solution, préparer **l’étape suivante depuis le clone principal**. `diff` compare les solutions enregistrées, pas les modifications en cours.
 
+## Répéter les démos
+
+`npm run course -- run NN` lance la démonstration propre à chaque étape. Le [tableau du conducteur](lesson-steps.md#les-démos-exécutables) indique le résultat attendu. `npm run course -- verify` compile, teste et exécute les dix étapes. Les tags corrigés sont `course-2026-v2/*`, préparés dans `.course-worktrees/v2/` ; les anciens restent disponibles.
+
+La démo 05 appelle réellement le parseur et l’adaptateur BGG avec un transport contrôlé. La démo 07 utilise réellement SQLite, ferme la connexion et relit avec une nouvelle instance Prisma ; sa base temporaire est nettoyée. La démo 09 montre les doublons refusés dans HTTP et CLI. Aucun accès BGG live n’est nécessaire.
+
 ## Schémas de référence
 
 Le deck comprend 49 slides. Les schémas de progression reprennent les mêmes positions et ajoutent seulement les éléments présents au checkpoint. Le schéma d’origine est conservé comme image, les nouveaux schémas restent éditables.

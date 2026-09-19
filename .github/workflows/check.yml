@@ -14,3 +14,4 @@ jobs:
       - run: npm ci
       - run: npm run check
       - run: npm run demo
+      - run: npm run course -- verify

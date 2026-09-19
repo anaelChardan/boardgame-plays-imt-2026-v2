@@ -15,7 +15,7 @@ npm run demo
 npm run course -- list
 ```
 
-Chaque tag `course-2026/00-start` à `course-2026/09-challenge` est un état exécutable. `main` contient la version complète. Les dépendances et le schéma Prisma sont préparés dès le départ pour éviter les installations en cours de démonstration.
+Chaque tag `course-2026-v2/00-start` à `course-2026-v2/09-challenge` est un état exécutable. `main` contient la version complète. Les dépendances et le schéma Prisma sont préparés dès le départ pour éviter les installations en cours de démonstration.
 
 ## Naviguer sans perdre les modifications
 
@@ -28,9 +28,19 @@ npm run course -- test 04
 npm run course -- next 04
 ```
 
-Les commandes créent des worktrees détachés dans `.course-worktrees/`, sans changer votre checkout ni écraser vos modifications. `run` utilise la démonstration de l’étape ; `test` exécute sa vérification. `next` prépare l’étape suivante et affiche les chemins, sans démarrer de serveur. Exécuter ces commandes depuis le clone principal. Les worktrees modifiés sont conservés ; leur vérification refuse de les traiter comme des réponses intactes.
+Les commandes créent des worktrees détachés dans `.course-worktrees/v2/`, sans changer votre checkout ni écraser vos modifications. `run` utilise la démonstration de l’étape ; `test` exécute sa vérification. `next` prépare l’étape suivante et affiche les chemins, sans démarrer de serveur. Exécuter ces commandes depuis le clone principal. Les worktrees modifiés sont conservés ; leur vérification refuse de les traiter comme des réponses intactes.
+
+Les tags corrigés utilisent le préfixe `course-2026-v2/`. Les anciens tags `course-2026/` et dossiers restent conservés. Après une mise à jour, lancer `git pull --ff-only`, `git fetch --tags`, puis `npm run course -- warmup` pour préparer les nouvelles versions.
 
 Les checkpoints ne sont disponibles qu’après récupération des tags (`git fetch --tags`). Les démonstrations ont été vérifiées sous macOS avec Node 24. Les exemples de variables d’environnement utilisent la syntaxe des terminaux macOS/Linux.
+
+## Ce que lance la démonstration
+
+`npm run demo` exécute `src/demo.ts` dans le dossier courant, affiche les résultats puis se termine. Dans `main`, c’est la démo finale 09. Pour choisir une étape : `npm run course -- run 04`. Pour laisser un serveur ouvert : `npm start` (à partir de 04).
+
+Chaque étape a sa propre démo, décrite dans le [conducteur](docs/lesson-steps.md#les-démos-exécutables). Les assertions font échouer la commande si le résultat attendu n’est pas obtenu ; les refus métier prévus sont vérifiés puis affichés.
+
+Pour répéter et vérifier toute la progression : `npm run course -- verify` compile, teste et lance les dix démos. Prévoir plusieurs minutes lors de la première préparation.
 
 ## Résultat final
 
