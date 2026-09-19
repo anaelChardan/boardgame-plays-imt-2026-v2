@@ -10,7 +10,7 @@ export class InvalidPlayerCount extends Error {
 }
 export class InvalidParticipants extends Error {
   constructor() {
-    super('Chaque joueur doit avoir un nom non vide');
+    super('Chaque joueur doit avoir un nom non vide et unique');
   }
 }
 export class CatalogUnavailable extends Error {

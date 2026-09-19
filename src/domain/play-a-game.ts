@@ -12,7 +12,10 @@ export function buildPlayAGame(
 ): PlayAGame {
   return async ({ boardgameName, players }) => {
     const names = players.map((name) => name.trim());
-    if (names.some((name) => name.length === 0)) {
+    if (
+      names.some((name) => name.length === 0) ||
+      new Set(names.map((name) => name.toLowerCase())).size !== names.length
+    ) {
       throw new InvalidParticipants();
     }
     const game = await inventory.getBoardgameByName(boardgameName.trim());
