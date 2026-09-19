@@ -4,6 +4,23 @@ Ce document est le support à garder ouvert pendant la séance. Les [notes par s
 
 Le format retenu : tu présentes et tu codes, les étudiants posent leurs questions au fil du cours. Les manipulations ci-dessous sont réalisées par toi. Aucun travail autonome ni exercice en binôme n’est programmé.
 
+## Ce qui est prêt et ce que tu tapes
+
+**Prérequis : Git, Node 24 et npm. Aucun Docker, Bun ou serveur de base externe.** SQLite utilise un fichier local. Le catalogue fixture évite tout accès à BGG pendant les démonstrations. Une connexion Internet sert à la première installation des dépendances et à la présentation en ligne. Préparer les checkpoints et garder le PDF pour travailler hors ligne.
+
+Les checkpoints sont des solutions complètes. Le cours montre le code progressivement en ouvrant un dossier par étape. Passer au checkpoint suivant ne rejoue pas automatiquement une écriture de code. Tu ouvres les fichiers indiqués et expliques le diff.
+
+| Moment | Ce que tu fais en direct |
+|---|---|
+| SOLID | Lire les exemples et lancer leurs tests. La mutation LSP est facultative. |
+| Validation métier | Changer `>` en `>=`, montrer le test rouge, remettre `>`. |
+| HTTP et BGG | Lire le code préparé, envoyer les requêtes, lancer les tests. |
+| Sauvegarde | Commenter `await writer.save(play)`, observer l’échec, rétablir la ligne. |
+| SQLite et CLI | Lancer les commandes préparées et montrer les résultats. |
+| Règle finale | Ajouter le test des doublons puis la condition d’unicité, ou lire le diff 08/09 si le temps manque. |
+
+Le schéma se complète aux slides **27, 31, 35, 39, 42 et 44**. Consacrer une à deux minutes au repère visuel, dans le créneau de la démonstration, puis ouvrir le code. Les éléments verts correspondent à l’ajout de l’étape. La carte cible de la slide 21 montre déjà l’ensemble.
+
 ## Préparer les solutions avant le cours
 
 Depuis le clone principal, avec Node 24 :
@@ -38,18 +55,18 @@ npm run course -- next 03
 | Minutes | Slides | Étape | Séquence |
 |---|---|---|---|
 | 0–15 | 1–5 | 00 | Comportement attendu et point de départ couplé |
-| 15–45 | 6–17 | 01 | Les cinq principes SOLID sur les mêmes besoins |
-| 45–55 | 18–22 | 01 | Ports, adaptateurs, imports et appels |
-| 55–59 | 23 | 02 | Modèle métier |
-| 59–75 | 24–25 | 03 | Validation et manipulation des bornes |
-| 75–85 | 26 | — | Pause de 10 minutes |
-| 85–100 | 27–29 | 04 | HTTP, demandes invalides et politique d’erreur |
-| 100–115 | 30–32 | 05 | Catalogue BGG et vérifications des adaptateurs |
-| 115–124 | 33–34 | 06 | Écriture et effets observables |
-| 124–130 | 35 | 07 | Persistance après reconnexion |
-| 130–134 | 36 | 08 | Même cas d’usage depuis la CLI |
-| 134–140 | 37–38 | 08 puis 09 | Ajout de la règle d’unicité |
-| 140–150 | 39–40 | 09 | Coûts, limites et questions restantes |
+| 15–40 | 6–17 | 01 | Les cinq principes SOLID sur les mêmes besoins |
+| 40–55 | 18–25 | 01 | Ports, adaptateurs, imports et appels |
+| 55–59 | 26 | 02 | Modèle métier |
+| 59–75 | 27–29 | 03 | Validation et manipulation des bornes |
+| 75–85 | 30 | — | Pause de 10 minutes |
+| 85–100 | 31–34 | 04 | HTTP, demandes invalides et politique d’erreur |
+| 100–115 | 35–38 | 05 | Catalogue BGG et vérifications des adaptateurs |
+| 115–124 | 39–41 | 06 | Écriture et effets observables |
+| 124–130 | 42–43 | 07 | Persistance après reconnexion |
+| 130–134 | 44–45 | 08 | Même cas d’usage depuis la CLI |
+| 134–140 | 46–47 | 08 puis 09 | Ajout de la règle d’unicité |
+| 140–150 | 48–49 | 09 | Coûts, limites et questions restantes |
 
 Les durées intègrent les explications et les questions au fil du cours. Si une question exige un long détour, la conserver pour les 10 dernières minutes. Garder la pause.
 
@@ -73,17 +90,17 @@ Les durées intègrent les explications et les questions au fil du cours. Si une
 
 **Ordre et créneaux :**
 
-- 15–21 : SRP, distinguer les raisons de modifier le code et montrer `validateCount`.
-- 21–27 : OCP, montrer le fournisseur reçu par `makeValidator` et l’axe d’extension choisi.
-- 27–33 : LSP, comparer `emptyCatalogue` et `brokenCatalogue` sur un nom inconnu.
-- 33–39 : ISP, montrer que `countPlays` ne demande que `PlayReader`.
-- 39–45 : DIP, distinguer la propriété du contrat et l’injection de l’instance.
+- 15–20 : SRP, distinguer les raisons de modifier le code et montrer `validateCount`.
+- 20–25 : OCP, montrer le fournisseur reçu par `makeValidator` et l’axe d’extension choisi.
+- 25–30 : LSP, comparer `emptyCatalogue` et `brokenCatalogue` sur un nom inconnu.
+- 30–35 : ISP, montrer que `countPlays` ne demande que `PlayReader`.
+- 35–40 : DIP, distinguer la propriété du contrat et l’injection de l’instance.
 
 **Vérifier :** `npm test -- tests/solid.test.ts`.
 
 **Attention au contre-exemple LSP :** la suite verte contient une assertion qui constate volontairement l’exception de `brokenCatalogue`. Elle ne certifie pas sa conformité au contrat « inconnu = null ». Pour montrer la violation en rouge, remplacer temporairement cette assertion par une attente `resolves.toBeNull()`, lancer le test puis remettre l’assertion initiale.
 
-**45–55 :** revenir aux schémas18–22. Distinguer la direction des imports de la séquence des appels. Cette partie ne nécessite pas de nouvelle étape Git.
+**40–55 :** parcourir les slides 18–25 : schéma d’origine, hexagone cible, ports primaires et secondaires, imports, appels et repérage dans le code. La slide 25 montre la version finale dans `main`, puis la construction reprend à 02. Cette partie ne nécessite pas de nouvelle étape Git.
 
 ## 02 · Le modèle
 

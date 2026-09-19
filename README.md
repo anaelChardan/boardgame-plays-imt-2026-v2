@@ -44,9 +44,13 @@ L’historique 2025/2026 reste accessible avant les commits v2. Le README histor
 
 ## Pour animer la séance
 
+[Vue présentateur avec les notes](https://slides.com/anaelchardan/solid-et-architecture-hexagonale-imt-2026-v2/speaker). Les 49 slides comprennent les rôles primaire/secondaire et six étapes du même hexagone. Aucun Docker nécessaire : Node 24, npm et Git suffisent.
+
+Le code existe déjà dans chaque checkpoint. Les modifications à taper en direct sont courtes et décrites dans le conducteur ; HTTP, BGG, Prisma et la CLI sont préparés.
+
 Commencer par le [conducteur pas à pas](docs/lesson-steps.md) : fichiers à ouvrir, manipulations, tests et résultats attendus pour chaque checkpoint.
 
-- [Conducteur détaillé des 40 slides](docs/presenter-notes.md)
+- [Conducteur détaillé des 49 slides](docs/presenter-notes.md)
 - [Commandes, séquences de code et plans de secours](docs/demo-runbook.md)
 - [PDF pour présenter hors ligne](slides/course.pdf)
 - [Source éditable du deck](slides/deck.html) et [contenu structuré](slides/slides.json)

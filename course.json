@@ -23,8 +23,8 @@
     "title": "Les objets et les exemples métier",
     "ref": "course-2026/02-model",
     "file": "src/domain/model.ts",
-    "slide": 22,
-    "slidesUrl": "https://slides.com/anaelchardan/solid-et-architecture-hexagonale-imt-2026-v2/fullscreen#/22"
+    "slide": 25,
+    "slidesUrl": "https://slides.com/anaelchardan/solid-et-architecture-hexagonale-imt-2026-v2/fullscreen#/25"
   },
   {
     "step": "03",
@@ -32,8 +32,8 @@
     "title": "Le cas d’usage hors ligne",
     "ref": "course-2026/03-domain",
     "file": "src/domain/play-a-game.ts",
-    "slide": 23,
-    "slidesUrl": "https://slides.com/anaelchardan/solid-et-architecture-hexagonale-imt-2026-v2/fullscreen#/23"
+    "slide": 26,
+    "slidesUrl": "https://slides.com/anaelchardan/solid-et-architecture-hexagonale-imt-2026-v2/fullscreen#/26"
   },
   {
     "step": "04",
@@ -41,8 +41,8 @@
     "title": "Un adaptateur HTTP",
     "ref": "course-2026/04-http",
     "file": "src/infrastructure/http.ts",
-    "slide": 26,
-    "slidesUrl": "https://slides.com/anaelchardan/solid-et-architecture-hexagonale-imt-2026-v2/fullscreen#/26"
+    "slide": 30,
+    "slidesUrl": "https://slides.com/anaelchardan/solid-et-architecture-hexagonale-imt-2026-v2/fullscreen#/30"
   },
   {
     "step": "05",
@@ -50,8 +50,8 @@
     "title": "Un autre catalogue",
     "ref": "course-2026/05-catalog",
     "file": "src/infrastructure/bgg.ts",
-    "slide": 29,
-    "slidesUrl": "https://slides.com/anaelchardan/solid-et-architecture-hexagonale-imt-2026-v2/fullscreen#/29"
+    "slide": 34,
+    "slidesUrl": "https://slides.com/anaelchardan/solid-et-architecture-hexagonale-imt-2026-v2/fullscreen#/34"
   },
   {
     "step": "06",
@@ -59,8 +59,8 @@
     "title": "Enregistrer par un port",
     "ref": "course-2026/06-save",
     "file": "src/domain/play-a-game.ts",
-    "slide": 32,
-    "slidesUrl": "https://slides.com/anaelchardan/solid-et-architecture-hexagonale-imt-2026-v2/fullscreen#/32"
+    "slide": 38,
+    "slidesUrl": "https://slides.com/anaelchardan/solid-et-architecture-hexagonale-imt-2026-v2/fullscreen#/38"
   },
   {
     "step": "07",
@@ -68,8 +68,8 @@
     "title": "Un adaptateur Prisma",
     "ref": "course-2026/07-sql",
     "file": "src/infrastructure/prisma-store.ts",
-    "slide": 34,
-    "slidesUrl": "https://slides.com/anaelchardan/solid-et-architecture-hexagonale-imt-2026-v2/fullscreen#/34"
+    "slide": 41,
+    "slidesUrl": "https://slides.com/anaelchardan/solid-et-architecture-hexagonale-imt-2026-v2/fullscreen#/41"
   },
   {
     "step": "08",
@@ -77,8 +77,8 @@
     "title": "Une autre entrée : CLI",
     "ref": "course-2026/08-second-driver",
     "file": "src/cli.ts",
-    "slide": 35,
-    "slidesUrl": "https://slides.com/anaelchardan/solid-et-architecture-hexagonale-imt-2026-v2/fullscreen#/35"
+    "slide": 43,
+    "slidesUrl": "https://slides.com/anaelchardan/solid-et-architecture-hexagonale-imt-2026-v2/fullscreen#/43"
   },
   {
     "step": "09",
@@ -86,7 +86,7 @@
     "title": "Un changement de règle",
     "ref": "course-2026/09-challenge",
     "file": "src/domain/play-a-game.ts",
-    "slide": 36,
-    "slidesUrl": "https://slides.com/anaelchardan/solid-et-architecture-hexagonale-imt-2026-v2/fullscreen#/36"
+    "slide": 45,
+    "slidesUrl": "https://slides.com/anaelchardan/solid-et-architecture-hexagonale-imt-2026-v2/fullscreen#/45"
   }
 ]

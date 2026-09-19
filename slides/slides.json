@@ -8,7 +8,9 @@
     "step": null,
     "kind": "cover",
     "rows": null,
-    "caption": ""
+    "caption": "",
+    "id": "imt-v2-00",
+    "section": "CONCEPTION"
   },
   {
     "title": "Le service : enregistrer une partie",
@@ -36,7 +38,9 @@
         "Jeu introuvable"
       ]
     ],
-    "caption": "La même politique doit s’appliquer à chaque entrée."
+    "caption": "La même politique doit s’appliquer à chaque entrée.",
+    "id": "imt-v2-01",
+    "section": "CONCEPTION"
   },
   {
     "title": "Trois évolutions du même service",
@@ -64,7 +68,9 @@
         "Aucune duplication des règles"
       ]
     ],
-    "caption": ""
+    "caption": "",
+    "id": "imt-v2-02",
+    "section": "CONCEPTION"
   },
   {
     "title": "Les critères de conception",
@@ -92,7 +98,9 @@
         "Quel coût ajoute la séparation ?"
       ]
     ],
-    "caption": "Une abstraction se justifie par le besoin qu’elle protège."
+    "caption": "Une abstraction se justifie par le besoin qu’elle protège.",
+    "id": "imt-v2-03",
+    "section": "CONCEPTION"
   },
   {
     "title": "Le point de départ couplé",
@@ -103,7 +111,9 @@
     "step": "00-start",
     "kind": "code",
     "rows": null,
-    "caption": "Transport, politique métier et représentation du stockage."
+    "caption": "Transport, politique métier et représentation du stockage.",
+    "id": "imt-v2-04",
+    "section": "CONCEPTION"
   },
   {
     "title": "SOLID : cinq critères de conception",
@@ -139,14 +149,16 @@
         "Dépendances vers les besoins métier"
       ]
     ],
-    "caption": ""
+    "caption": "",
+    "id": "imt-v2-05",
+    "section": "CONCEPTION"
   },
   {
     "title": "SRP : les axes de changement",
     "body": "",
     "code": "",
     "prompt": "",
-    "notes": "15–18 min. SRP = une raison cohérente de changer, pas une fonction qui ne ferait qu’une instruction. Illustrer quelle équipe ou quel besoin déclencherait chaque changement.\nLecture du schéma : Les flèches relient chaque source de changement à la responsabilité concernée. Elles ne représentent pas des appels à l’exécution.",
+    "notes": "15–17 min. SRP = une raison cohérente de changer, pas une fonction qui ne ferait qu’une instruction. Illustrer quelle équipe ou quel besoin déclencherait chaque changement.\nLecture du schéma : Les flèches relient chaque source de changement à la responsabilité concernée. Elles ne représentent pas des appels à l’exécution.",
     "step": null,
     "kind": "responsibilities",
     "rows": [
@@ -167,47 +179,55 @@
         "Évolution du stockage"
       ]
     ],
-    "caption": "Un module peut coordonner plusieurs opérations cohérentes."
+    "caption": "Un module peut coordonner plusieurs opérations cohérentes.",
+    "id": "imt-v2-06",
+    "section": "CONCEPTION"
   },
   {
     "title": "Validation indépendante du transport",
     "body": "",
     "code": "function validateCount(\n  game: Game, players: string[]\n) {\n  if (players.length < game.min ||\n      players.length > game.max) {\n    throw new Error(\"Nombre invalide\");\n  }\n}",
     "prompt": "",
-    "notes": "18–21 min. Ouvrir principles.ts et le test du validateur. Le parsing et la conversion SQL sont aux frontières. SRP ne se démontre pas seulement en découpant une grosse interface.",
+    "notes": "17–20 min. Ouvrir principles.ts et le test du validateur. Le parsing et la conversion SQL sont aux frontières. SRP ne se démontre pas seulement en découpant une grosse interface.",
     "step": null,
     "kind": "code",
     "rows": null,
-    "caption": "Le test porte sur la règle et ses données d’entrée."
+    "caption": "Le test porte sur la règle et ses données d’entrée.",
+    "id": "imt-v2-07",
+    "section": "CONCEPTION"
   },
   {
     "title": "OCP : remplacer le catalogue",
     "body": "Le catalogue local doit pouvoir céder la place à BGG.\n\nLe cas d’usage dépend des informations du jeu,\npas du protocole utilisé pour les obtenir.",
     "code": "",
     "prompt": "",
-    "notes": "21–24 min. OCP dépend d’un axe d’évolution identifié. On ne prévoit pas tous les futurs possibles. Montrer une substitution de catalogue.\nLecture du schéma : Le schéma représente les appels possibles via BoardgameInventory. Le câblage sélectionne un seul catalogue au démarrage. Les deux branches sont des alternatives, pas deux appels systématiques.",
+    "notes": "20–22 min. OCP dépend d’un axe d’évolution identifié. On ne prévoit pas tous les futurs possibles. Montrer une substitution de catalogue.\nLecture du schéma : Le schéma représente les appels possibles via BoardgameInventory. Le câblage sélectionne un seul catalogue au démarrage. Les deux branches sont des alternatives, pas deux appels systématiques.",
     "step": null,
     "kind": "substitution",
     "rows": null,
-    "caption": "Le câblage choisit un adaptateur. Le cas d’usage reste identique."
+    "caption": "Le câblage choisit un adaptateur. Le cas d’usage reste identique.",
+    "id": "imt-v2-08",
+    "section": "CONCEPTION"
   },
   {
     "title": "Le câblage concentre le changement",
     "body": "",
     "code": "// Configuration locale\nconst play = buildPlayAGame(fixtureCatalogue, store);\n\n// Configuration avec le fournisseur externe\nconst play = buildPlayAGame(bggCatalogue, store);",
     "prompt": "",
-    "notes": "24–27 min. Comparaison de deux configurations, pas deux déclarations dans le même scope. Le port du catalogue sera introduit à03 et le writer à06. L’exemple annonce le câblage final. Les petits exemples autonomes sont disponibles à01. L’OCP protège un axe choisi, pas tous les changements possibles.",
+    "notes": "22–25 min. Comparaison de deux configurations, pas deux déclarations dans le même scope. Le port du catalogue sera introduit à03 et le writer à06. L’exemple annonce le câblage final. Les petits exemples autonomes sont disponibles à01. L’OCP protège un axe choisi, pas tous les changements possibles.",
     "step": null,
     "kind": "code",
     "rows": null,
-    "caption": "Une nouvelle politique métier peut encore modifier le cas d’usage."
+    "caption": "Une nouvelle politique métier peut encore modifier le cas d’usage.",
+    "id": "imt-v2-09",
+    "section": "CONCEPTION"
   },
   {
     "title": "LSP : le contrat observable du catalogue",
     "body": "",
     "code": "",
     "prompt": "",
-    "notes": "27–29 min. Contrat précis utilisé dans tout le cours. LSP concerne comportement et attentes du client, même sans héritage de classes.",
+    "notes": "25–27 min. Contrat précis utilisé dans tout le cours. LSP concerne comportement et attentes du client, même sans héritage de classes.",
     "step": null,
     "kind": "table",
     "rows": [
@@ -228,80 +248,94 @@
         "CatalogUnavailable"
       ]
     ],
-    "caption": "Résultat, absence et erreurs font partie du contrat."
+    "caption": "Résultat, absence et erreurs font partie du contrat.",
+    "id": "imt-v2-10",
+    "section": "CONCEPTION"
   },
   {
     "title": "Une signature compatible ne suffit pas",
     "body": "",
     "code": "const brokenCatalogue: Catalogue = {\n  async find(name) {\n    throw new Error(\"Jeu inconnu\");\n  }\n};",
     "prompt": "",
-    "notes": "29–31 min. Une implémentation qui refuse un cas prévu par le contrat ne se substitue pas correctement. Ne pas confondre absence et indisponibilité.",
+    "notes": "27–28 min. Une implémentation qui refuse un cas prévu par le contrat ne se substitue pas correctement. Ne pas confondre absence et indisponibilité.",
     "step": null,
     "kind": "code",
     "rows": null,
-    "caption": "Le client attend null pour une absence, pas une exception."
+    "caption": "Le client attend null pour une absence, pas une exception.",
+    "id": "imt-v2-11",
+    "section": "CONCEPTION"
   },
   {
     "title": "Le contrat commun des catalogues",
     "body": "",
     "code": "expect(await catalogue.getBoardgameByName(\"Inconnu\"))\n  .toBeNull();\n\nexpect(await catalogue.getBoardgameByName(\"Azul\"))\n  .toMatchObject({ minNumberOfPlayers: 2 });",
     "prompt": "",
-    "notes": "31–33 min. Extraits alignés sur le port réel, disponible à03 et les tests de contrat à05. À01, l’exemple autonome utilise find et les noms courts Game.min/max. Montrer la continuité des contrats plutôt que le détail des noms. Le contrat doit aussi distinguer une panne du fournisseur.",
+    "notes": "28–30 min. Extraits alignés sur le port réel, disponible à03 et les tests de contrat à05. À01, l’exemple autonome utilise find et les noms courts Game.min/max. Montrer la continuité des contrats plutôt que le détail des noms. Le contrat doit aussi distinguer une panne du fournisseur.",
     "step": null,
     "kind": "code",
     "rows": null,
-    "caption": "La même suite de contrat s’applique aux deux catalogues."
+    "caption": "La même suite de contrat s’applique aux deux catalogues.",
+    "id": "imt-v2-12",
+    "section": "CONCEPTION"
   },
   {
     "title": "ISP : le contrat vu par le consommateur",
     "body": "",
     "code": "interface PlayRepository {\n  save(play: Play): Promise<void>;\n  all(): Promise<Play[]>;\n  deleteAll(): Promise<void>;\n  rebuildStatistics(): Promise<void>;\n}",
     "prompt": "",
-    "notes": "33–36 min. Le problème est le couplage du consommateur à des opérations inutiles, pas le nombre arbitraire de méthodes.",
+    "notes": "30–32 min. Le problème est le couplage du consommateur à des opérations inutiles, pas le nombre arbitraire de méthodes.",
     "step": null,
     "kind": "code",
     "rows": null,
-    "caption": "Un rapport de lecture n’utilise qu’une partie de ce contrat."
+    "caption": "Un rapport de lecture n’utilise qu’une partie de ce contrat.",
+    "id": "imt-v2-13",
+    "section": "CONCEPTION"
   },
   {
     "title": "Des ports distincts pour lire et écrire",
     "body": "",
     "code": "interface PlayReader {\n  all(): Promise<Play[]>;\n}\n\ninterface PlayWriter {\n  save(play: Play): Promise<void>;\n}",
     "prompt": "",
-    "notes": "36–39 min. Revenir au consommateur countPlays dans principles.ts. Il demande PlayReader. L’ISP porte sur le besoin des clients, pas sur l’obligation de créer de nombreux petits objets. Une implémentation commune reste possible.\nLecture du schéma : Les flèches de gauche signifient « utilise ce contrat ». Celles de droite signifient « implémente ce contrat ». Un rapport peut recevoir PlayReader, tandis que PlayAGame ne demande que PlayWriter. Un même adaptateur peut réaliser les deux ports.",
+    "notes": "32–35 min. Revenir au consommateur countPlays dans principles.ts. Il demande PlayReader. L’ISP porte sur le besoin des clients, pas sur l’obligation de créer de nombreux petits objets. Une implémentation commune reste possible.\nLecture du schéma : Les flèches de gauche signifient « utilise ce contrat ». Celles de droite signifient « implémente ce contrat ». Un rapport peut recevoir PlayReader, tandis que PlayAGame ne demande que PlayWriter. Un même adaptateur peut réaliser les deux ports.",
     "step": null,
     "kind": "segregation",
     "rows": null,
-    "caption": "Chaque consommateur utilise uniquement le contrat nécessaire."
+    "caption": "Chaque consommateur utilise uniquement le contrat nécessaire.",
+    "id": "imt-v2-14",
+    "section": "CONCEPTION"
   },
   {
     "title": "DIP : le métier dépend du stockage",
     "body": "",
     "code": "// Module métier couplé à une bibliothèque\nimport { PrismaClient } from \"@prisma/client\";\n\nconst db = new PrismaClient();\nawait db.play.create({ data: sqlRow });",
     "prompt": "",
-    "notes": "39–42 min. Montrer le problème d’import et le vocabulaire SQL qui entre dans le métier. Montrer comment tester les bornes sans base.",
+    "notes": "35–37 min. Montrer le problème d’import et le vocabulaire SQL qui entre dans le métier. Montrer comment tester les bornes sans base.",
     "step": null,
     "kind": "code",
     "rows": null,
-    "caption": "La politique métier connaît ici Prisma et la forme SQL."
+    "caption": "La politique métier connaît ici Prisma et la forme SQL.",
+    "id": "imt-v2-15",
+    "section": "CONCEPTION"
   },
   {
     "title": "Le domaine définit le port",
     "body": "",
     "code": "// Contrat défini dans domain/ports.ts\ninterface PlayWriter {\n  save(play: Play): Promise<void>;\n}\n\n// Instance choisie dans composition.ts\nconst play = buildPlayAGame(catalogue, store);",
     "prompt": "",
-    "notes": "42–45 min. DIP et injection ne sont pas synonymes. Pas besoin de conteneur DI. Une fonction suffit. Le domaine n’importe pas Prisma.",
+    "notes": "37–40 min. DIP et injection ne sont pas synonymes. Pas besoin de conteneur DI. Une fonction suffit. Le domaine n’importe pas Prisma.",
     "step": null,
     "kind": "code",
     "rows": null,
-    "caption": "DIP : direction des dépendances. Injection : assemblage des objets."
+    "caption": "DIP : direction des dépendances. Injection : assemblage des objets.",
+    "id": "imt-v2-16",
+    "section": "CONCEPTION"
   },
   {
     "title": "Les décisions obtenues avec SOLID",
     "body": "",
     "code": "",
     "prompt": "",
-    "notes": "45–46 min. Synthèse des décisions effectivement prises. Expliquer pourquoi certaines de ces séparations seraient superflues pour un script jetable. Les lettres servent à argumenter, elles ne remplacent pas l’analyse du contexte.",
+    "notes": "40–41 min. Synthèse des décisions effectivement prises. Expliquer pourquoi certaines de ces séparations seraient superflues pour un script jetable. Les lettres servent à argumenter, elles ne remplacent pas l’analyse du contexte.",
     "step": null,
     "kind": "table",
     "rows": [
@@ -326,14 +360,16 @@
         "Éviter les imports techniques"
       ]
     ],
-    "caption": "Contrepartie : des interfaces et des conversions à maintenir."
+    "caption": "Contrepartie : des interfaces et des conversions à maintenir.",
+    "id": "imt-v2-17",
+    "section": "CONCEPTION"
   },
   {
     "title": "Couches et frontière applicative",
     "body": "",
     "code": "",
     "prompt": "",
-    "notes": "46–48 min. Éviter l’opposition artificielle entre couches et architecture hexagonale. Les dossiers ne prouvent pas la règle de dépendance. Examiner les imports et les contrats. Source : https://alistair.cockburn.us/hexagonal-architecture",
+    "notes": "41–42 min. Éviter l’opposition artificielle entre couches et architecture hexagonale. Les dossiers ne prouvent pas la règle de dépendance. Examiner les imports et les contrats. Source : https://alistair.cockburn.us/hexagonal-architecture",
     "step": null,
     "kind": "comparison",
     "rows": [
@@ -350,40 +386,89 @@
         "Rendre les technologies substituables"
       ]
     ],
-    "caption": "Les deux approches peuvent coexister."
+    "caption": "Les deux approches peuvent coexister.",
+    "id": "imt-v2-18",
+    "section": "FRONTIÈRES"
   },
   {
-    "title": "La frontière du domaine",
+    "id": "651418e82a4d",
+    "title": "L’inversion de dépendance, dans le schéma initial",
+    "kind": "original",
+    "notes": "42–43 min. Schéma repris de la présentation initiale, slide 51. Ici les flèches se lisent comme des dépendances de code vers le domaine. La persistance dépend du contrat défini à l’intérieur. Le cas d’usage pourra appeler cet adaptateur à l’exécution : cela ne renverse pas les imports. Source : deck original d’Anaël Chardan, https://slides.com/anaelchardan/hexagonal-architecture-and-beyond-0e45d4",
     "body": "",
     "code": "",
     "prompt": "",
-    "notes": "48–51 min. Cartographie des conversations à l’exécution, pas graphe d’imports. PlayAGame est le port d’entrée. Le catalogue et l’écriture sont les ports de sortie. Fixture/BGG et mémoire/Prisma sont des alternatives. Source : https://alistair.cockburn.us/hexagonal-architecture",
+    "caption": "Les contrats du domaine donnent leur direction aux dépendances.",
     "step": null,
-    "kind": "architecture",
     "rows": null,
-    "caption": ""
+    "section": "FRONTIÈRES",
+    "image": "https://s3.amazonaws.com/media-p.slid.es/uploads/467338/images/11748080/pasted-from-clipboard.png"
+  },
+  {
+    "title": "L’hexagone : les contrats à la frontière",
+    "body": "",
+    "code": "",
+    "prompt": "",
+    "notes": "43–45 min. Cartographie des conversations à l’exécution, pas graphe d’imports. PlayAGame est le port d’entrée. Le catalogue et l’écriture sont les ports de sortie. Fixture/BGG et mémoire/Prisma sont des alternatives. Source : https://alistair.cockburn.us/hexagonal-architecture Reprendre la frontière du schéma d’origine. Le cœur regroupe ici cas d’usage et règles métier dans domain/. Les rectangles sur la frontière représentent les contrats. Le port primaire PlayAGame est un type de fonction, pas nécessairement une interface orientée objet. Les six côtés ne prescrivent ni six ports ni six dossiers. Cette carte montre la cible, les diapositives de démonstration montreront seulement les pièces déjà présentes.",
+    "step": null,
+    "kind": "hexagon",
+    "rows": null,
+    "caption": "Flèches : sens des appels. Le retour des données suit le chemin inverse.",
+    "id": "imt-v2-19",
+    "section": "FRONTIÈRES",
+    "phase": "overview"
+  },
+  {
+    "id": "1b30155e1c0f",
+    "title": "Ports primaires et secondaires",
+    "kind": "port_roles",
+    "notes": "45–48 min. Primaire = entrant = driver/driving : un acteur extérieur demande un service à l’application. Secondaire = sortant = driven : l’application sollicite une capacité externe. HTTP et CLI sont des adaptateurs primaires, PlayAGame est leur contrat. BGG et Prisma sont des adaptateurs secondaires, BoardgameInventory et PlayWriter sont les contrats qu’ils implémentent. Un retour de données ne change pas le rôle : le catalogue est secondaire même lorsqu’il renvoie un jeu. Un port décrit une conversation métier, pas un port TCP. Un test qui appelle PlayAGame joue le rôle de pilote, un catalogue en mémoire remplace une dépendance secondaire. Source : https://alistair.cockburn.us/hexagonal-architecture",
+    "body": "",
+    "code": "",
+    "prompt": "",
+    "caption": "La question décisive : qui déclenche l’interaction ?",
+    "step": null,
+    "rows": null,
+    "section": "FRONTIÈRES"
   },
   {
     "title": "Dépendances à la compilation",
     "body": "",
     "code": "",
     "prompt": "",
-    "notes": "51–53 min. Chaque flèche signifie « importe le type de ». Le domaine ne connaît aucun adaptateur concret. composition.ts connaît les deux côtés pour les assembler. Comparer avec les appels de la slide suivante.",
+    "notes": "48–49 min. Chaque flèche signifie « importe le type de ». Le domaine ne connaît aucun adaptateur concret. composition.ts connaît les deux côtés pour les assembler. Comparer avec les appels de la slide suivante.",
     "step": null,
     "kind": "dependencies",
     "rows": null,
-    "caption": "Les adaptateurs importent les contrats définis dans le domaine."
+    "caption": "Les adaptateurs importent les contrats définis dans le domaine.",
+    "id": "imt-v2-20",
+    "section": "FRONTIÈRES"
   },
   {
     "title": "Séquence d’un enregistrement",
     "body": "",
     "code": "",
     "prompt": "",
-    "notes": "53–55 min. Séquence nominale de la version finale. L’étape03 valide, puis l’étape06 ajoute l’écriture. Une exception de validation interrompt la séquence avant save. Les interfaces sont définies dans le domaine même quand l’appel atteint un adaptateur externe.",
+    "notes": "49–51 min. Séquence nominale de la version finale. L’étape03 valide, puis l’étape06 ajoute l’écriture. Une exception de validation interrompt la séquence avant save. Les interfaces sont définies dans le domaine même quand l’appel atteint un adaptateur externe.",
     "step": null,
     "kind": "sequence",
     "rows": null,
-    "caption": "Le sens des appels diffère du sens des dépendances du code."
+    "caption": "Le sens des appels diffère du sens des dépendances du code.",
+    "id": "imt-v2-21",
+    "section": "FRONTIÈRES"
+  },
+  {
+    "id": "45290c977bc0",
+    "title": "Retrouver l’architecture dans le code",
+    "kind": "code_map",
+    "notes": "51–55 min. Ouvrir src/domain/play-a-game.ts dans main comme aperçu de la cible, puis src/domain/ports.ts et src/composition.ts. PlayAGame annonce une capacité métier, BoardgameInventory et PlayWriter ses besoins. Le contrat primaire est un type de fonction dans play-a-game.ts, les secondaires sont regroupés dans ports.ts. Montrer les imports : aucune référence à Fastify ni Prisma dans le cas d’usage. Les noms des dossiers aident, les contrats et imports constituent la preuve. Dans ce petit dépôt, domain/ regroupe domaine et cas d’usage. Montrer HTTP/CLI comme appelants. Le GET /plays délègue directement à PlayReader dans cette démo : il ne traverse pas PlayAGame. Ne pas présenter ce raccourci de lecture comme un deuxième cas d’usage métier explicite. Revenir ensuite au checkpoint 02 pour construire progressivement.",
+    "body": "",
+    "code": "",
+    "prompt": "",
+    "caption": "Les noms rendent les intentions visibles. Les imports confirment les frontières.",
+    "step": null,
+    "rows": null,
+    "section": "FRONTIÈRES"
   },
   {
     "title": "Le modèle manipulé par le cas d’usage",
@@ -394,18 +479,36 @@
     "step": "02-model",
     "kind": "code",
     "rows": null,
-    "caption": ""
+    "caption": "",
+    "id": "imt-v2-22",
+    "section": "FRONTIÈRES"
+  },
+  {
+    "id": "9881d896c7e8",
+    "title": "Un premier hexagone piloté par les tests",
+    "kind": "hexagon",
+    "notes": "59–61 min. Ouvrir tests/domain.test.ts puis le type PlayAGame et BoardgameInventory. Le test appelle le même port primaire que les futures entrées. Le catalogue fixture implémente le port secondaire. Aucun HTTP ni stockage à cette étape. Lancer la suite métier sans réseau.",
+    "body": "",
+    "code": "",
+    "prompt": "",
+    "caption": "Tests métier seuls : aucune API ni base à démarrer.",
+    "step": "03-domain",
+    "rows": null,
+    "section": "FRONTIÈRES",
+    "phase": "domain"
   },
   {
     "title": "La validation dans le cas d’usage",
     "body": "",
     "code": "const game = await inventory.getBoardgameByName(name);\nif (!game) throw new BoardgameNotFound();\n\nif (count < game.minNumberOfPlayers ||\n    count > game.maxNumberOfPlayers) {\n  throw new InvalidPlayerCount(min, max);\n}",
     "prompt": "",
-    "notes": "59–67 min. Extrait avec variables abrégées. Coder et expliquer la condition puis lancer tests/domain.test.ts. À cette étape on retourne le Play, sans prétendre l’avoir sauvegardé. Le test n’effectue aucun appel réseau.",
+    "notes": "61–67 min. Extrait avec variables abrégées. Coder et expliquer la condition puis lancer tests/domain.test.ts. À cette étape on retourne le Play, sans prétendre l’avoir sauvegardé. Le test n’effectue aucun appel réseau. Le code complet est déjà dans le checkpoint. Saisir uniquement les petites modifications indiquées dans le conducteur.",
     "step": "03-domain",
     "kind": "code",
     "rows": null,
-    "caption": "À cette étape, une partie valide est retournée sans écriture."
+    "caption": "À cette étape, une partie valide est retournée sans écriture.",
+    "id": "imt-v2-23",
+    "section": "FRONTIÈRES"
   },
   {
     "title": "Les tests aux frontières de l’intervalle",
@@ -437,7 +540,9 @@
         "Erreur distincte du nombre invalide"
       ]
     ],
-    "caption": "Mutation de la condition : > devient >=."
+    "caption": "Mutation de la condition : > devient >=.",
+    "id": "imt-v2-24",
+    "section": "FRONTIÈRES"
   },
   {
     "title": "Pause",
@@ -448,18 +553,36 @@
     "step": null,
     "kind": "break",
     "rows": null,
-    "caption": ""
+    "caption": "",
+    "id": "imt-v2-25",
+    "section": "FRONTIÈRES"
+  },
+  {
+    "id": "8ffbea69fdac",
+    "title": "HTTP rejoint le port primaire",
+    "kind": "hexagon",
+    "notes": "85–87 min. Ouvrir src/infrastructure/http.ts. Montrer le type PlayAGame reçu en paramètre et l’appel play(parsed.data). HTTP traduit JSON et erreurs, le domaine garde ses règles. Les tests existants restent des pilotes du même contrat. Préparer 04 depuis le clone principal, puis montrer le code déjà présent.",
+    "body": "",
+    "code": "",
+    "prompt": "",
+    "caption": "Le nouvel adaptateur traduit HTTP et appelle PlayAGame.",
+    "step": "04-http",
+    "rows": null,
+    "section": "INTÉGRATION",
+    "phase": "http"
   },
   {
     "title": "HTTP : validation et traduction",
     "body": "",
     "code": "const parsed = requestSchema.safeParse(request.body);\nif (!parsed.success) {\n  return reply.code(400).send({\n    error: \"Requête invalide\"\n  });\n}\nconst result = await play(parsed.data);\nreturn reply.code(200).send(result);",
     "prompt": "",
-    "notes": "85–91 min. Étape04 : validation seule, réponse200. À l’étape06 on passera à201 après l’écriture. Modifier un payload et expliquer pourquoi la réponse devient400 ou422. Extrait abrégé, fichier complet dans infrastructure/http.ts.",
+    "notes": "87–91 min. Étape04 : validation seule, réponse200. À l’étape06 on passera à201 après l’écriture. Modifier un payload et expliquer pourquoi la réponse devient400 ou422. Extrait abrégé, fichier complet dans infrastructure/http.ts. Le code complet est déjà dans le checkpoint. Saisir uniquement les petites modifications indiquées dans le conducteur.",
     "step": "04-http",
     "kind": "code",
     "rows": null,
-    "caption": "Étape 04 : validation seule. Étape 06 : création après écriture."
+    "caption": "Étape 04 : validation seule. Étape 06 : création après écriture.",
+    "id": "imt-v2-26",
+    "section": "INTÉGRATION"
   },
   {
     "title": "La politique d’erreur de l’API",
@@ -495,7 +618,9 @@
         "500"
       ]
     ],
-    "caption": "Les codes HTTP appartiennent à l’adaptateur."
+    "caption": "Les codes HTTP appartiennent à l’adaptateur.",
+    "id": "imt-v2-27",
+    "section": "INTÉGRATION"
   },
   {
     "title": "Absence métier ou panne technique",
@@ -523,14 +648,30 @@
         "Notre API répond 503"
       ]
     ],
-    "caption": ""
+    "caption": "",
+    "id": "imt-v2-28",
+    "section": "INTÉGRATION"
+  },
+  {
+    "id": "0349551f4c03",
+    "title": "BGG réalise le port secondaire de catalogue",
+    "kind": "hexagon",
+    "notes": "100–102 min. Ouvrir src/domain/ports.ts, src/infrastructure/bgg.ts puis src/composition.ts. Même BoardgameInventory, autre réalisation. Fixture et BGG sont des alternatives choisies au démarrage, pas deux appels successifs. Les flèches indiquent les appels. Le retour du jeu ne transforme pas BGG en adaptateur primaire.",
+    "body": "",
+    "code": "",
+    "prompt": "",
+    "caption": "Le cas d’usage choisit les données nécessaires, pas le protocole XML.",
+    "step": "05-catalog",
+    "rows": null,
+    "section": "INTÉGRATION",
+    "phase": "catalog"
   },
   {
     "title": "Intégration du catalogue BGG",
     "body": "",
     "code": "",
     "prompt": "",
-    "notes": "100–104 min. Ouvrir composition.ts, montrer le choix CATALOG. Le mode live est facultatif et demande un jeton BGG valide. Ne pas réutiliser le jeton Slides. Les tests BGG utilisent des réponses HTTP contrôlées. Source : https://boardgamegeek.com/wiki/page/BGG_XML_API2",
+    "notes": "102–105 min. Ouvrir composition.ts, montrer le choix CATALOG. Le mode live est facultatif et demande un jeton BGG valide. Ne pas réutiliser le jeton Slides. Les tests BGG utilisent des réponses HTTP contrôlées. Source : https://boardgamegeek.com/wiki/page/BGG_XML_API2 Le code complet est déjà dans le checkpoint. Saisir uniquement les petites modifications indiquées dans le conducteur.",
     "step": "05-catalog",
     "kind": "table",
     "rows": [
@@ -551,7 +692,9 @@
         "Erreur technique distincte"
       ]
     ],
-    "caption": "Le mode BGG exige un jeton d’application valide."
+    "caption": "Le mode BGG exige un jeton d’application valide.",
+    "id": "imt-v2-29",
+    "section": "INTÉGRATION"
   },
   {
     "title": "La traduction au niveau de l’adaptateur",
@@ -562,7 +705,9 @@
     "step": null,
     "kind": "translation",
     "rows": null,
-    "caption": "L’adaptateur valide le document et produit le type métier."
+    "caption": "L’adaptateur valide le document et produit le type métier.",
+    "id": "imt-v2-30",
+    "section": "INTÉGRATION"
   },
   {
     "title": "Les niveaux de vérification",
@@ -594,18 +739,36 @@
         "Écriture et relecture dans une base"
       ]
     ],
-    "caption": "Un faux transport ne vérifie ni BGG en direct ni ses identifiants."
+    "caption": "Un faux transport ne vérifie ni BGG en direct ni ses identifiants.",
+    "id": "imt-v2-31",
+    "section": "INTÉGRATION"
+  },
+  {
+    "id": "4da190ad42f6",
+    "title": "Un nouveau besoin : enregistrer la partie",
+    "kind": "hexagon",
+    "notes": "115–117 min. Ouvrir le diff 05/06 puis PlayWriter dans ports.ts. Le cas d’usage a désormais besoin d’enregistrer : c’est un nouveau port secondaire, avec un adaptateur mémoire. Ouvrir play-a-game.ts pour montrer await writer.save(play). La manipulation suivante retire puis rétablit cette ligne.",
+    "body": "",
+    "code": "",
+    "prompt": "",
+    "caption": "Le port PlayWriter apparaît lorsque le besoin de sauvegarde apparaît.",
+    "step": "06-save",
+    "rows": null,
+    "section": "INTÉGRATION",
+    "phase": "save"
   },
   {
     "title": "La sauvegarde fait partie du cas d’usage",
     "body": "",
     "code": "// Les validations ont réussi\nconst play = { boardgameName, bggId, players };\n\nawait writer.save(play);\nreturn play;",
     "prompt": "",
-    "notes": "115–121 min. Ajouter await writer.save(play) et expliquer son rôle. Étape06 retourne201 après succès. Sans await, on pourrait annoncer une création avant un échec. Montrer le test de stockage indisponible.",
+    "notes": "117–121 min. Ajouter await writer.save(play) et expliquer son rôle. Étape06 retourne201 après succès. Sans await, on pourrait annoncer une création avant un échec. Montrer le test de stockage indisponible. Le code complet est déjà dans le checkpoint. Saisir uniquement les petites modifications indiquées dans le conducteur.",
     "step": "06-save",
     "kind": "code",
     "rows": null,
-    "caption": "La réponse de création attend le succès de l’écriture."
+    "caption": "La réponse de création attend le succès de l’écriture.",
+    "id": "imt-v2-32",
+    "section": "INTÉGRATION"
   },
   {
     "title": "Deux propriétés à vérifier",
@@ -629,29 +792,63 @@
         "L’erreur remonte à l’adaptateur"
       ]
     ],
-    "caption": "Vérifier les effets observables, pas seulement le retour du cas d’usage."
+    "caption": "Vérifier les effets observables, pas seulement le retour du cas d’usage.",
+    "id": "imt-v2-33",
+    "section": "INTÉGRATION"
+  },
+  {
+    "id": "f973982deaff",
+    "title": "SQLite remplace l’adaptateur mémoire",
+    "kind": "hexagon",
+    "notes": "124–125 min. Ouvrir src/infrastructure/prisma-store.ts et le câblage. Le port PlayWriter et le métier ne changent pas. Mémoire et Prisma sont des alternatives. SQLite est un fichier local, aucun conteneur ni service de base à lancer. La slide suivante prouve la persistance après reconnexion.",
+    "body": "",
+    "code": "",
+    "prompt": "",
+    "caption": "Même contrat d’écriture, stockage durable dans un fichier local.",
+    "step": "07-sql",
+    "rows": null,
+    "section": "INTÉGRATION",
+    "phase": "sql"
   },
   {
     "title": "Persistance après reconnexion",
     "body": "",
     "code": "",
     "prompt": "",
-    "notes": "124–130 min. Démonstration préparée. npm run db:setup, puis STORAGE=sqlite npm run cli à partir de08 ou test Prisma à07. Le test ferme la connexion, rouvre la même base temporaire et relit la partie. Aucun Docker. Ne pas taper tout le schéma.\nLecture du schéma : Le client A écrit puis se déconnecte. Le client B est une nouvelle connexion au même fichier SQLite et relit la partie. Le maintien du résultat après reconnexion établit la persistance.",
+    "notes": "125–130 min. Démonstration préparée. npm run db:setup, puis STORAGE=sqlite npm run cli à partir de08 ou test Prisma à07. Le test ferme la connexion, rouvre la même base temporaire et relit la partie. Aucun Docker. Ne pas taper tout le schéma.\nLecture du schéma : Le client A écrit puis se déconnecte. Le client B est une nouvelle connexion au même fichier SQLite et relit la partie. Le maintien du résultat après reconnexion établit la persistance. Le code complet est déjà dans le checkpoint. Saisir uniquement les petites modifications indiquées dans le conducteur.",
     "step": "07-sql",
     "kind": "persistence",
     "rows": null,
-    "caption": "La partie reste disponible après la fermeture du premier client."
+    "caption": "La partie reste disponible après la fermeture du premier client.",
+    "id": "imt-v2-34",
+    "section": "INTÉGRATION"
+  },
+  {
+    "id": "8538b98bb7a9",
+    "title": "La CLI réutilise le même port primaire",
+    "kind": "hexagon",
+    "notes": "130–131 min. Ouvrir src/infrastructure/cli.ts puis src/cli.ts. Les arguments deviennent une PlayRequest, puis la CLI appelle PlayAGame. Aucune copie des règles métier. Exécuter une acceptation et un refus dans le créneau de la slide suivante. Pour montrer le partage avec HTTP, choisir SQLite et le même fichier de base.",
+    "body": "",
+    "code": "",
+    "prompt": "",
+    "caption": "Deux entrées, une seule implémentation des règles métier.",
+    "step": "08-second-driver",
+    "rows": null,
+    "section": "INTÉGRATION",
+    "phase": "cli"
   },
   {
     "title": "Une entrée CLI sur le même cas d’usage",
     "body": "",
     "code": "npm run cli -- \"Azul\" Alice Bob\n\n// Adaptateur CLI\nawait play({ boardgameName, players });",
     "prompt": "",
-    "notes": "130–134 min. Montrer runCli puis le domaine pour établir la réutilisation du cas d’usage. Mode memory : chaque processus a son propre magasin. Pour partager avec le serveur, choisir sqlite et la même DATABASE_URL. Comparer une acceptation et un refus.",
+    "notes": "131–134 min. Montrer runCli puis le domaine pour établir la réutilisation du cas d’usage. Mode memory : chaque processus a son propre magasin. Pour partager avec le serveur, choisir sqlite et la même DATABASE_URL. Comparer une acceptation et un refus. Le code complet est déjà dans le checkpoint. Saisir uniquement les petites modifications indiquées dans le conducteur.",
     "step": "08-second-driver",
     "kind": "code",
     "rows": null,
-    "caption": "HTTP et CLI partagent le stockage lorsqu’ils ciblent la même base."
+    "caption": "HTTP et CLI partagent le stockage lorsqu’ils ciblent la même base.",
+    "id": "imt-v2-35",
+    "section": "INTÉGRATION"
   },
   {
     "title": "Unicité des participants",
@@ -679,7 +876,9 @@
         "Refus après normalisation"
       ]
     ],
-    "caption": "Convention du modèle : le nom normalisé représente l’identité."
+    "caption": "Convention du modèle : le nom normalisé représente l’identité.",
+    "id": "imt-v2-36",
+    "section": "ÉVOLUTION"
   },
   {
     "title": "Une règle commune aux deux entrées",
@@ -690,7 +889,9 @@
     "step": null,
     "kind": "diff",
     "rows": null,
-    "caption": "Le diff 08 / 09 ajoute la règle et les vérifications HTTP et CLI."
+    "caption": "Le diff 08 / 09 ajoute la règle et les vérifications HTTP et CLI.",
+    "id": "imt-v2-37",
+    "section": "ÉVOLUTION"
   },
   {
     "title": "Le coût des frontières",
@@ -718,7 +919,9 @@
         "Parcours du code moins direct"
       ]
     ],
-    "caption": "Le contexte détermine si cette séparation est rentable."
+    "caption": "Le contexte détermine si cette séparation est rentable.",
+    "id": "imt-v2-38",
+    "section": "ÉVOLUTION"
   },
   {
     "title": "Les limites du modèle et la suite",
@@ -729,6 +932,8 @@
     "step": null,
     "kind": "text",
     "rows": null,
-    "caption": "Ces besoins doivent précéder les nouvelles abstractions."
+    "caption": "Ces besoins doivent précéder les nouvelles abstractions.",
+    "id": "imt-v2-39",
+    "section": "ÉVOLUTION"
   }
 ]

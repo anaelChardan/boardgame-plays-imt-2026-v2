@@ -6,7 +6,7 @@ Le [conducteur pas à pas](lesson-steps.md) précise le point de départ, les ma
 
 ## Avant la séance
 
-Utiliser **Node 24**, puis `npm ci`, `npm run check` et `npm run course -- warmup` dans le clone principal. La préparation installe les dépendances de chaque étape une fois. Prévoir plusieurs minutes et de l’espace disque. Les passages suivants réutilisent les étapes prêtes, sans téléchargement.
+Aucun Docker ni serveur de base externe. SQLite conserve un fichier local. Utiliser **Node 24**, puis `npm ci`, `npm run check` et `npm run course -- warmup` dans le clone principal. La préparation installe les dépendances de chaque étape une fois. Prévoir plusieurs minutes et de l’espace disque. Les passages suivants réutilisent les étapes prêtes, sans téléchargement.
 
 Garder deux fenêtres : le clone principal pour naviguer et le dossier d’une étape pour coder. Augmenter la taille du texte dans le terminal et l’éditeur. Les étudiants n’ont rien à installer pendant la séance.
 
@@ -23,25 +23,33 @@ Si une étape contient des modifications, le navigateur refuse de la réinitiali
 
 ## Schémas de référence
 
-Le deck comprend huit schémas éditables. Le sens des flèches est précisé sur la slide ou dans les notes.
+Le deck comprend 49 slides. Les schémas de progression reprennent les mêmes positions et ajoutent seulement les éléments présents au checkpoint. Le schéma d’origine est conservé comme image, les nouveaux schémas restent éditables.
 
 | Slide | Schéma | Point expliqué |
 |---|---|---|
 | 7 | Sources de changement et responsabilités | SRP |
 | 9 | Deux adaptateurs pour un port | OCP et choix au démarrage |
 | 15 | Consommateurs, interfaces et adaptateur commun | ISP |
-| 20 | Frontière du domaine | Ports et adaptateurs |
-| 21 | Imports vers le domaine | Inversion des dépendances |
-| 22 | Séquence d’enregistrement | Ordre des appels |
-| 31 | XML et objet métier | Traduction à la frontière |
-| 35 | Écriture et relecture après reconnexion | Persistance réelle |
+| 20 | Schéma du deck d’origine | Inversion de dépendance vers le domaine |
+| 21–22 | Hexagone cible et rôles des ports | Primaire / secondaire, port / adaptateur |
+| 23–24 | Imports puis séquence des appels | Deux sens de flèches distincts |
+| 25 | Correspondance avec les fichiers | Retrouver les intentions et les dépendances |
+| 27 | Tests et catalogue fixture | Premier hexagone exécutable hors ligne |
+| 31 | Ajout de HTTP | Adaptateur primaire |
+| 35 | Ajout de BGG | Adaptateur secondaire de catalogue |
+| 37 | XML et objet métier | Traduction à la frontière |
+| 39 | Ajout de PlayWriter et de la mémoire | Nouveau besoin du cas d’usage |
+| 42–43 | Prisma puis reconnexion | Substitution et preuve de persistance |
+| 44 | Ajout de la CLI | Même port primaire et mêmes règles |
+
+La carte représente le cas d’usage d’enregistrement. Le `GET /plays` de cette démo délègue directement à `PlayReader` et n’appelle pas `PlayAGame`.
 
 ## Démonstrations et revues de conception
 
 | Minute | Étape | Action du professeur | Point expliqué |
 |---|---|---|---|
 | 11 | 00 | Montrer la fonction couplée | Identifier les raisons de changer |
-| 15–45 | 01 | Analyser les cinq exemples SOLID | Comportement après remplacement |
+| 15–40 | 01 | Analyser les cinq exemples SOLID | Comportement après remplacement |
 | 59–67 | 03 | Écrire la condition min/max | Choix des exemples de test |
 | 67–75 | 03 | Changer temporairement `>` en `>=` | Détection de la régression |
 | 85–100 | 04 | Envoyer deux payloads | Traduction en 400, 404 ou 422 |
