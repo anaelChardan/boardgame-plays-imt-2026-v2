@@ -1,31 +1,30 @@
 import assert from 'node:assert/strict';
-import type { Boardgame, Play, PlayRequest } from './domain/model.js';
-import { games } from './infrastructure/fixtures.js';
+import { buildPlayAGame } from './domain/play-a-game.js';
+import { fixtureCatalogue } from './infrastructure/fixture-catalogue.js';
 
-console.log('02 · Modèle : distinguer jeu, demande et partie');
-const game: Boardgame | undefined = games.find((game) => game.name === 'Azul');
-assert.ok(game);
-const request: PlayRequest = {
-  boardgameName: game.name,
-  players: ['Alice', 'Bob'],
-};
-const example: Play = { ...request, bggId: game.bggId };
-console.log('Boardgame → catalogue et limites :', game);
-console.log('PlayRequest → demande reçue :', request);
-console.log('Play → exemple de résultat, construit manuellement :', example);
-
-const invalidRequest: PlayRequest = {
-  boardgameName: game.name,
-  players: ['Alice'],
-};
-assert.ok(invalidRequest.players.length < game.minNumberOfPlayers);
 console.log(
-  'Cette demande à un joueur est pourtant bien typée :',
-  invalidRequest,
+  '03 · Port primaire PlayAGame et catalogue secondaire, sans serveur ni base',
+);
+const play = buildPlayAGame(fixtureCatalogue);
+for (const players of [
+  ['Alice', 'Bob'],
+  ['Alice', 'Bob', 'Chloé', 'David'],
+]) {
+  const result = await play({ boardgameName: ' azul ', players });
+  assert.equal(result.boardgameName, 'Azul');
+  console.log(`Borne acceptée : ${players.length} joueurs →`, result);
+}
+for (const players of [['Alice'], ['Alice', 'Bob', 'Chloé', 'David', 'Emma']]) {
+  await assert.rejects(
+    () => play({ boardgameName: 'Azul', players }),
+    /entre 2 et 4/,
+  );
+  console.log(`Hors limites : ${players.length} joueurs → refus attendu.`);
+}
+await assert.rejects(
+  () => play({ boardgameName: 'Inconnu', players: ['Alice', 'Bob'] }),
+  /Jeu introuvable/,
 );
 console.log(
-  'Les types ne valident pas les règles métier. Le cas d’usage arrive à 03.',
-);
-console.log(
-  'Aucune validation automatique et aucune sauvegarde à cette étape.',
+  'Jeu inconnu → refus distinct. Les parties sont retournées, pas sauvegardées.',
 );
