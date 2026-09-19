@@ -487,7 +487,7 @@
     "id": "9881d896c7e8",
     "title": "Un premier hexagone piloté par les tests",
     "kind": "hexagon",
-    "notes": "59–61 min. Ouvrir tests/domain.test.ts puis le type PlayAGame et BoardgameInventory. Le test appelle le même port primaire que les futures entrées. Le catalogue fixture implémente le port secondaire. Aucun HTTP ni stockage à cette étape. Lancer la suite métier sans réseau.\n\nPassage au code : Lancer npm run course -- run 03 pour montrer les bornes acceptées et refusées. Ouvrir les fichiers dans .course-worktrees/v2/03-domain.",
+    "notes": "59–61 min. Ouvrir tests/domain.test.ts puis le type PlayAGame et BoardgameInventory. Le test appelle le même port primaire que les futures entrées. Le catalogue fixture implémente le port secondaire. Aucun HTTP ni stockage à cette étape. Lancer la suite métier sans réseau.\n\nPassage au code : Lancer npm run course -- run 03 pour montrer les bornes acceptées et refusées. Ouvrir les fichiers dans .course-worktrees/v3/03-domain.",
     "body": "",
     "code": "",
     "prompt": "",

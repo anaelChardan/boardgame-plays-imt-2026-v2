@@ -15,7 +15,7 @@ npm run demo
 npm run course -- list
 ```
 
-Chaque tag `course-2026-v2/00-start` à `course-2026-v2/09-challenge` est un état exécutable. `main` contient la version complète. Les dépendances et le schéma Prisma sont préparés dès le départ pour éviter les installations en cours de démonstration.
+Chaque tag `course-2026-v3/00-start` à `course-2026-v3/09-challenge` est un état exécutable. `main` contient la version complète. Les dépendances et le schéma Prisma sont préparés dès le départ pour éviter les installations en cours de démonstration.
 
 ## Naviguer sans perdre les modifications
 
@@ -28,9 +28,9 @@ npm run course -- test 04
 npm run course -- next 04
 ```
 
-Les commandes créent des worktrees détachés dans `.course-worktrees/v2/`, sans changer votre checkout ni écraser vos modifications. `run` utilise la démonstration de l’étape ; `test` exécute sa vérification. `next` prépare l’étape suivante et affiche les chemins, sans démarrer de serveur. Exécuter ces commandes depuis le clone principal. Les worktrees modifiés sont conservés ; leur vérification refuse de les traiter comme des réponses intactes.
+Les commandes créent des worktrees détachés dans `.course-worktrees/v3/`, sans changer votre checkout ni écraser vos modifications. `run` utilise la démonstration de l’étape ; `test` exécute sa vérification. `next` prépare l’étape suivante et affiche les chemins, sans démarrer de serveur. Exécuter ces commandes depuis le clone principal. Les worktrees modifiés sont conservés ; leur vérification refuse de les traiter comme des réponses intactes.
 
-Les tags corrigés utilisent le préfixe `course-2026-v2/`. Les anciens tags `course-2026/` et dossiers restent conservés. Après une mise à jour, lancer `git pull --ff-only`, `git fetch --tags`, puis `npm run course -- warmup` pour préparer les nouvelles versions.
+Les tags formatés avec Biome utilisent le préfixe `course-2026-v3/`. Les anciens tags `course-2026/`, `course-2026-v2/` et leurs dossiers restent conservés. Après une mise à jour, lancer `git pull --ff-only`, `git fetch --tags`, puis `npm run course -- warmup` pour préparer les nouvelles versions.
 
 Les checkpoints ne sont disponibles qu’après récupération des tags (`git fetch --tags`). Les démonstrations ont été vérifiées sous macOS avec Node 24. Les exemples de variables d’environnement utilisent la syntaxe des terminaux macOS/Linux.
 
@@ -41,6 +41,21 @@ Les checkpoints ne sont disponibles qu’après récupération des tags (`git fe
 Chaque étape a sa propre démo, décrite dans le [conducteur](docs/lesson-steps.md#les-démos-exécutables). Les assertions font échouer la commande si le résultat attendu n’est pas obtenu ; les refus métier prévus sont vérifiés puis affichés.
 
 Pour répéter et vérifier toute la progression : `npm run course -- verify` compile, teste et lance les dix démos. Prévoir plusieurs minutes lors de la première préparation.
+
+## Format et qualité du code
+
+[Biome](https://biomejs.dev/guides/getting-started/) est installé avec une version exacte, commune à tous les checkpoints. Il formate TypeScript, JavaScript et les configurations JSON, trie les imports et applique ses règles recommandées. Le code utilise deux espaces, des lignes de 80 caractères et des accolades pour les blocs.
+
+```sh
+npm run format     # Mettre en forme
+npm run lint:fix   # Formater, organiser les imports et appliquer les corrections sûres
+npm run lint       # Vérifier sans modifier les fichiers
+npm run check      # Lint, compilation et tests
+```
+
+La CI vérifie aussi les dix checkpoints avec `npm run course -- verify`. Les documents, les exports de slides, le lockfile npm et les fichiers générés ne sont pas reformattés par Biome. Le schéma Prisma utilise son formateur natif.
+
+Après une manipulation en direct, lancer `npm run lint:fix` dans le dossier du checkpoint pour retrouver le format du dépôt. `npm test` reste disponible pour se concentrer sur le comportement pendant la démonstration.
 
 ## Résultat final
 

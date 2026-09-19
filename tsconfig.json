@@ -9,13 +9,7 @@
     "skipLibCheck": true,
     "outDir": "dist",
     "rootDir": ".",
-    "types": [
-      "node"
-    ]
+    "types": ["node"]
   },
-  "include": [
-    "src/**/*.ts",
-    "tests/**/*.ts",
-    "examples/**/*.ts"
-  ]
+  "include": ["src/**/*.ts", "tests/**/*.ts", "examples/**/*.ts"]
 }

@@ -32,7 +32,7 @@ npm run course -- warmup
 npm run course -- list
 ```
 
-Chaque tag `course-2026-v2/00-start` à `course-2026-v2/09-challenge` contient **une solution complète qui fonctionne**. Le dépôt ne contient pas de versions à trous. Pour montrer un changement, comparer deux tags ou modifier temporairement une petite portion de la solution dans son dossier préparé.
+Chaque tag `course-2026-v3/00-start` à `course-2026-v3/09-challenge` contient **une solution complète qui fonctionne**. Le dépôt ne contient pas de versions à trous. Pour montrer un changement, comparer deux tags ou modifier temporairement une petite portion de la solution dans son dossier préparé.
 
 Garder deux fenêtres :
 
@@ -46,7 +46,7 @@ npm run course -- diff 02 03
 npm run course -- next 03
 ```
 
-`prepare 03` affiche un chemin se terminant par `.course-worktrees/v2/03-domain`. Ouvrir ce dossier dans l’éditeur. Les commandes de test indiquées ci-dessous s’exécutent **dans ce dossier**, sauf les commandes `course`, exécutées depuis le clone principal.
+`prepare 03` affiche un chemin se terminant par `.course-worktrees/v3/03-domain`. Ouvrir ce dossier dans l’éditeur. Les commandes de test indiquées ci-dessous s’exécutent **dans ce dossier**, sauf les commandes `course`, exécutées depuis le clone principal.
 
 `next 03` prépare 04 sans effacer ce que tu as modifié dans 03. Il ne transporte pas tes modifications vers 04 et ne démarre aucun serveur. Pour une étape modifiée, lancer ses tests directement dans son dossier : le navigateur refuse de la réinitialiser. Les diffs entre tags montrent les solutions enregistrées, pas les modifications en cours.
 
@@ -69,7 +69,9 @@ Dans un dossier d’étape, `npm run demo` lance `src/demo.ts`, affiche les obse
 
 La démo 07 prépare et supprime sa propre base temporaire : aucun `db:setup` manuel et aucune modification de ta base. Les démos HTTP n’ouvrent aucun port réseau. Pour manipuler avec `curl`, utiliser `npm start`. Les démos 08/09 partagent la mémoire dans un seul processus ; deux commandes séparées nécessitent SQLite pour partager les données.
 
-Pour une répétition complète : `npm run course -- verify`. Les checkpoints corrigés se trouvent dans `.course-worktrees/v2/`. Les anciens tags et dossiers sont conservés ; ils contiennent les anciennes démos.
+Pour une répétition complète : `npm run course -- verify`. Les checkpoints formatés avec Biome se trouvent dans `.course-worktrees/v3/`. Les anciens tags et dossiers sont conservés ; ils contiennent les versions précédentes.
+
+Après les petites modifications en direct, `npm run lint:fix` rétablit le format. `npm run check` inclut désormais le lint ; `npm test` reste la commande rapide pour montrer un test rouge puis vert.
 
 ## Vue d’ensemble : 150 minutes
 

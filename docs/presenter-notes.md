@@ -121,7 +121,7 @@ Passage au code : Lancer npm run course -- run 02 pour afficher les objets méti
 
 59–61 min. Ouvrir tests/domain.test.ts puis le type PlayAGame et BoardgameInventory. Le test appelle le même port primaire que les futures entrées. Le catalogue fixture implémente le port secondaire. Aucun HTTP ni stockage à cette étape. Lancer la suite métier sans réseau.
 
-Passage au code : Lancer npm run course -- run 03 pour montrer les bornes acceptées et refusées. Ouvrir les fichiers dans .course-worktrees/v2/03-domain.
+Passage au code : Lancer npm run course -- run 03 pour montrer les bornes acceptées et refusées. Ouvrir les fichiers dans .course-worktrees/v3/03-domain.
 
 ## 28 · La validation dans le cas d’usage
 

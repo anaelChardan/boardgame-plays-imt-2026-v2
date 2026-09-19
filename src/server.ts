@@ -1,9 +1,17 @@
-import { buildHttp } from './infrastructure/http.js';
 import { compose } from './composition.js';
-const {play,store,close} = compose();
-const app = buildHttp(play,store);
-app.addHook('onClose',close);
-const address = await app.listen({port:Number(process.env.PORT ?? 3000),host:'127.0.0.1'});
-console.log('API ' + address);
+import { buildHttp } from './infrastructure/http.js';
 
-for (const signal of ['SIGINT','SIGTERM'] as const) process.once(signal,()=>{void app.close();});
+const { play, store, close } = compose();
+const app = buildHttp(play, store);
+app.addHook('onClose', close);
+const address = await app.listen({
+  port: Number(process.env.PORT ?? 3000),
+  host: '127.0.0.1',
+});
+console.log(`API ${address}`);
+
+for (const signal of ['SIGINT', 'SIGTERM'] as const) {
+  process.once(signal, () => {
+    void app.close();
+  });
+}

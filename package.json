@@ -9,25 +9,29 @@
     "build": "tsc -p tsconfig.json",
     "test": "vitest run",
     "test:watch": "vitest",
-    "check": "npm run build && npm test",
+    "check": "npm run lint && npm run build && npm test",
     "demo": "tsx src/demo.ts",
     "course": "node scripts/course.mjs",
     "db:setup": "node scripts/db-setup.mjs",
     "start": "tsx src/server.ts",
     "cli": "tsx src/cli.ts",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "lint": "biome ci --error-on-warnings .",
+    "lint:fix": "biome check --write .",
+    "format": "biome format --write . && prisma format"
   },
   "dependencies": {
-    "fastify": "5.12.4",
+    "@prisma/client": "6.19.3",
     "fast-xml-parser": "5.11.1",
-    "zod": "3.25.76",
-    "@prisma/client": "6.19.3"
+    "fastify": "5.12.4",
+    "zod": "3.25.76"
   },
   "devDependencies": {
-    "typescript": "5.9.3",
-    "tsx": "4.23.13",
-    "vitest": "5.0.0",
+    "@biomejs/biome": "2.5.14",
+    "@types/node": "24.10.1",
     "prisma": "6.19.3",
-    "@types/node": "24.10.1"
+    "tsx": "4.23.13",
+    "typescript": "5.9.3",
+    "vitest": "5.0.0"
   }
 }

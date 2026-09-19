@@ -23,7 +23,7 @@ Si une étape contient des modifications, le navigateur refuse de la réinitiali
 
 ## Répéter les démos
 
-`npm run course -- run NN` lance la démonstration propre à chaque étape. Le [tableau du conducteur](lesson-steps.md#les-démos-exécutables) indique le résultat attendu. `npm run course -- verify` compile, teste et exécute les dix étapes. Les tags corrigés sont `course-2026-v2/*`, préparés dans `.course-worktrees/v2/` ; les anciens restent disponibles.
+`npm run course -- run NN` lance la démonstration propre à chaque étape. Le [tableau du conducteur](lesson-steps.md#les-démos-exécutables) indique le résultat attendu. `npm run course -- verify` vérifie le lint, compile, teste et exécute les dix étapes. Les tags formatés avec Biome sont `course-2026-v3/*`, préparés dans `.course-worktrees/v3/` ; les anciens restent disponibles.
 
 La démo 05 appelle réellement le parseur et l’adaptateur BGG avec un transport contrôlé. La démo 07 utilise réellement SQLite, ferme la connexion et relit avec une nouvelle instance Prisma ; sa base temporaire est nettoyée. La démo 09 montre les doublons refusés dans HTTP et CLI. Aucun accès BGG live n’est nécessaire.
 
