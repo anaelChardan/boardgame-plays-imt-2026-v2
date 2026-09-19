@@ -10,6 +10,8 @@ Public : première année du cycle ingénieur, Bac+3. La séance analyse les cha
 
 2–5 min. Exécuter la démonstration00. Distinguer comportement observable et structure interne. Le point de départ ne persiste pas encore les données. Expliquer où la règle sera vérifiée si une seconde entrée apparaît. Brass désigne Brass: Birmingham dans les exemples du dépôt.
 
+Passage au code : Lancer npm run course -- run 00 depuis le clone principal. Montrer le résultat au terminal ; la lecture du code vient à la slide 5.
+
 ## 3 · Trois évolutions du même service
 
 5–8 min. Annoncer les changements concrets que la séance va introduire. Préciser que les étudiants peuvent interrompre la démonstration pour poser leurs questions. Répondre au fil du cours. Aucun tour de table, sondage ou exercice en binôme prévu.
@@ -22,9 +24,13 @@ Public : première année du cycle ingénieur, Bac+3. La séance analyse les cha
 
 11–15 min. Extrait abrégé de examples/00-coupled.ts. Le stockage reste simulé. Identifier quelles lignes changeraient pour un nouveau payload, une règle différente ou un schéma SQL différent. Les changements externes motivent la séparation, pas la longueur de la fonction.
 
+Passage au code : Ouvrir examples/00-coupled.ts dans le dossier affiché par npm run course -- prepare 00.
+
 ## 6 · SOLID : cinq critères de conception
 
 15 min. Carte des cinq principes. Annoncer leur rôle comme critères d’analyse, sans les présenter comme une recette mécanique. Les exemples restent centrés sur les parties de jeux de société. Source : https://www.cs.odu.edu/~zeil/cs330/latest/Public/solid/
+
+Passage au code : Ouvrir examples/solid/principles.ts dans le checkpoint 01. Lancer npm run course -- run 01 pour les cinq observations SOLID, puis revenir aux slides de chaque principe et aux fonctions correspondantes.
 
 ## 7 · SRP : les axes de changement
 
@@ -109,9 +115,13 @@ Lecture du schéma : Les flèches de gauche signifient « utilise ce contrat ».
 
 55–59 min. Ouvrir model.ts à02. Les types n’expriment pas à eux seuls la validité du nombre de joueurs. Distinguer forme des données et invariants. bggId reste un identifiant de référence dans le vocabulaire du cours, sans introduire le XML dans le domaine.
 
+Passage au code : Lancer npm run course -- run 02 pour afficher les objets métier et la demande bien typée mais invalide. Ouvrir src/domain/model.ts et src/infrastructure/fixtures.ts dans 02.
+
 ## 27 · Un premier hexagone piloté par les tests
 
 59–61 min. Ouvrir tests/domain.test.ts puis le type PlayAGame et BoardgameInventory. Le test appelle le même port primaire que les futures entrées. Le catalogue fixture implémente le port secondaire. Aucun HTTP ni stockage à cette étape. Lancer la suite métier sans réseau.
+
+Passage au code : Lancer npm run course -- run 03 pour montrer les bornes acceptées et refusées. Ouvrir les fichiers dans .course-worktrees/v2/03-domain.
 
 ## 28 · La validation dans le cas d’usage
 
@@ -129,6 +139,8 @@ Lecture du schéma : Les flèches de gauche signifient « utilise ce contrat ».
 
 85–87 min. Ouvrir src/infrastructure/http.ts. Montrer le type PlayAGame reçu en paramètre et l’appel play(parsed.data). HTTP traduit JSON et erreurs, le domaine garde ses règles. Les tests existants restent des pilotes du même contrat. Préparer 04 depuis le clone principal, puis montrer le code déjà présent.
 
+Passage au code : Lancer npm run course -- run 04 pour montrer les réponses 200, 400, 404, 422 et 503. La démo utilise inject() sans ouvrir de port réseau. Pour les requêtes curl, lancer npm start dans 04.
+
 ## 32 · HTTP : validation et traduction
 
 87–91 min. Étape04 : validation seule, réponse200. À l’étape06 on passera à201 après l’écriture. Modifier un payload et expliquer pourquoi la réponse devient400 ou422. Extrait abrégé, fichier complet dans infrastructure/http.ts. Le code complet est déjà dans le checkpoint. Saisir uniquement les petites modifications indiquées dans le conducteur.
@@ -145,9 +157,13 @@ Lecture du schéma : Les flèches de gauche signifient « utilise ce contrat ».
 
 100–102 min. Ouvrir src/domain/ports.ts, src/infrastructure/bgg.ts puis src/composition.ts. Même BoardgameInventory, autre réalisation. Fixture et BGG sont des alternatives choisies au démarrage, pas deux appels successifs. Les flèches indiquent les appels. Le retour du jeu ne transforme pas BGG en adaptateur primaire.
 
+Passage au code : Ouvrir src/infrastructure/bgg.ts dans 05. La démo prévue pour le cours reste hors ligne, avec des réponses XML contrôlées.
+
 ## 36 · Intégration du catalogue BGG
 
 102–105 min. Ouvrir composition.ts, montrer le choix CATALOG. Le mode live est facultatif et demande un jeton BGG valide. Ne pas réutiliser le jeton Slides. Les tests BGG utilisent des réponses HTTP contrôlées. Source : https://boardgamegeek.com/wiki/page/BGG_XML_API2 Le code complet est déjà dans le checkpoint. Saisir uniquement les petites modifications indiquées dans le conducteur.
+
+Passage au code : Lancer npm run course -- run 05 : le vrai adaptateur BGG transforme les réponses XML contrôlées. Aucun jeton réel ni appel au service BGG pendant la séance.
 
 ## 37 · La traduction au niveau de l’adaptateur
 
@@ -161,6 +177,8 @@ Lecture du schéma : Les flèches de gauche signifient « utilise ce contrat ».
 
 115–117 min. Ouvrir le diff 05/06 puis PlayWriter dans ports.ts. Le cas d’usage a désormais besoin d’enregistrer : c’est un nouveau port secondaire, avec un adaptateur mémoire. Ouvrir play-a-game.ts pour montrer await writer.save(play). La manipulation suivante retire puis rétablit cette ligne.
 
+Passage au code : Lancer npm run course -- run 06 pour observer HTTP 201 après écriture, le refus sans ajout et la panne du writer. Ouvrir ensuite la ligne await writer.save(play) avant la manipulation.
+
 ## 40 · La sauvegarde fait partie du cas d’usage
 
 117–121 min. Ajouter await writer.save(play) et expliquer son rôle. Étape06 retourne201 après succès. Sans await, on pourrait annoncer une création avant un échec. Montrer le test de stockage indisponible. Le code complet est déjà dans le checkpoint. Saisir uniquement les petites modifications indiquées dans le conducteur.
@@ -173,26 +191,38 @@ Lecture du schéma : Les flèches de gauche signifient « utilise ce contrat ».
 
 124–125 min. Ouvrir src/infrastructure/prisma-store.ts et le câblage. Le port PlayWriter et le métier ne changent pas. Mémoire et Prisma sont des alternatives. SQLite est un fichier local, aucun conteneur ni service de base à lancer. La slide suivante prouve la persistance après reconnexion.
 
+Passage au code : Ouvrir src/infrastructure/prisma-store.ts et prisma/schema.prisma dans 07. La démo de la slide suivante prépare sa propre base SQLite temporaire.
+
 ## 43 · Persistance après reconnexion
 
-125–130 min. Démonstration préparée. npm run db:setup, puis STORAGE=sqlite npm run cli à partir de08 ou test Prisma à07. Le test ferme la connexion, rouvre la même base temporaire et relit la partie. Aucun Docker. Ne pas taper tout le schéma.
+125–130 min. Démonstration préparée au checkpoint 07. Aucun Docker. Ne pas taper tout le schéma.
 Lecture du schéma : Le client A écrit puis se déconnecte. Le client B est une nouvelle connexion au même fichier SQLite et relit la partie. Le maintien du résultat après reconnexion établit la persistance. Le code complet est déjà dans le checkpoint. Saisir uniquement les petites modifications indiquées dans le conducteur.
+
+Passage au code : Lancer npm run course -- run 07. La démo écrit une partie, ferme la connexion, crée une nouvelle instance Prisma et relit la partie. Elle crée puis supprime une base temporaire : aucune préparation manuelle, aucun Docker. Ouvrir src/demo.ts puis tests/prisma.test.ts dans 07 pour montrer la preuve.
 
 ## 44 · La CLI réutilise le même port primaire
 
 130–131 min. Ouvrir src/infrastructure/cli.ts puis src/cli.ts. Les arguments deviennent une PlayRequest, puis la CLI appelle PlayAGame. Aucune copie des règles métier. Exécuter une acceptation et un refus dans le créneau de la slide suivante. Pour montrer le partage avec HTTP, choisir SQLite et le même fichier de base.
 
+Passage au code : Préparer 08 puis ouvrir src/infrastructure/cli.ts et src/cli.ts. La démo suivante appelle réellement HTTP et runCli avec le même cas d’usage.
+
 ## 45 · Une entrée CLI sur le même cas d’usage
 
 131–134 min. Montrer runCli puis le domaine pour établir la réutilisation du cas d’usage. Mode memory : chaque processus a son propre magasin. Pour partager avec le serveur, choisir sqlite et la même DATABASE_URL. Comparer une acceptation et un refus. Le code complet est déjà dans le checkpoint. Saisir uniquement les petites modifications indiquées dans le conducteur.
+
+Passage au code : Lancer npm run course -- run 08 pour comparer les résultats et refus HTTP/CLI. Cette démo partage la mémoire dans un seul processus. SQLite ne sert que si l’on veut ensuite partager des données entre deux processus séparés.
 
 ## 46 · Unicité des participants
 
 134–138 min. Partir de08. Présenter la nouvelle exigence, montrer quels modules doivent changer, puis réaliser la modification et expliquer les régressions à vérifier. Répondre aux questions au fil de la démonstration. L’unicité par nom est une simplification explicite, pas un modèle universel des personnes.
 
+Passage au code : Rester dans 08 pour ajouter le test des doublons puis modifier la règle, comme indiqué dans le conducteur. Le lien 09 donne la solution à montrer après la manipulation.
+
 ## 47 · Une règle commune aux deux entrées
 
 138–140 min. Passer à09, montrer le diff08→09 et lancer challenge.test.ts. Définition simplifiée de l’identité par le nom dans cette démonstration. En production deux personnes peuvent porter le même nom : un identifiant serait un autre besoin.
+
+Passage au code : Depuis le clone principal, lancer npm run course -- run 09 : les doublons normalisés sont refusés par HTTP et CLI sans sauvegarde. Ouvrir ensuite tests/challenge.test.ts dans 09.
 
 ## 48 · Le coût des frontières
 
