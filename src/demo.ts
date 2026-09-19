@@ -1,47 +1,55 @@
 import assert from 'node:assert/strict';
+import { spawnSync } from 'node:child_process';
+import { mkdtempSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { resolve } from 'node:path';
+import { PrismaClient } from '@prisma/client';
 import { buildPlayAGame } from './domain/play-a-game.js';
 import { fixtureCatalogue } from './infrastructure/fixture-catalogue.js';
-import { buildHttp } from './infrastructure/http.js';
-import { buildMemoryStore } from './infrastructure/memory-store.js';
+import { buildPrismaStore } from './infrastructure/prisma-store.js';
 
-console.log('06 · PlayWriter : annoncer la création après la sauvegarde');
-const store = buildMemoryStore();
-const play = buildPlayAGame(fixtureCatalogue, store);
-const app = buildHttp(play);
+console.log(
+  '07 · Prisma / SQLite : une partie survit à la fermeture de la connexion',
+);
+const dir = mkdtempSync(resolve(tmpdir(), 'imt-demo-'));
+const url = `file:${resolve(dir, 'demo.db')}`;
+let client: PrismaClient | undefined;
 try {
-  assert.equal((await store.all()).length, 0);
-  console.log('Avant la demande : 0 partie en mémoire.');
-  const response = await app.inject({
-    method: 'POST',
-    url: '/plays',
-    payload: { boardgameName: 'Azul', players: ['Alice', 'Bob'] },
-  });
-  assert.equal(response.statusCode, 201);
-  assert.deepEqual(await store.all(), [response.json()]);
-  console.log(
-    'HTTP 201 → partie effectivement sauvegardée :',
-    await store.all(),
+  const setup = spawnSync(
+    process.execPath,
+    ['node_modules/prisma/build/index.js', 'db', 'push', '--skip-generate'],
+    {
+      env: { ...process.env, RUST_LOG: 'info', DATABASE_URL: url },
+      encoding: 'utf8',
+    },
   );
+  if (setup.error) {
+    throw setup.error;
+  }
+  assert.equal(setup.status, 0, setup.stderr || setup.stdout);
+  client = new PrismaClient({ datasources: { db: { url } } });
+  const store = buildPrismaStore(client);
+  const play = buildPlayAGame(fixtureCatalogue, store);
+  const result = await play({
+    boardgameName: 'Azul',
+    players: ['Alice', 'Bob'],
+  });
+  console.log('Partie écrite dans une base SQLite temporaire :', result);
   await assert.rejects(
     () => play({ boardgameName: 'Azul', players: ['Alice'] }),
     /entre 2 et 4/,
   );
-  assert.equal((await store.all()).length, 1);
-  console.log('Partie refusée → toujours 1 partie en mémoire.');
-  const failedWrite = new Error('Stockage indisponible');
-  const fail = buildPlayAGame(fixtureCatalogue, {
-    async save() {
-      throw failedWrite;
-    },
-  });
-  await assert.rejects(
-    () => fail({ boardgameName: 'Azul', players: ['Alice', 'Bob'] }),
-    (error) => error === failedWrite,
-  );
-  console.log(
-    'Writer en panne → le cas d’usage échoue, aucune réussite annoncée.',
-  );
-  console.log('Mémoire du processus uniquement ; la persistance arrive à 07.');
+  await client.$disconnect();
+  console.log('Première connexion fermée. Nouvelle instance Prisma…');
+  client = new PrismaClient({ datasources: { db: { url } } });
+  const persisted = await buildPrismaStore(client).all();
+  assert.deepEqual(persisted, [result]);
+  console.log('Après reconnexion → 1 partie conservée :', persisted);
 } finally {
-  await app.close();
+  try {
+    await client?.$disconnect();
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
 }
+console.log('Base temporaire supprimée ; votre base de travail reste intacte.');

@@ -7,6 +7,7 @@ import {
   InvalidPlayerCount,
 } from '../domain/errors.js';
 import type { PlayAGame } from '../domain/play-a-game.js';
+import type { PlayReader } from '../domain/ports.js';
 
 const requestSchema = z
   .object({
@@ -14,8 +15,11 @@ const requestSchema = z
     players: z.array(z.string()),
   })
   .strict();
-export function buildHttp(play: PlayAGame) {
+export function buildHttp(play: PlayAGame, reader?: PlayReader) {
   const app = Fastify();
+  if (reader) {
+    app.get('/plays', async () => reader.all());
+  }
   app.post('/plays', async (request, reply) => {
     const parsed = requestSchema.safeParse(request.body);
     if (!parsed.success) {

@@ -8,6 +8,7 @@ const result = spawnSync(command, ['db', 'push', '--skip-generate'], {
   stdio: 'inherit',
   env: {
     ...process.env,
+    RUST_LOG: 'info',
     DATABASE_URL: process.env.DATABASE_URL || 'file:./classroom.db',
   },
 });
