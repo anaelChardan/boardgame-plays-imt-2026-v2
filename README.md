@@ -30,6 +30,8 @@ npm run course -- next 04
 
 Les commandes créent des worktrees détachés dans `.course-worktrees/v3/`, sans changer votre checkout ni écraser vos modifications. `run` utilise la démonstration de l’étape ; `test` exécute sa vérification. `next` prépare l’étape suivante et affiche les chemins, sans démarrer de serveur. Exécuter ces commandes depuis le clone principal. Les worktrees modifiés sont conservés ; leur vérification refuse de les traiter comme des réponses intactes.
 
+Si le dossier d’un checkpoint a disparu mais reste enregistré dans Git, `prepare`, `warmup` et `verify` le recréent automatiquement. Cette récupération concerne uniquement le checkpoint demandé, non verrouillé et resté sur le commit attendu ; les autres worktrees sont conservés.
+
 Les tags formatés avec Biome utilisent le préfixe `course-2026-v3/`. Les anciens tags `course-2026/`, `course-2026-v2/` et leurs dossiers restent conservés. Après une mise à jour, lancer `git pull --ff-only`, `git fetch --tags`, puis `npm run course -- warmup` pour préparer les nouvelles versions.
 
 Les checkpoints ne sont disponibles qu’après récupération des tags (`git fetch --tags`). Les démonstrations ont été vérifiées sous macOS avec Node 24. Les exemples de variables d’environnement utilisent la syntaxe des terminaux macOS/Linux.

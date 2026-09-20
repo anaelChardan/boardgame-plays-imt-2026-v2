@@ -63,7 +63,38 @@ function prepare(s) {
   );
   const dir = resolve(root, '.course-worktrees', 'v3', s.name);
   if (!existsSync(dir)) {
-    run('git', ['worktree', 'add', '--detach', dir, s.ref]);
+    const registrations = run(
+      'git',
+      ['worktree', 'list', '--porcelain', '-z'],
+      root,
+      true,
+    )
+      .split('\0\0')
+      .map((entry) => entry.split('\0'))
+      .filter((fields) => fields.includes(`worktree ${dir}`));
+    for (const fields of registrations) {
+      if (
+        fields.some(
+          (field) => field === 'locked' || field.startsWith('locked '),
+        )
+      ) {
+        throw new Error(
+          `Le worktree ${dir} est verrouillé. Référence conservée.`,
+        );
+      }
+      if (!fields.includes('detached') || !fields.includes(`HEAD ${sha}`)) {
+        throw new Error(
+          `Le worktree absent ${dir} contient une référence différente du checkpoint. Référence conservée.`,
+        );
+      }
+    }
+    // A single --force lets Git replace a missing registration, never an
+    // existing directory or a locked worktree. No global prune is needed.
+    const recovery = registrations.length > 0 ? ['--force'] : [];
+    if (recovery.length) {
+      console.log(`Recréation du checkpoint absent : ${dir}`);
+    }
+    run('git', ['worktree', 'add', '--detach', ...recovery, dir, sha]);
   }
   if (run('git', ['rev-parse', 'HEAD'], dir, true) !== sha) {
     throw new Error(
