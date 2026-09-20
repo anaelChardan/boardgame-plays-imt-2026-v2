@@ -53,6 +53,12 @@ function show(s) {
 Tag : ${s.ref}
 Fichier : ${s.file}
 Slides : ${s.slidesUrl}`);
+  if (s.goal) {
+    console.log(`À expliquer : ${s.goal}`);
+  }
+  if (s.expected) {
+    console.log(`À observer : ${s.expected}`);
+  }
 }
 function prepare(s) {
   const sha = run(
@@ -123,7 +129,39 @@ function prepare(s) {
   show(s);
   console.log(`Dossier : ${dir}
 Ouvrir : ${resolve(dir, s.file)}`);
+  for (const file of s.files ?? []) {
+    if (file !== s.file) {
+      console.log(`Puis : ${resolve(dir, file)}`);
+    }
+  }
   return dir;
+}
+function present(s) {
+  const dir = prepare(s);
+  const previous = steps[steps.indexOf(s) - 1];
+  if (previous) {
+    console.log(`\nÉvolution ${previous.step} → ${s.step} :`);
+    run('git', [
+      '--no-pager',
+      'diff',
+      '--no-ext-diff',
+      '--no-textconv',
+      previous.ref,
+      s.ref,
+      '--',
+      ...(s.focus ?? [s.file]),
+    ]);
+  } else {
+    console.log(
+      '\nPoint de départ : observer le comportement et lire le code.',
+    );
+  }
+  console.log(`\nDémonstration ${s.step} :`);
+  run(npm, ['run', 'demo'], dir);
+  const next = steps[steps.indexOf(s) + 1];
+  if (next) {
+    console.log(`\nÉtape suivante : npm run course -- present ${next.step}`);
+  }
 }
 try {
   if (action === 'warmup') {
@@ -143,6 +181,8 @@ try {
     });
   } else if (action === 'show') {
     show(step(id));
+  } else if (action === 'present') {
+    present(step(id));
   } else if (action === 'diff') {
     run('git', [
       'diff',
@@ -176,7 +216,7 @@ try {
     }
   } else {
     throw new Error(
-      'Commande inconnue : list, show, diff, warmup, verify, prepare, run, test, next.',
+      'Commande inconnue : list, show, diff, warmup, verify, prepare, present, run, test, next.',
     );
   }
 } catch (e) {

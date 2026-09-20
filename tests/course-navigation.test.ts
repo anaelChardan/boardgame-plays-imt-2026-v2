@@ -27,8 +27,8 @@ function git(args: string[], cwd = root) {
   return result.stdout.trim();
 }
 
-function prepare() {
-  return spawnSync(process.execPath, ['scripts/course.mjs', 'prepare', '00'], {
+function prepare(action = 'prepare', id = '00') {
+  return spawnSync(process.execPath, ['scripts/course.mjs', action, id], {
     cwd: root,
     encoding: 'utf8',
     env: { ...process.env, npm_config_offline: 'true' },
@@ -53,6 +53,7 @@ beforeEach(() => {
       // This dependency-free fixture still needs the install-cache directory.
       build:
         "node -e \"require('node:fs').mkdirSync('node_modules', { recursive: true })\"",
+      demo: 'node -e "console.log(\'fixture demo\')"',
     },
   };
   writeFileSync(resolve(root, 'package.json'), JSON.stringify(manifest));
@@ -160,4 +161,55 @@ it('does not overwrite edits in an existing checkpoint', () => {
   expect(result.status).not.toBe(0);
   expect(result.stderr).toContain('Modifications conservées');
   expect(readFileSync(file, 'utf8')).toBe(before);
+  expect(prepare('present').status).not.toBe(0);
+  expect(readFileSync(file, 'utf8')).toBe(before);
 });
+
+it('presents the starting point without requiring a previous checkpoint', () => {
+  const result = prepare('present');
+  expect(result.status, result.stderr).toBe(0);
+  expect(result.stdout).toContain('Point de départ');
+  expect(result.stdout).toContain('fixture demo');
+  expect(git(['status', '--porcelain'], checkpoint)).toBe('');
+}, 15000);
+
+it('shows a focused transition and runs the destination demo without editing code', () => {
+  writeFileSync(resolve(root, 'lesson.txt'), 'new concept\n');
+  writeFileSync(
+    resolve(root, 'unrelated.txt'),
+    'not part of the walkthrough\n',
+  );
+  git(['add', '.']);
+  git(['-c', 'commit.gpgsign=false', 'commit', '-qm', 'Next checkpoint']);
+  git(['tag', 'course-test/01']);
+  const metadata = JSON.parse(
+    readFileSync(resolve(root, 'course.json'), 'utf8'),
+  );
+  metadata.push({
+    step: '01',
+    name: '01-next',
+    title: 'Next',
+    ref: 'course-test/01',
+    file: 'lesson.txt',
+    files: ['lesson.txt', 'package.json'],
+    focus: ['lesson.txt'],
+    goal: 'explain the new concept',
+    expected: 'observe the demo',
+    slidesUrl: 'https://example.com/next',
+  });
+  writeFileSync(resolve(root, 'course.json'), JSON.stringify(metadata));
+  const result = prepare('present', '01');
+  expect(result.status, result.stderr).toBe(0);
+  expect(result.stdout).toContain('Évolution 00 → 01');
+  expect(result.stdout).toContain('+new concept');
+  expect(result.stdout).not.toContain('not part of the walkthrough');
+  expect(result.stdout).toContain('explain the new concept');
+  expect(result.stdout).toContain('observe the demo');
+  expect(result.stdout).toContain('fixture demo');
+  expect(
+    git(
+      ['status', '--porcelain'],
+      resolve(root, '.course-worktrees/v3/01-next'),
+    ),
+  ).toBe('');
+}, 15000);

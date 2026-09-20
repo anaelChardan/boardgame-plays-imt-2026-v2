@@ -6,16 +6,24 @@
     "ref": "course-2026-v3/00-start",
     "file": "examples/00-coupled.ts",
     "slide": 0,
-    "slidesUrl": "https://slides.com/anaelchardan/solid-et-architecture-hexagonale-imt-2026-v2/fullscreen#/0"
+    "slidesUrl": "https://slides.com/anaelchardan/solid-et-architecture-hexagonale-imt-2026-v2/fullscreen#/0",
+    "goal": "Identifier le mélange JSON, règle métier et représentation du stockage.",
+    "expected": "Partie acceptée, refus à un joueur ; stockage simulé.",
+    "files": ["examples/00-coupled.ts", "tests/start.test.ts"],
+    "focus": ["examples/00-coupled.ts"]
   },
   {
     "step": "01",
     "name": "01-solid",
     "title": "Les cinq principes SOLID",
     "ref": "course-2026-v3/01-solid",
-    "file": "examples/solid/README.md",
+    "file": "examples/solid/principles.ts",
     "slide": 5,
-    "slidesUrl": "https://slides.com/anaelchardan/solid-et-architecture-hexagonale-imt-2026-v2/fullscreen#/5"
+    "slidesUrl": "https://slides.com/anaelchardan/solid-et-architecture-hexagonale-imt-2026-v2/fullscreen#/5",
+    "goal": "Relier chaque principe SOLID à un changement concret.",
+    "expected": "Cinq observations : règle isolée, substitution, contrat LSP, lecture seule, injection.",
+    "files": ["examples/solid/principles.ts", "tests/solid.test.ts"],
+    "focus": ["examples/solid/principles.ts"]
   },
   {
     "step": "02",
@@ -24,7 +32,11 @@
     "ref": "course-2026-v3/02-model",
     "file": "src/domain/model.ts",
     "slide": 25,
-    "slidesUrl": "https://slides.com/anaelchardan/solid-et-architecture-hexagonale-imt-2026-v2/fullscreen#/25"
+    "slidesUrl": "https://slides.com/anaelchardan/solid-et-architecture-hexagonale-imt-2026-v2/fullscreen#/25",
+    "goal": "Distinguer les données métier de leur validation.",
+    "expected": "Une demande à un joueur est bien typée mais invalide selon les règles.",
+    "files": ["src/domain/model.ts", "src/infrastructure/fixtures.ts"],
+    "focus": ["src/domain/model.ts", "src/infrastructure/fixtures.ts"]
   },
   {
     "step": "03",
@@ -33,7 +45,15 @@
     "ref": "course-2026-v3/03-domain",
     "file": "src/domain/play-a-game.ts",
     "slide": 26,
-    "slidesUrl": "https://slides.com/anaelchardan/solid-et-architecture-hexagonale-imt-2026-v2/fullscreen#/26"
+    "slidesUrl": "https://slides.com/anaelchardan/solid-et-architecture-hexagonale-imt-2026-v2/fullscreen#/26",
+    "goal": "Introduire PlayAGame et son port de catalogue sans serveur ni stockage.",
+    "expected": "2 et 4 joueurs acceptés ; 1 et 5 refusés ; jeu inconnu distinct.",
+    "files": [
+      "src/domain/play-a-game.ts",
+      "src/domain/ports.ts",
+      "tests/domain.test.ts"
+    ],
+    "focus": ["src/domain/play-a-game.ts", "src/domain/ports.ts"]
   },
   {
     "step": "04",
@@ -42,7 +62,11 @@
     "ref": "course-2026-v3/04-http",
     "file": "src/infrastructure/http.ts",
     "slide": 30,
-    "slidesUrl": "https://slides.com/anaelchardan/solid-et-architecture-hexagonale-imt-2026-v2/fullscreen#/30"
+    "slidesUrl": "https://slides.com/anaelchardan/solid-et-architecture-hexagonale-imt-2026-v2/fullscreen#/30",
+    "goal": "Ajouter HTTP comme adaptateur primaire sans déplacer la règle métier.",
+    "expected": "Réponses 200, 400, 404, 422 et 503 avec HTTP interne.",
+    "files": ["src/infrastructure/http.ts", "tests/http.test.ts"],
+    "focus": ["src/infrastructure/http.ts"]
   },
   {
     "step": "05",
@@ -51,16 +75,37 @@
     "ref": "course-2026-v3/05-catalog",
     "file": "src/infrastructure/bgg.ts",
     "slide": 34,
-    "slidesUrl": "https://slides.com/anaelchardan/solid-et-architecture-hexagonale-imt-2026-v2/fullscreen#/34"
+    "slidesUrl": "https://slides.com/anaelchardan/solid-et-architecture-hexagonale-imt-2026-v2/fullscreen#/34",
+    "goal": "Remplacer le catalogue par un adaptateur XML respectant le même contrat.",
+    "expected": "Fixture et BGG contrôlé donnent le même résultat ; absence et panne restent distinctes.",
+    "files": [
+      "src/infrastructure/bgg.ts",
+      "src/composition.ts",
+      "tests/catalogue.test.ts"
+    ],
+    "focus": ["src/infrastructure/bgg.ts", "src/composition.ts"]
   },
   {
     "step": "06",
     "name": "06-save",
     "title": "Enregistrer par un port",
     "ref": "course-2026-v3/06-save",
-    "file": "src/domain/play-a-game.ts",
+    "file": "src/domain/ports.ts",
     "slide": 38,
-    "slidesUrl": "https://slides.com/anaelchardan/solid-et-architecture-hexagonale-imt-2026-v2/fullscreen#/38"
+    "slidesUrl": "https://slides.com/anaelchardan/solid-et-architecture-hexagonale-imt-2026-v2/fullscreen#/38",
+    "goal": "Faire apparaître le port PlayWriter avec le besoin de sauvegarde.",
+    "expected": "201 après écriture ; aucun ajout si refus ; panne du writer propagée.",
+    "files": [
+      "src/domain/ports.ts",
+      "src/domain/play-a-game.ts",
+      "src/infrastructure/memory-store.ts",
+      "tests/save.test.ts"
+    ],
+    "focus": [
+      "src/domain/ports.ts",
+      "src/domain/play-a-game.ts",
+      "src/infrastructure/memory-store.ts"
+    ]
   },
   {
     "step": "07",
@@ -69,16 +114,28 @@
     "ref": "course-2026-v3/07-sql",
     "file": "src/infrastructure/prisma-store.ts",
     "slide": 41,
-    "slidesUrl": "https://slides.com/anaelchardan/solid-et-architecture-hexagonale-imt-2026-v2/fullscreen#/41"
+    "slidesUrl": "https://slides.com/anaelchardan/solid-et-architecture-hexagonale-imt-2026-v2/fullscreen#/41",
+    "goal": "Remplacer la mémoire par SQLite sans changer le cas d’usage.",
+    "expected": "La partie reste présente après fermeture et nouvelle connexion Prisma.",
+    "files": [
+      "src/infrastructure/prisma-store.ts",
+      "prisma/schema.prisma",
+      "tests/prisma.test.ts"
+    ],
+    "focus": ["src/infrastructure/prisma-store.ts", "src/composition.ts"]
   },
   {
     "step": "08",
     "name": "08-second-driver",
     "title": "Une autre entrée : CLI",
     "ref": "course-2026-v3/08-second-driver",
-    "file": "src/cli.ts",
+    "file": "src/infrastructure/cli.ts",
     "slide": 43,
-    "slidesUrl": "https://slides.com/anaelchardan/solid-et-architecture-hexagonale-imt-2026-v2/fullscreen#/43"
+    "slidesUrl": "https://slides.com/anaelchardan/solid-et-architecture-hexagonale-imt-2026-v2/fullscreen#/43",
+    "goal": "Piloter le même cas d’usage depuis une seconde entrée.",
+    "expected": "HTTP et CLI acceptent et refusent les mêmes demandes.",
+    "files": ["src/infrastructure/cli.ts", "src/cli.ts", "tests/cli.test.ts"],
+    "focus": ["src/infrastructure/cli.ts", "src/cli.ts"]
   },
   {
     "step": "09",
@@ -87,6 +144,18 @@
     "ref": "course-2026-v3/09-challenge",
     "file": "src/domain/play-a-game.ts",
     "slide": 45,
-    "slidesUrl": "https://slides.com/anaelchardan/solid-et-architecture-hexagonale-imt-2026-v2/fullscreen#/45"
+    "slidesUrl": "https://slides.com/anaelchardan/solid-et-architecture-hexagonale-imt-2026-v2/fullscreen#/45",
+    "goal": "Lire le diff 08/09 : une règle métier supplémentaire protège les deux entrées.",
+    "expected": "Les doublons normalisés sont refusés par HTTP et CLI, sans sauvegarde.",
+    "files": [
+      "src/domain/play-a-game.ts",
+      "src/domain/errors.ts",
+      "tests/challenge.test.ts"
+    ],
+    "focus": [
+      "src/domain/play-a-game.ts",
+      "src/domain/errors.ts",
+      "tests/challenge.test.ts"
+    ]
   }
 ]

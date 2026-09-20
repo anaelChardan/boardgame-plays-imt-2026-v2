@@ -2,24 +2,31 @@
 
 Public : troisième année après le baccalauréat, première année du cycle ingénieur. Objectif : argumenter des décisions de conception à partir des effets observables d’un changement. Les questions viennent des étudiants, qui peuvent interrompre les démonstrations. Le professeur répond au fil du cours. Les slides présentent le problème, le code et les compromis.
 
-Le [conducteur pas à pas](lesson-steps.md) précise le point de départ, les manipulations et les résultats attendus pour chaque étape.
+Le [conducteur pas à pas](lesson-steps.md) précise le point de départ, les transitions et les résultats attendus pour chaque étape.
 
 ## Avant la séance
 
 Aucun Docker ni serveur de base externe. SQLite conserve un fichier local. Utiliser **Node 24**, puis `npm ci`, `npm run check` et `npm run course -- warmup` dans le clone principal. La préparation installe les dépendances de chaque étape une fois. Prévoir plusieurs minutes et de l’espace disque. Les passages suivants réutilisent les étapes prêtes, sans téléchargement.
 
-Garder deux fenêtres : le clone principal pour naviguer et le dossier d’une étape pour coder. Augmenter la taille du texte dans le terminal et l’éditeur. Les étudiants n’ont rien à installer pendant la séance.
+Garder deux fenêtres : le clone principal pour naviguer et le dossier d’une étape pour lire le code. Augmenter la taille du texte dans le terminal et l’éditeur. Les étudiants n’ont rien à installer pendant la séance.
 
 ```sh
 npm run course -- list
+npm run course -- present 03
 npm run course -- prepare 03
 npm run course -- next 03
 npm run course -- diff 08 09
 ```
 
-`prepare` affiche le dossier, le fichier à ouvrir et la slide. `next 03` prépare 04. Chaque étape est un worktree Git indépendant. Aucun changement de branche dans le dossier où vous codez. Aucun `reset --hard` ni nettoyage forcé.
+`prepare` affiche le dossier, le fichier à ouvrir et la slide. `next 03` prépare 04. Chaque étape est un worktree Git indépendant. Aucun changement de branche dans le dossier affiché. Aucun `reset --hard` ni nettoyage forcé.
 
 Si une étape contient des modifications, le navigateur refuse de la réinitialiser. Les modifications restent disponibles : ouvrir son dossier et lancer `npm run demo` ou `npm test` directement. Pour passer à la solution, préparer **l’étape suivante depuis le clone principal**. `diff` compare les solutions enregistrées, pas les modifications en cours.
+
+## Présenter sans écrire de code
+
+Le parcours par défaut consiste à expliquer le besoin, lire le diff et les fichiers préparés, puis commenter le résultat. Depuis le clone principal : `npm run course -- present NN`. La commande affiche l’objectif, les fichiers, un diff ciblé depuis l’étape précédente et la démo. Elle ne modifie aucun fichier source. Les commandes `prepare`, `diff` et `run` permettent de séparer ces temps si nécessaire.
+
+Seules deux petites modifications sont optionnelles : `>` vers `>=` à 03, et suppression temporaire de toute la ligne `await writer.save(play)` à 06. Elles restent dans les créneaux prévus. La règle finale est présentée en lisant le diff 08/09.
 
 ## Répéter les démos
 
@@ -56,20 +63,20 @@ La carte représente le cas d’usage d’enregistrement. Le `GET /plays` de cet
 |---|---|---|---|
 | 11 | 00 | Montrer la fonction couplée | Identifier les raisons de changer |
 | 15–40 | 01 | Analyser les cinq exemples SOLID | Comportement après remplacement |
-| 59–67 | 03 | Écrire la condition min/max | Choix des exemples de test |
-| 67–75 | 03 | Changer temporairement `>` en `>=` | Détection de la régression |
-| 85–100 | 04 | Envoyer deux payloads | Traduction en 400, 404 ou 422 |
-| 100–115 | 05 | Remplacer le catalogue dans la composition | Distinguer absence et panne |
-| 115–124 | 06 | Ajouter `await writer.save(play)` | Dire quand annoncer une création |
-| 124–130 | 07 | Exécuter le test Prisma préparé | Vérifier la preuve de persistance |
+| 59–67 | 03 | Lire le diff 02/03 et la condition min/max | Choix des exemples de test |
+| 67–75 | 03 | Lire et lancer les tests aux bornes | Protection contre une régression |
+| 85–100 | 04 | Exécuter les requêtes préparées de la démo | Traduction en 400, 404 ou 422 |
+| 100–115 | 05 | Lire le diff du catalogue et lancer la démo contrôlée | Distinguer absence et panne |
+| 115–124 | 06 | Lire le diff 05/06 et lancer la démo de sauvegarde | Dire quand annoncer une création |
+| 124–130 | 07 | Lancer la démo Prisma et lire son test | Vérifier la preuve de persistance |
 | 130–134 | 08 | Lancer la CLI | Repérer le cas métier réutilisé |
-| 134–140 | 08 puis 09 | Ajouter les noms uniques | Justification du test et lecture du diff |
+| 134–140 | 08 puis 09 | Lire le diff 08/09 et lancer la démo 09 | Justification du test et lecture du diff |
 
-Les tests de l’étape 03 et la modification finale sont les meilleurs moments pour écrire du code en direct. Préparer le parsing XML, Fastify et Prisma : leur saisie n’est pas l’objectif pédagogique. La pause dure 10 minutes, entre la minute 75 et la minute 85. Les questions peuvent intervenir pendant toute la séance. Les 10 dernières minutes accueillent les questions restantes et absorbent un éventuel retard.
+Toute la séance utilise les solutions préparées. Le temps sert à expliquer les choix, lire les tests et répondre aux questions. Les deux modifications optionnelles ne sont pas nécessaires pour suivre la progression. La pause dure 10 minutes, entre la minute 75 et la minute 85. Les questions peuvent intervenir pendant toute la séance. Les 10 dernières minutes accueillent les questions restantes et absorbent un éventuel retard.
 
 ## HTTP
 
-À partir de 04, dans le dossier préparé :
+Variante facultative pour rejouer les requêtes manuellement. Le parcours principal utilise les requêtes préparées de `present 04`. À partir de 04, dans le dossier préparé :
 
 ```sh
 npm start
@@ -87,7 +94,7 @@ curl -i http://127.0.0.1:3000/plays \
 
 ## Persistance visible dans la version finale
 
-Ces commandes s’exécutent **dans le même dossier**, à 08 ou après. Ne pas partager le chemin relatif d’une base entre plusieurs worktrees.
+Variante facultative après la démo autonome de `present 07`. Ces commandes s’exécutent **dans le même dossier**, à 08 ou après. Ne pas partager le chemin relatif d’une base entre plusieurs worktrees.
 
 ```sh
 npm run db:setup

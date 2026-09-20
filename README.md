@@ -20,6 +20,7 @@ Chaque tag `course-2026-v3/00-start` à `course-2026-v3/09-challenge` est un ét
 ## Naviguer sans perdre les modifications
 
 ```sh
+npm run course -- present 03
 npm run course -- show 03
 npm run course -- diff 03 04
 npm run course -- prepare 04
@@ -57,7 +58,7 @@ npm run check      # Lint, compilation et tests
 
 La CI vérifie aussi les dix checkpoints avec `npm run course -- verify`. Les documents, les exports de slides, le lockfile npm et les fichiers générés ne sont pas reformattés par Biome. Le schéma Prisma utilise son formateur natif.
 
-Après une manipulation en direct, lancer `npm run lint:fix` dans le dossier du checkpoint pour retrouver le format du dépôt. `npm test` reste disponible pour se concentrer sur le comportement pendant la démonstration.
+Après une modification optionnelle, lancer `npm run lint:fix` dans le dossier du checkpoint pour retrouver le format du dépôt. `npm test` reste disponible pour se concentrer sur le comportement pendant la démonstration.
 
 ## Résultat final
 
@@ -73,16 +74,16 @@ L’historique 2025/2026 reste accessible avant les commits v2. Le README histor
 
 [Vue présentateur avec les notes](https://slides.com/anaelchardan/solid-et-architecture-hexagonale-imt-2026-v2/speaker). Les 49 slides comprennent les rôles primaire/secondaire et six étapes du même hexagone. Aucun Docker nécessaire : Node 24, npm et Git suffisent.
 
-Le code existe déjà dans chaque checkpoint. Les modifications à taper en direct sont courtes et décrites dans le conducteur ; HTTP, BGG, Prisma et la CLI sont préparés.
+Le cours est prévu pour montrer les évolutions du code préparé, sans saisie obligatoire. Expliquer le besoin, lire le diff, parcourir les fichiers et commenter la démo. Deux petites modifications restent optionnelles pour illustrer un test rouge puis vert ; la règle finale se montre avec le diff 08/09.
 
-Commencer par le [conducteur pas à pas](docs/lesson-steps.md) : fichiers à ouvrir, manipulations, tests et résultats attendus pour chaque checkpoint.
+Commencer par le [conducteur pas à pas](docs/lesson-steps.md) : fichiers à ouvrir, transitions, tests et résultats attendus pour chaque checkpoint.
 
 - [Conducteur détaillé des 49 slides](docs/presenter-notes.md)
 - [Commandes, séquences de code et plans de secours](docs/demo-runbook.md)
 - [PDF pour présenter hors ligne](slides/course.pdf)
 - [Source éditable du deck](slides/deck.html) et [contenu structuré](slides/slides.json)
 
-Avant le cours : `npm run course -- warmup`. Pendant le cours : `npm run course -- prepare 03` puis `npm run course -- next 03` depuis le clone principal. Les premières étapes montrent volontairement une validation sans écriture. Les scripts `start` et `cli` deviennent utilisables respectivement à 04 et 08.
+Avant le cours : `npm run course -- warmup`. Pendant le cours : `npm run course -- present 03`, puis `npm run course -- present 04` depuis le clone principal. Cette commande prépare le checkpoint, affiche l’objectif et les fichiers, montre un diff ciblé et lance la démo. `prepare`, `diff` et `run` restent disponibles séparément. Les premières étapes montrent volontairement une validation sans écriture. Les scripts `start` et `cli` deviennent utilisables respectivement à 04 et 08.
 
 Le deck est en français. Le professeur explique les concepts et réalise les démonstrations. Les étudiants peuvent l’interrompre pour poser leurs questions tout au long de la séance. Le conducteur réserve du temps aux réponses, sans prédictions imposées ni exercices en binôme.
 

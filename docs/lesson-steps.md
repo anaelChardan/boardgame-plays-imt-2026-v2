@@ -2,22 +2,41 @@
 
 Ce document est le support à garder ouvert pendant la séance. Les [notes par slide](presenter-notes.md) indiquent quoi expliquer. Le [guide des démonstrations](demo-runbook.md) détaille le démarrage, les requêtes HTTP et les solutions de secours.
 
-Le format retenu : tu présentes et tu codes, les étudiants posent leurs questions au fil du cours. Les manipulations ci-dessous sont réalisées par toi. Aucun travail autonome ni exercice en binôme n’est programmé.
+Le format retenu : tu présentes les évolutions du code préparé, tu exécutes les démonstrations et tu réponds aux questions au fil du cours. **Toute la séance se déroule sans écrire de code.** Deux petites modifications sont proposées en option pour montrer un test rouge puis vert. Aucun travail autonome ni exercice en binôme n’est programmé.
 
-## Ce qui est prêt et ce que tu tapes
+## Le parcours par défaut : besoin, diff, code, résultat
 
-**Prérequis : Git, Node 24 et npm. Aucun Docker, Bun ou serveur de base externe.** SQLite utilise un fichier local. Le catalogue fixture évite tout accès à BGG pendant les démonstrations. Une connexion Internet sert à la première installation des dépendances et à la présentation en ligne. Préparer les checkpoints et garder le PDF pour travailler hors ligne.
+**Prérequis : Git, Node 24 et npm. Aucun Docker, Bun ou service externe.** Après préparation, les démos fonctionnent hors ligne. BGG utilise des réponses contrôlées ; SQLite utilise une base temporaire pour sa démo.
 
-Les checkpoints sont des solutions complètes. Le cours montre le code progressivement en ouvrant un dossier par étape. Passer au checkpoint suivant ne rejoue pas automatiquement une écriture de code. Tu ouvres les fichiers indiqués et expliques le diff.
+Les checkpoints contiennent le code complet. Pour chaque transition : expliquer le nouveau besoin, montrer le diff ciblé, ouvrir les fichiers concernés, puis commenter le résultat et les tests. Le professeur explique pourquoi la modification appartient à cet endroit et ce qui reste inchangé.
 
-| Moment | Ce que tu fais en direct |
+Depuis le **clone principal** (`imt-lundi` si c’est ton clone de préparation) :
+
+```sh
+npm run course -- present 04
+```
+
+Cette commande prépare 04, affiche l’objectif, les résultats attendus et les chemins des fichiers, montre le diff ciblé 03 → 04, puis lance la démo. La sortie reste dans le terminal pour commenter le diff et le résultat. Elle ne modifie pas le code et ne lance pas de serveur permanent. Avec `present`, la démo est déjà exécutée : les commandes `npm run demo` indiquées plus bas servent seulement à la rejouer si nécessaire. Ouvrir ensuite les fichiers affichés dans l’éditeur pour les parcourir avec les étudiants.
+
+Si tu veux séparer les temps d’explication et d’exécution :
+
+```sh
+npm run course -- prepare 04
+npm run course -- diff 03 04
+# Ouvrir et expliquer les fichiers affichés
+npm run course -- run 04
+```
+
+`present` utilise un diff ciblé sur le changement pédagogique ; `diff` conserve le diff complet du code, des exemples et des tests. Les commandes de navigation récentes s’exécutent depuis le clone principal ; les tags conservent leurs scripts historiques.
+
+| Moment | Ce que tu montres |
 |---|---|
-| SOLID | Lire les exemples et lancer leurs tests. La mutation LSP est facultative. |
-| Validation métier | Changer `>` en `>=`, montrer le test rouge, remettre `>`. |
-| HTTP et BGG | Lire le code préparé, envoyer les requêtes, lancer les tests. |
-| Sauvegarde | Commenter `await writer.save(play)`, observer l’échec, rétablir la ligne. |
-| SQLite et CLI | Lancer les commandes préparées et montrer les résultats. |
-| Règle finale | Ajouter le test des doublons puis la condition d’unicité, ou lire le diff 08/09 si le temps manque. |
+| SOLID | Les exemples écrits et leurs résultats |
+| Validation | Le diff 02/03, la condition min/max et les cas de test |
+| HTTP et BGG | Les adaptateurs ajoutés et les réponses contrôlées |
+| Sauvegarde | Le diff 05/06, `PlayWriter`, l’écriture et ses effets |
+| SQLite et CLI | Les adaptateurs supplémentaires et leurs démos |
+| Règle finale | Le diff 08/09 et les doublons refusés par les deux entrées |
 
 Le schéma se complète aux slides **27, 31, 35, 39, 42 et 44**. Consacrer une à deux minutes au repère visuel, dans le créneau de la démonstration, puis ouvrir le code. Les éléments verts correspondent à l’ajout de l’étape. La carte cible de la slide 21 montre déjà l’ensemble.
 
@@ -32,12 +51,12 @@ npm run course -- warmup
 npm run course -- list
 ```
 
-Chaque tag `course-2026-v3/00-start` à `course-2026-v3/09-challenge` contient **une solution complète qui fonctionne**. Le dépôt ne contient pas de versions à trous. Pour montrer un changement, comparer deux tags ou modifier temporairement une petite portion de la solution dans son dossier préparé.
+Chaque tag `course-2026-v3/00-start` à `course-2026-v3/09-challenge` contient **une solution complète qui fonctionne**. Le dépôt ne contient pas de versions à trous. Pour montrer un changement, comparer les checkpoints complets. Aucune saisie n’est nécessaire.
 
 Garder deux fenêtres :
 
 1. Le clone principal pour les commandes de navigation.
-2. Le dossier de l’étape, affiché par `prepare`, pour lire le code, le modifier et lancer ses tests.
+2. Le dossier de l’étape, affiché par `prepare`, pour lire le code et lancer ses tests.
 
 ```sh
 # Dans le clone principal
@@ -71,7 +90,7 @@ La démo 07 prépare et supprime sa propre base temporaire : aucun `db:setup` ma
 
 Pour une répétition complète : `npm run course -- verify`. Les checkpoints formatés avec Biome se trouvent dans `.course-worktrees/v3/`. Les anciens tags et dossiers sont conservés ; ils contiennent les versions précédentes.
 
-Après les petites modifications en direct, `npm run lint:fix` rétablit le format. `npm run check` inclut désormais le lint ; `npm test` reste la commande rapide pour montrer un test rouge puis vert.
+Après une modification optionnelle, `npm run lint:fix` rétablit le format. Le parcours principal ne nécessite aucune modification. `npm run check` inclut le lint ; les tests ciblés se lancent avec `npm test`.
 
 ## Vue d’ensemble : 150 minutes
 
@@ -81,7 +100,7 @@ Après les petites modifications en direct, `npm run lint:fix` rétablit le form
 | 15–40 | 6–17 | 01 | Les cinq principes SOLID sur les mêmes besoins |
 | 40–55 | 18–25 | 01 | Ports, adaptateurs, imports et appels |
 | 55–59 | 26 | 02 | Modèle métier |
-| 59–75 | 27–29 | 03 | Validation et manipulation des bornes |
+| 59–75 | 27–29 | 03 | Validation et lecture des tests aux bornes |
 | 75–85 | 30 | — | Pause de 10 minutes |
 | 85–100 | 31–34 | 04 | HTTP, demandes invalides et politique d’erreur |
 | 100–115 | 35–38 | 05 | Catalogue BGG et vérifications des adaptateurs |
@@ -95,7 +114,7 @@ Les durées intègrent les explications et les questions au fil du cours. Si une
 
 ## 00 · Le point de départ
 
-**Préparer :** `npm run course -- prepare 00`.
+**Parcours guidé :** `npm run course -- present 00` depuis le clone principal. Pour ouvrir seulement les fichiers : `npm run course -- prepare 00`.
 
 **Ouvrir :** `examples/00-coupled.ts`, puis `tests/start.test.ts`.
 
@@ -107,7 +126,7 @@ Les durées intègrent les explications et les questions au fil du cours. Si une
 
 ## 01 · Les cinq principes SOLID
 
-**Préparer :** `npm run course -- prepare 01`.
+**Parcours guidé :** `npm run course -- present 01` depuis le clone principal. Pour ouvrir seulement les fichiers : `npm run course -- prepare 01`.
 
 **Ouvrir :** `examples/solid/principles.ts` et `tests/solid.test.ts`.
 
@@ -123,13 +142,13 @@ Les durées intègrent les explications et les questions au fil du cours. Si une
 
 **Vérifier :** `npm test -- tests/solid.test.ts`.
 
-**Attention au contre-exemple LSP :** la suite verte contient une assertion qui constate volontairement l’exception de `brokenCatalogue`. Elle ne certifie pas sa conformité au contrat « inconnu = null ». Pour montrer la violation en rouge, remplacer temporairement cette assertion par une attente `resolves.toBeNull()`, lancer le test puis remettre l’assertion initiale.
+**Contre-exemple LSP :** lire la différence entre `emptyCatalogue` et `brokenCatalogue`. La démo montre déjà null puis l’exception attendue. La suite verte constate cette différence ; elle ne certifie pas la conformité de `brokenCatalogue` au contrat « inconnu = null ». Aucun changement du test à réaliser.
 
 **40–55 :** parcourir les slides 18–25 : schéma d’origine, hexagone cible, ports primaires et secondaires, imports, appels et repérage dans le code. La slide 25 montre la version finale dans `main`, puis la construction reprend à 02. Cette partie ne nécessite pas de nouvelle étape Git.
 
 ## 02 · Le modèle
 
-**Préparer :** `npm run course -- prepare 02`.
+**Parcours guidé :** `npm run course -- present 02` depuis le clone principal. Pour ouvrir seulement les fichiers : `npm run course -- prepare 02`.
 
 **Ouvrir :** `src/domain/model.ts` et `src/infrastructure/fixtures.ts`.
 
@@ -137,21 +156,17 @@ Les durées intègrent les explications et les questions au fil du cours. Si une
 
 **Transition :** depuis le clone principal, `npm run course -- diff 02 03` montre l’arrivée du port de catalogue, des erreurs et du cas d’usage.
 
-## 03 · Validation et manipulation des bornes
+## 03 · Validation et lecture des tests aux bornes
 
-**Préparer :** `npm run course -- prepare 03`.
+**Parcours guidé :** `npm run course -- present 03` depuis le clone principal. Pour ouvrir seulement les fichiers : `npm run course -- prepare 03`.
 
 **Ouvrir :** `src/domain/play-a-game.ts`, `src/domain/ports.ts`, `tests/domain.test.ts`.
 
-**59–67 :** parcourir la recherche du jeu, le cas inconnu, la normalisation des noms et la condition min/max. La solution est déjà écrite : expliquer ou retaper uniquement la condition si cela aide la démonstration.
+**59–67 :** utiliser `npm run course -- present 03`. Expliquer le diff 02/03 : contrat du catalogue, cas d’usage et règles métier. Parcourir recherche du jeu, normalisation et condition min/max dans la solution complète.
 
-**67–75 : manipulation concrète.**
+**67–75 :** ouvrir `tests/domain.test.ts` et relier chaque cas aux branches du cas d’usage. Lancer `npm test -- tests/domain.test.ts`. Montrer pourquoi 2 et 4 passent, pourquoi 1 et 5 sont refusés et pourquoi le jeu inconnu est distinct. Expliquer ce que détecterait une borne incorrecte. Répondre aux questions sur les tests hors infrastructure.
 
-1. Lancer `npm test -- tests/domain.test.ts` sur la solution correcte.
-2. Dans la borne supérieure, remplacer seulement `>` par `>=`.
-3. Relancer le même test : le cas à 4 joueurs échoue.
-4. Remettre `>` et relancer : la suite redevient verte.
-5. Montrer également les cas à 1 et 5 joueurs et le jeu inconnu.
+**Option, une à deux minutes dans ce créneau :** remplacer `>` par `>=`, lancer le même test, constater l’échec à 4 puis remettre `>` et relancer. Cette modification est facultative ; sans elle, consacrer ce temps à la lecture du test de borne supérieure.
 
 **Résultat :** un test protège une limite précise sans serveur, réseau ni base. Le cas d’usage retourne une partie, il ne la sauvegarde pas encore.
 
@@ -159,11 +174,11 @@ Les durées intègrent les explications et les questions au fil du cours. Si une
 
 ## 04 · HTTP et erreurs
 
-**Préparer :** `npm run course -- prepare 04`.
+**Parcours guidé :** `npm run course -- present 04` depuis le clone principal. Pour ouvrir seulement les fichiers : `npm run course -- prepare 04`.
 
 **Ouvrir :** `src/infrastructure/http.ts` et `tests/http.test.ts`.
 
-**Faire :** lancer `npm start` dans le dossier 04. Envoyer la requête du [guide HTTP](demo-runbook.md#http) depuis un deuxième terminal, puis modifier le payload :
+**Faire :** lancer `npm run course -- present 04` depuis le clone principal. Lire le diff de l’adaptateur puis les résultats de la démo HTTP interne. Les demandes suivantes sont déjà préparées. Une session `curl` avec `npm start` reste une variante facultative décrite dans le [guide HTTP](demo-runbook.md#http).
 
 | Modification | Réponse attendue à 04 |
 |---|---|
@@ -178,7 +193,7 @@ La réponse 200 correspond ici à la validation. Le passage à 201 arrivera avec
 
 ## 05 · Catalogue externe
 
-**Préparer :** `npm run course -- prepare 05`.
+**Parcours guidé :** `npm run course -- present 05` depuis le clone principal. Pour ouvrir seulement les fichiers : `npm run course -- prepare 05`.
 
 **Ouvrir :** `src/infrastructure/bgg.ts`, `src/composition.ts`, `tests/catalogue.test.ts`.
 
@@ -186,29 +201,25 @@ La réponse 200 correspond ici à la validation. Le passage à 201 arrivera avec
 
 **Vérifier :** `npm test -- tests/catalogue.test.ts`.
 
-**Résultat :** même contrat de catalogue, comportement d’absence compatible et erreurs techniques distinctes. La suite vérifie notre adaptateur avec des réponses contrôlées. Le mode live reste optionnel et requiert un jeton BGG valide. Aucun parsing XML complet à taper pendant ce créneau.
+**Résultat :** même contrat de catalogue, comportement d’absence compatible et erreurs techniques distinctes. La suite vérifie notre adaptateur avec des réponses contrôlées. Le cours utilise les réponses contrôlées, sans jeton réel ni disponibilité du service BGG. Lire le parseur préparé et sa traduction en objet métier.
 
 ## 06 · La sauvegarde
 
-**Préparer :** `npm run course -- prepare 06`.
+**Parcours guidé :** `npm run course -- present 06` depuis le clone principal. Pour ouvrir seulement les fichiers : `npm run course -- prepare 06`.
 
 **Ouvrir :** `src/domain/ports.ts`, `src/domain/play-a-game.ts`, `src/infrastructure/memory-store.ts`, `tests/save.test.ts`.
 
 **Transition à montrer :** `npm run course -- diff 05 06` depuis le clone principal. Le changement complet inclut le writer, son adaptateur, le câblage des appels et les tests. Il est préparé.
 
-**115–124 : manipulation concrète.**
+**115–124 : parcours préparé.** Lancer `npm run course -- present 06` depuis le clone principal. Lire le diff 05/06 : `PlayWriter`, l’appel `await writer.save(play)` et l’adaptateur mémoire. Commenter les observations de la démo : réponse 201 après écriture, stockage inchangé si la demande est refusée, erreur propagée si le writer échoue. Dans le dossier 06, ouvrir puis lancer `npm test -- tests/save.test.ts`.
 
-1. Lancer `npm test -- tests/save.test.ts` dans 06.
-2. Commenter temporairement toute la ligne `await writer.save(play)`.
-3. Relancer : les assertions sur les effets de la sauvegarde échouent, même si une partie peut encore être retournée.
-4. Remettre la ligne et relancer : la suite redevient verte.
-5. Montrer le test où le writer échoue : l’API doit répondre 500, jamais 201.
+**Option, une à deux minutes dans ce créneau :** commenter toute la ligne `await writer.save(play)`, lancer le test, puis rétablir la ligne et relancer. Ne pas supprimer uniquement `await`. Sans cette option, expliquer les assertions qui détecteraient l’absence de sauvegarde.
 
-**Résultat :** une partie refusée ne s’enregistre pas et l’annonce de création attend la réussite de l’écriture. Éviter de supprimer seulement `await` pendant cette manipulation, ce qui introduirait une promesse rejetée non attendue et brouillerait la démonstration.
+**Résultat :** montrer les effets de l’écriture, pas seulement la valeur retournée. La sauvegarde est déjà présente dans la solution 06.
 
 ## 07 · La persistance réelle
 
-**Préparer :** `npm run course -- prepare 07`.
+**Parcours guidé :** `npm run course -- present 07` depuis le clone principal. Pour ouvrir seulement les fichiers : `npm run course -- prepare 07`.
 
 **Ouvrir :** `src/infrastructure/prisma-store.ts`, `prisma/schema.prisma`, `tests/prisma.test.ts`.
 
@@ -220,7 +231,7 @@ La réponse 200 correspond ici à la validation. Le passage à 201 arrivera avec
 
 ## 08 · Une deuxième entrée
 
-**Préparer :** `npm run course -- prepare 08`.
+**Parcours guidé :** `npm run course -- present 08` depuis le clone principal. Pour ouvrir seulement les fichiers : `npm run course -- prepare 08`.
 
 **Ouvrir :** `src/cli.ts` et `src/infrastructure/cli.ts`.
 
@@ -234,39 +245,20 @@ npm test -- tests/cli.test.ts
 
 **Résultat :** la première commande retourne une partie, la seconde refuse le nombre de joueurs. Les règles sont celles de `PlayAGame`. En mode mémoire, chaque processus dispose de ses propres données. Le [guide de persistance](demo-runbook.md#persistance-visible-dans-la-version-finale) permet de montrer une CLI et un serveur partageant SQLite.
 
-## 08 → 09 · Ajouter une règle
+## 08 → 09 · Lire l’évolution d’une règle
 
-**134–140 : manipulation concrète.** Rester d’abord dans le dossier 08.
+**134–140 : parcours préparé, sans saisie.**
 
-1. Dans `tests/domain.test.ts`, ajouter le cas suivant. La fonction `play()` est déjà définie dans ce fichier.
+1. Présenter la nouvelle exigence : Alice et « alice » avec espaces représentent le même nom normalisé dans ce modèle.
+2. Depuis le clone principal, lancer `npm run course -- present 09`. Le diff ciblé 08/09 montre la condition d’unicité, le message d’erreur et les tests d’intégration déjà écrits.
+3. Ouvrir les fichiers affichés dans le dossier 09 : `src/domain/play-a-game.ts`, `src/domain/errors.ts`, `tests/challenge.test.ts`.
+4. Commenter la démo : HTTP renvoie 422, la CLI renvoie le code 1, le stockage reste vide ; Alice et Bob sont toujours acceptés.
+5. Si nécessaire, lancer `npm test -- tests/challenge.test.ts` depuis 09. Montrer que les règles ne sont dupliquées ni dans HTTP ni dans la CLI.
 
-```ts
-it('refuse les noms dupliqués après normalisation', async () => {
-  await expect(play()({
-    boardgameName: 'Azul',
-    players: ['Alice', ' alice '],
-  })).rejects.toThrow('unique');
-});
-```
-
-2. Lancer `npm test -- tests/domain.test.ts` : le nouveau test échoue à 08.
-3. Dans `src/domain/play-a-game.ts`, compléter la validation de `names` avec le contrôle suivant :
-
-```ts
-new Set(names.map(name => name.toLowerCase())).size !== names.length
-```
-
-Combiner cette condition avec le contrôle existant des noms vides pour lever `InvalidParticipants`. Les espaces ont déjà été retirés lors du calcul de `names`.
-
-4. Dans `src/domain/errors.ts`, adapter le message à « Chaque joueur doit avoir un nom non vide et unique ».
-5. Relancer le test : il réussit.
-6. Depuis le clone principal, afficher `npm run course -- diff 08 09`, puis `npm run course -- prepare 09` pour ouvrir la solution complète.
-7. Dans le dossier 09, lancer `npm run demo` pour voir les deux refus, puis `npm test -- tests/challenge.test.ts` : HTTP et CLI rejettent les doublons, le stockage reste vide.
-
-**Résultat :** une modification de la politique métier s’applique aux deux entrées. L’unicité par nom est une convention limitée de cette démonstration. La solution 09 ajoute aussi les vérifications d’intégration préparées, sans obliger à les saisir pendant les 6 minutes.
+**Résultat :** une seule évolution métier protège les deux entrées. L’unicité par nom est une convention limitée de cette démonstration ; en production, les homonymes demanderaient un autre modèle.
 
 ## Dernières 10 minutes
 
 Expliquer les coûts des interfaces et les limites du modèle. Répondre aux questions restantes. Distinguer les prolongements possibles — identité des personnes, idempotence et transactions — des fonctionnalités effectivement démontrées.
 
-Si le temps manque, conserver les démonstrations 03 et 06 et la réutilisation depuis la CLI. Montrer directement le diff 08/09 et sa suite de tests. Les solutions sont disponibles à chaque tag, même si une manipulation en direct reste inachevée.
+Si le temps manque, supprimer les deux modifications optionnelles et raccourcir la lecture des adaptateurs. Conserver les résultats des démos 03 et 06, la réutilisation depuis la CLI et le diff 08/09. Le parcours reste complet sans saisie.
